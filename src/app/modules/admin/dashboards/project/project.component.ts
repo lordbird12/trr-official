@@ -305,6 +305,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 pushNotifications: ['everything', Validators.required],
             }),
         });
+
+
+
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -343,13 +346,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     deduct: any;
     profiles: any;
     totalAmountPaid: any;
+    img:any;
     ngOnInit(): void {
+
         this.route.params.subscribe(params => {
             this.Id = params['id'];
             console.log("ดู ID", this.Id);
           });
 
-          this._farmmerService.profiles(this.Id).subscribe((resp: any) => {
+        this._farmmerService.getImg(this.Id).subscribe((resp: any) => {
+            this.img = resp.image;
+            console.log("ดู รูปภาพพ", this.img);
+            this.cdr.detectChanges();
+        });
+
+        this._farmmerService.profiles(this.Id).subscribe((resp: any) => {
             this.profiles = resp
             console.log("ดู profiles ชื่อ บัตร", this.profiles);
             this.cdr.detectChanges();

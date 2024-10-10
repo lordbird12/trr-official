@@ -62,7 +62,12 @@
                     <!-- Breadcrumbs -->
                     <div class="flex flex-wrap items-center font-medium">
                         <div class="flex-0 w-30 h-30 rounded-full overflow-hidden">
-                            <img class="w-full h-full object-cover" src="assets/images/avatars/brian-hughes.jpg">
+                            <ng-container *ngIf="img != null">
+                                <img class="w-full h-full object-cover" src={{img}}>
+                            </ng-container>
+                            <ng-container *ngIf="img == null">
+                                
+                            </ng-container>
                         </div>
                         <div class="flex flex-row items-start ml-5 whitespace-nowrap">
                             <div class="grid grid-cols-2">

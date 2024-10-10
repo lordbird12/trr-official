@@ -250,6 +250,17 @@ export class NewsService {
             );
     }
 
+    getImg(Id: any): Observable<any> {
+        console.log("ssssssssssssssssssss",Id);
+        return this._httpClient
+            .get(environment.baseURL + `/api/get_image_profile/${Id}`)
+            .pipe(
+                switchMap((response: any) => {
+                    return of(response.data);
+                })
+            );
+    }
+
     getById(Id: any): Observable<any> {
         return this._httpClient
             .get(environment.baseURL + `api/news/${Id}`)
@@ -343,12 +354,17 @@ export class NewsService {
     }
 
     receive(Id: any): Observable<any> {
+        const currentYear = new Date().getFullYear();
+        const previousYear = currentYear - 1;
+        const beginDate = `12/01/${previousYear}`; 
+        const endDate = `03/31/${currentYear}`;
+        console.log("previousYear ",beginDate," currentYear ",endDate)
         return this._httpClient
             .post('https://canegrow.com:28099/api/queue_quota', {
                 FacID: 1,
                 QuotaID: Id,
-                Begin_date: '12/01/2023',
-                End_date: '03/31/2024',
+                Begin_date: beginDate,
+                End_date: endDate,
             })
             .pipe();
     }

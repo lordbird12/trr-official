@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { environment } from 'environments/environment.development';
 
 @Injectable({
@@ -67,10 +67,24 @@ export class ConfignotiService {
         );
 }
 
+getDate(name: string): Observable<any> {
+    return this.http
+        .get(environment.baseURL +  `/api/get_date/${name}`)
+        .pipe(
+            switchMap((response: any) => {
+                return of(response.data);
+            })
+        );
+}
 
-  deleteMessage(messageId: number): Observable<any> {
-    return this.http.delete(environment.baseURL + `/api/chat_msg/${messageId}`);
+
+  delete(id: number): Observable<any> {
+    return this.http.delete(environment.baseURL + `/api/notify_alert/${id}`);
   }
+  deletesub(id: number): Observable<any> {
+    return this.http.delete(environment.baseURL + `/api/notify_alert_day/${id}`);
+  }
+
 }
 
 

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ConfignotiService } from './confignoti.service';
 import { DatePipe } from '@angular/common';
+import { DataTableDirective } from 'angular-datatables';
 
 @Component({
     selector: 'app-confignoti',
@@ -15,11 +16,14 @@ import { DatePipe } from '@angular/common';
 })
 export class ConfignotiComponent implements OnInit {
     isLoading: boolean = false;
+    @ViewChild(DataTableDirective)
+    dtElement!: DataTableDirective;
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     addForm: FormGroup;
     permissiondata: any[];
     item: any;
     imageUrls: string[] = [];
+    datenoti: string[] = [];
     config = {
         placeholder: '',
         tabsize: 2,
@@ -81,7 +85,13 @@ export class ConfignotiComponent implements OnInit {
         //   }
         // this.addForm.get('image').updateValueAndValidity();
     }
+    onSelectNoti(event:any){
+        console.log(event)
+        this._service.getDate(event).subscribe((resp:any)=>{
+            this.datenoti = resp
 
+        })
+    }
     addDate(data?: any) {
         const d = this.formBuilder.group({
             day: '',
@@ -109,8 +119,72 @@ export class ConfignotiComponent implements OnInit {
         }
         formvalueday.push(t);
     }
-    deletedate() {
-
+    delete(itemid: any) {
+        const confirmation = this._fuseConfirmationService.open({
+            title: 'ลบข้อมูล',
+            message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
+            icon: {
+                show: true,
+                name: 'heroicons_outline:exclamation-triangle',
+                color: 'warning',
+            },
+            actions: {
+                confirm: {
+                    show: true,
+                    label: 'Remove',
+                    color: 'warn',
+                },
+                cancel: {
+                    show: true,
+                    label: 'Cancel',
+                },
+            },
+            dismissible: true,
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if (result === 'confirmed') {
+                this._service.delete(itemid).subscribe((resp) => {
+                    this.rerender();
+                });
+            }
+            error: (err: any) => {};
+        });
+    }
+    deletesub(itemid: any) {
+        const confirmation = this._fuseConfirmationService.open({
+            title: 'ลบข้อมูล',
+            message: 'คุณต้องการลบข้อมูลแจ้งเตือนย่อยใช่หรือไม่ ?',
+            icon: {
+                show: true,
+                name: 'heroicons_outline:exclamation-triangle',
+                color: 'warning',
+            },
+            actions: {
+                confirm: {
+                    show: true,
+                    label: 'Remove',
+                    color: 'warn',
+                },
+                cancel: {
+                    show: true,
+                    label: 'Cancel',
+                },
+            },
+            dismissible: true,
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if (result === 'confirmed') {
+                this._service.deletesub(itemid).subscribe((resp) => {
+                    this.rerender();
+                });
+            }
+            error: (err: any) => {};
+        });
+    }
+    rerender(): void {
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            dtInstance.ajax.reload();
+        });
     }
     removeDate(index: number) {
         this.date.removeAt(index);
