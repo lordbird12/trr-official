@@ -220,7 +220,7 @@ export class ListComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe((result) => {
-            location.reload();
+            this.loadTable();
         });
     }
     editElement(element: any) {
@@ -232,7 +232,7 @@ export class ListComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                location.reload();
+                this.loadTable();
                 // เมื่อ Dialog ถูกปิด ดำเนินการตามผลลัพธ์ที่คุณได้รับจาก Dialog
             }
         });
@@ -294,7 +294,7 @@ export class ListComponent implements OnInit {
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 this._Service.delete(itemid).subscribe((resp) => {
-                    this.rerender();
+                    this.loadTable();
                 });
             }
             error: (err: any) => {};
