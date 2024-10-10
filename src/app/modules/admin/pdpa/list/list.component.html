@@ -48,13 +48,12 @@
                         <td>{{item.title}}</td>
                         <td>{{item.views}} บัญชี</td>
                         <td>
-                            <div *ngIf="item.status === 'N'" class="bg-red-200 p-1 rounded-md text-red-800 font-bold text-center">
-                                ยังไม่เปิดใช้งาน
-                            </div>
-                            <div *ngIf="item.status === 'Y'"
-                                class="bg-green-200 p-1 rounded-md text-green-800 font-bold text-center">
-                                เปิดการใช้งาน
-                            </div>
+                            <span class="bg-[#1bb394] rounded-xl p-1 px-5 text-xs text-white" *ngIf="item.status === 'Yes'">
+                                เปิดใช้งาน
+                            </span>
+                            <span class="bg-[#ed5666] rounded-xl p-1 px-5 text-xs text-white" *ngIf="item.status !== 'Yes'">
+                                ยังไม่ปิดใช้งาน
+                            </span>
                         </td>
                         <td>
                             {{item.created_at | date : 'dd/MM/yyyy hh:mm aa'}}
