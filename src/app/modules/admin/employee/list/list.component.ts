@@ -34,6 +34,7 @@ import { PageService } from '../page.service';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
 import { tap } from 'rxjs';
 import { DataTableDirective, DataTablesModule } from 'angular-datatables';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
     selector: 'employee-list',
@@ -70,7 +71,8 @@ export class ListComponent implements OnInit, AfterViewInit {
     constructor(
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _service: PageService
+        private _service: PageService,
+        private _fuseConfirmationService: FuseConfirmationService
     ) {}
 
     ngOnInit() {
@@ -174,7 +176,35 @@ export class ListComponent implements OnInit, AfterViewInit {
         // เขียนโค้ดสำหรับการลบออกองคุณ
     }
 
-    // handlePageEvent(event) {
-    //     this.loadData(event.pageIndex + 1, event.pageSize);
-    // }
+    delete(itemid: any) {
+        const confirmation = this._fuseConfirmationService.open({
+            title: 'ลบข้อมูล',
+            message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
+            icon: {
+                show: true,
+                name: 'heroicons_outline:exclamation-triangle',
+                color: 'warning',
+            },
+            actions: {
+                confirm: {
+                    show: true,
+                    label: 'Remove',
+                    color: 'warn',
+                },
+                cancel: {
+                    show: true,
+                    label: 'Cancel',
+                },
+            },
+            dismissible: true,
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if (result === 'confirmed') {
+                this._service.delete(itemid).subscribe((resp) => {
+                    this.rerender();
+                });
+            }
+            error: (err: any) => {};
+        });
+    }
 }
