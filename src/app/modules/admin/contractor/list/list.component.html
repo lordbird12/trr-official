@@ -55,7 +55,7 @@
                             <th class="border-bottom-0 w-50">เบอร์ติดต่อ</th>
                             <th class="border-bottom-0 w-50">พิกัดโรงงาน</th>
                             <th class="border-bottom-0 w-50">สถานะ</th>
-                            <th class="border-bottom-0 w-50"></th>
+                            <th class="border-bottom-0"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,13 +87,16 @@
                                 <span class="bg-[#1bb394] rounded-xl p-1 px-5 text-xs text-white" *ngIf="item.status === 'Yes'">
                                     เปิดใช้งาน
                                 </span>
-                                <span class="bg-[#ed5666] rounded-xl p-1 px-5 text-xs text-white" *ngIf="item.status === 'No'">
+                                <span class="bg-[#ed5666] rounded-xl p-1 px-5 text-xs text-white" *ngIf="item.status !== 'Yes'">
                                     ปิดใช้งาน
                                 </span>
                             </td>
                             <td>
                                 <button class="border-2 border-green-200 w-fit rounded-md p-2 font-black hover:bg-slate-50" (click)="editDialog(item)">
                                     <span class="ml-2 mr-1">รายละเอียด</span>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="delete(item.id)">
+                                    <mat-icon>delete</mat-icon>
                                 </button>
                             </td>
                         </tr>
