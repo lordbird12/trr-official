@@ -205,7 +205,7 @@ export class FormComponent implements OnInit {
                     this._service.create(formData).subscribe({
                         next: (resp: any) => {
                             this._router
-                                .navigateByUrl('admin/news/list')
+                                .navigateByUrl('admin/pdpa/list')
                                 .then(() => { });
                         },
 
