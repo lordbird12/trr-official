@@ -76,11 +76,11 @@ export class NewChatComponent implements OnInit, OnDestroy {
     this.chatService.getMessages().subscribe((resp: any) => {
       this.messages = resp;
       this.member = resp.data.data.map((chat: any) => ({
-        id: chat.id,
-        name: chat.frammer.name,
-        meeting: chat.meeting,
-        image: chat.frammer.image,
-        chat_msgs: chat.chat_msgs
+        id: chat?.id,
+        name: chat?.frammer?.name ?? "Guest",
+        meeting: chat?.meeting  ?? "-",
+        image: this.env + chat?.frammer?.image,
+        chat_msgs: chat?.chat_msgs ?? "-"
       }));
 
       if (this.selectedChatId !== null) {
