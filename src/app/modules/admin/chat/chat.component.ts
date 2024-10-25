@@ -84,7 +84,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
       }));
 
       if (this.selectedChatId !== null) {
-        const selectedChat = this.member.find(contact => contact.id === this.selectedChatId);
+        const selectedChat = this.member.find(contact => contact?.id === this.selectedChatId);
         if (selectedChat) {
           this.chat_msgs = selectedChat.chat_msgs;
         }
@@ -108,10 +108,10 @@ export class NewChatComponent implements OnInit, OnDestroy {
     console.log(contactId)
     const selectedChat = this.member.find(contact => contact.id === contactId);
 
-    this.name = selectedChat.name;
-    this.iduser = selectedChat.id;
+    this.name = selectedChat?.name;
+    this.iduser = selectedChat?.id;
     if (selectedChat) {
-      this.chat_msgs = selectedChat.chat_msgs;
+      this.chat_msgs = selectedChat?.chat_msgs;
       setTimeout(() => this.scrollToBottom(), 100);
       this.cdr.detectChanges();
     }
@@ -131,11 +131,11 @@ export class NewChatComponent implements OnInit, OnDestroy {
     console.log(filePath);
 
     if (this.selectedChatId === null) return;
-    this.chatService.sendMessages(this.selectedChatId, filePath, this.userdata.id,type).subscribe((resp: any) => {
+    this.chatService.sendMessages(this.selectedChatId, filePath, this.userdata?.id,type).subscribe((resp: any) => {
       const newMessageData = {
-        id: resp.data.id,
+        id: resp?.data?.id,
         message: filePath,
-        user_id: this.userdata.id,
+        user_id: this.userdata?.id,
         member_id: null,
         type: type
       };
@@ -159,14 +159,14 @@ export class NewChatComponent implements OnInit, OnDestroy {
     const file: File = event.target.files[0];
     if (file) {
       if (file.type.startsWith('image/')) {
-        console.log('Uploading image file:', file.name);
+        console.log('Uploading image file:', file?.name);
         this.chatService.uploadImage(this.selectedChatId, file).subscribe((event: HttpEvent<any>) => {
           this.handleUploadEvent(event, 'image');
           console.log('Image upload completed.');
           console.log(event,'eventimage');
         });
       } else {
-        console.log('Uploading file:', file.name);
+        console.log('Uploading file:', file?.name);
         this.chatService.uploadFile(this.selectedChatId, file).subscribe((event: HttpEvent<any>) => {
           this.handleUploadEvent(event, 'file');
           console.log('File upload completed.');
