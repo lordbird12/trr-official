@@ -14,6 +14,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PictureComponent } from '../picture/picture.component';
 import { FormControl } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { co } from '@fullcalendar/core/internal-common';
 declare var jQuery: any;
 export interface PeriodicElement {
     no: number;
@@ -128,6 +129,7 @@ export class ListComponent implements OnInit {
         this.searchFarmers();
     }
 
+
     loadFarmers(): void {
         this._Service.getAPIFarmmer(this.searchTerm, this.currentPage).subscribe((resp: any) => {
             this.farmmer = resp;
@@ -142,8 +144,8 @@ export class ListComponent implements OnInit {
                 console.log(this.months);
             });
             // console.log(this.quotas);
-            console.log("เปลี่ยนหน้า page, this.farmmer", this.farmmer);
-            this.totalPages = resp.length
+            // console.log("เปลี่ยนหน้า page, this.farmmer", this.farmmer);
+            // this.totalPages = resp.length
             console.log("เปลี่ยนหน้า page, this.farmmer", this.totalPages);
             this._changeDetectorRef.markForCheck();
         });
@@ -312,43 +314,44 @@ export class ListComponent implements OnInit {
             serverSide: true,
             processing: true,
             order: [[0, 'desc']],
+            searching: false,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
             },
             ajax: (dataTablesParameters: any, callback) => {
-                that._Service.getPage(dataTablesParameters).subscribe((resp) => {
-                    // this.dataRow = resp.data;
-                    this.pages.current_page = resp.current_page;
-                    this.pages.last_page = resp.last_page;
-                    this.pages.per_page = resp.per_page;
-                    if (parseInt(resp.current_page) > 1) {
-                        this.pages.begin =
-                            parseInt(resp.per_page) *
-                            (parseInt(resp.current_page) - 1);
-                    } else {
-                        this.pages.begin = 0;
-                    }
-                    that.dataRow = this.farmmer;
-                    this._changeDetectorRef.markForCheck();
-
-                    callback({
-                        recordsTotal: resp.total,
-                        recordsFiltered: resp.total,
-                        data: [],
+                that._Service
+                    .getPage(dataTablesParameters)
+                    .subscribe((resp) => {
+                        this.pages.current_page = resp.current_page;
+                        this.pages.last_page = resp.last_page;
+                        this.pages.per_page = resp.per_page;
+                        if (parseInt(resp.current_page) > 1) {
+                            this.pages.begin =
+                                parseInt(resp.per_page) *
+                                (parseInt(resp.current_page) - 1);
+                        } else {
+                            this.pages.begin = 0;
+                        }
+                        that.farmmer = resp.data;
+                        console.log("that.dataRow", resp.total);
+                        callback({
+                            recordsTotal: resp.total,
+                            recordsFiltered: resp.total,
+                            data: [],
+                        });
                     });
-                });
             },
-            // columns: [
-            //     { data: 'id_card_number', orderable: false },
-            //     { data: 'name', orderable: false },
-            //     { data: 'qouta', orderable: false },
-            //     { data: 'phone', orderable: false },
-            //     // { data: 'no', orderable: false },
-            //     { data: 'no', orderable: false },
-            //     { data: 'area', orderable: false },
-            //     { data: 'count_area', orderable: false },
-            //     { data: 'action', orderable: false },
-            // ],
+            columns: [
+                { data: 'id_card_number', orderable: false },
+                { data: 'name', orderable: false },
+                { data: 'qouta', orderable: false },
+                { data: 'phone', orderable: false },
+                // { data: 'no', orderable: false },
+                { data: 'no', orderable: false },
+                { data: 'area', orderable: false },
+                { data: 'count_area', orderable: false },
+                { data: 'action', orderable: false },
+            ],
         };
     }
 

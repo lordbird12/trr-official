@@ -23,6 +23,12 @@ export class FormComponent implements OnInit {
     srcResult: any;
     defaultImages: string[] = ['https://logowik.com/content/uploads/images/adobe-pdf3324.jpg'];
 
+    is_use: any[] = [
+        { name: 'Active', value: '1' },
+        { name: 'Inactive', value: '0' },
+    ];
+    
+
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -42,6 +48,7 @@ export class FormComponent implements OnInit {
             file: '',
             image: '',
             notify_status: '',
+            is_use: false,
         });
     }
 
@@ -83,6 +90,7 @@ export class FormComponent implements OnInit {
             });
         }
     }
+    
 
     selectedFile: File = null;
     onFileChange(event) {
@@ -96,118 +104,77 @@ export class FormComponent implements OnInit {
     }
 
     Submit(): void {
-        console.log(this.addForm.value);
-        // const end =  moment(this.addForm.value.register_date).format('YYYY-MM-DD')
-        // console.log(end)
-        // this.addForm.patchValue({
-        //   register_date:end
-        // })
         const confirmation = this._fuseConfirmationService.open({
             title: 'เพิ่มข้อมูล',
             message: 'คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ?',
-            icon: {
-                show: false,
-                name: 'heroicons_outline:exclamation',
-                color: 'warning',
-            },
+            icon: { show: false, name: 'heroicons_outline:exclamation', color: 'warning' },
             actions: {
-                confirm: {
-                    show: true,
-                    label: 'ตกลง',
-                    color: 'primary',
-                },
-                cancel: {
-                    show: true,
-                    label: 'ยกเลิก',
-                },
+                confirm: 
+                { show: true, 
+                    label: 'ตกลง', 
+                    color: 'primary' },
+                cancel: { show: true, label: 'ยกเลิก' },
             },
             dismissible: true,
         });
-
-        // Subscribe to the confirmation dialog closed action
+    
         confirmation.afterClosed().subscribe((result) => {
-            // If the confirm button pressed...
             if (result === 'confirmed') {
                 const formData = new FormData();
-                Object.entries(this.addForm.value).forEach(
-                    ([key, value]: any[]) => {
-                        formData.append(key, value);
-                    }
-                );
+                Object.entries(this.addForm.value).forEach(([key, value]: any[]) => {
+                    formData.append(key, value);
+                });
+    
+                // ตรวจสอบขนาดไฟล์ก่อนการส่งข้อมูล
+                if (this.files2.length > 0 && this.files2[0].size > 20 * 1024 * 1024) {
+                    this._fuseConfirmationService.open({
+                        title: 'ขนาดไฟล์เกินขีดจำกัด',
+                        message: 'ขนาดไฟล์สูงสุดคือ 5MB',
+                        icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                        actions: { confirm: { show: true, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
+                        dismissible: true,
+                    });
+                    return;  // ไม่ทำการส่งฟอร์มหากไฟล์เกินขนาด
+                }
+                
+    
                 if (!this.Id) {
                     this._service.create(formData).subscribe({
                         next: (resp: any) => {
-                            this._router
-                                .navigateByUrl('admin/journal/list')
-                                .then(() => {});
+                            this._router.navigateByUrl('admin/journal/list');
                         },
-
                         error: (err: any) => {
-                            console.log(err);
                             this.addForm.enable();
                             this._fuseConfirmationService.open({
                                 title: 'ไม่สามารถบันทึกข้อมูลได้',
                                 message: err.error.message,
-                                icon: {
-                                    show: true,
-                                    name: 'heroicons_outline:exclamation',
-                                    color: 'warning',
-                                },
-                                actions: {
-                                    confirm: {
-                                        show: false,
-                                        label: 'ตกลง',
-                                        color: 'primary',
-                                    },
-                                    cancel: {
-                                        show: false,
-                                        label: 'ยกเลิก',
-                                    },
-                                },
+                                icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                                actions: { confirm: { show: false, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                                 dismissible: true,
                             });
-                            console.log(err.error.message);
                         },
                     });
                 } else {
                     this._service.update(formData).subscribe({
                         next: (resp: any) => {
-                            this._router
-                                .navigateByUrl('admin/journal/list')
-                                .then(() => {});
+                            this._router.navigateByUrl('admin/journal/list');
                         },
-
                         error: (err: any) => {
-                            console.log(err);
                             this.addForm.enable();
                             this._fuseConfirmationService.open({
                                 title: 'เกิดข้อผิดพลาด',
                                 message: err.error.message,
-                                icon: {
-                                    show: true,
-                                    name: 'heroicons_outline:exclamation',
-                                    color: 'warning',
-                                },
-                                actions: {
-                                    confirm: {
-                                        show: false,
-                                        label: 'ตกลง',
-                                        color: 'primary',
-                                    },
-                                    cancel: {
-                                        show: false,
-                                        label: 'ยกเลิก',
-                                    },
-                                },
+                                icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                                actions: { confirm: { show: false, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                                 dismissible: true,
                             });
-                            console.log(err.error.message);
                         },
                     });
                 }
             }
         });
     }
+    
 
     files: File[] = [];
     url_logo: string;

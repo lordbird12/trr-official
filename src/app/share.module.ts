@@ -20,6 +20,7 @@ import { NewChatComponent } from './modules/admin/chat/chat.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [],
@@ -44,6 +45,7 @@ import {MatListModule} from '@angular/material/list';
         MatCardModule,
         MatDividerModule,
         MatListModule,
+        MatSlideToggleModule
     ],
     exports: [
         CommonModule,
@@ -66,7 +68,8 @@ import {MatListModule} from '@angular/material/list';
         MatCheckboxModule,
         MatCardModule,
         MatDividerModule,
-        MatListModule
+        MatListModule,
+        MatSlideToggleModule,
     ],
 })
 export class ShareModule {}

@@ -90,7 +90,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     editDialog(element: any) {
         const dialogRef = this.dialog.open(EditDialogComponent, {
             width: '700px', // กำหนดความกว้างของ Dialog
-            height: 'auto',
+            height: '600px',
             disableClose: false,
             autoFocus: false,
             data: {
@@ -107,7 +107,7 @@ export class ListComponent implements OnInit, AfterViewInit {
     addElement() {
         const dialogRef = this.dialog.open(FormDialogComponent, {
             width: '700px', // กำหนดความกว้างของ Dialog
-            height: 'auto',
+            height: '600px',
             disableClose: false,
             autoFocus: false,
         });
