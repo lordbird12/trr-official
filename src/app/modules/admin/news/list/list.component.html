@@ -59,11 +59,11 @@
                         <td>{{item.title}}</td>
                         <td> {{item.views}}</td>
                         <td>
-                            <div class="bg-[#1bb394] rounded-xl p-1 px-5 text-xs text-white" 
+                            <div class="bg-[#1bb394] rounded-xl p-1 px-5 text-xs text-white"
                             [ngClass]="item.is_use == '1' ? 'bg-[#1bb394]' : 'bg-[#ed5666]'">
                                 {{item.is_use == '1' ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}}
                             </div>
-                       
+
                         </td>
                         <td>
                             {{item.created_at | date : 'dd/MM/yyyy hh:mm aa'}}

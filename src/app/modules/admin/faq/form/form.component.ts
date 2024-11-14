@@ -81,6 +81,12 @@ export class FormComponent implements OnInit {
     }
 
     Submit(): void {
+        console.log(this.addForm.value);
+        // const end =  moment(this.addForm.value.register_date).format('YYYY-MM-DD')
+        // console.log(end)
+        // this.addForm.patchValue({
+        //   register_date:end
+        // })
 
         const confirmation = this._fuseConfirmationService.open({
             title: 'เพิ่มข้อมูล',

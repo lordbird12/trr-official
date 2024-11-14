@@ -20,7 +20,7 @@ export interface PeriodicElement {
     email: string;
     position: string;
     phoneNumber: string;
-    // status: string;
+    status: string;
     is_use: string;
 }
 
@@ -35,7 +35,7 @@ const ELEMENT_DATA: PeriodicElement[] = [];
     styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-    is_use = new FormControl('');    
+    is_use = new FormControl('');
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     dtOptions: DataTables.Settings = {};
@@ -51,7 +51,7 @@ export class ListComponent implements OnInit {
         'email',
         'position',
         'phoneNumber',
-        // 'status',
+        'status',
         'is_use',
     ];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
@@ -59,7 +59,7 @@ export class ListComponent implements OnInit {
     flashMessage: null;
     flashErrorMessage: null;
     private _matDialog: any;
-    
+
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -276,14 +276,14 @@ export class ListComponent implements OnInit {
     //     } else {
     //         item.status = 'active'; // เปลี่ยนเป็น active
     //     }
-        
+
     //     // แจ้งให้ Angular ทราบเกี่ยวกับการเปลี่ยนแปลงสถานะ
     //     this._changeDetectorRef.detectChanges();
     // }
-    
+
     getData() {
         this.rerender();
     }
-    
-    
+
+
 }

@@ -27,7 +27,7 @@ export class FormComponent implements OnInit {
         { name: 'Active', value: '1' },
         { name: 'Inactive', value: '0' },
     ];
-    
+
 
     constructor(
         private _router: Router,
@@ -90,7 +90,7 @@ export class FormComponent implements OnInit {
             });
         }
     }
-    
+
 
     selectedFile: File = null;
     onFileChange(event) {
@@ -109,35 +109,35 @@ export class FormComponent implements OnInit {
             message: 'คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ?',
             icon: { show: false, name: 'heroicons_outline:exclamation', color: 'warning' },
             actions: {
-                confirm: 
-                { show: true, 
-                    label: 'ตกลง', 
+                confirm:
+                { show: true,
+                    label: 'ตกลง',
                     color: 'primary' },
                 cancel: { show: true, label: 'ยกเลิก' },
             },
             dismissible: true,
         });
-    
+
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 const formData = new FormData();
                 Object.entries(this.addForm.value).forEach(([key, value]: any[]) => {
                     formData.append(key, value);
                 });
-    
+
                 // ตรวจสอบขนาดไฟล์ก่อนการส่งข้อมูล
-                if (this.files2.length > 0 && this.files2[0].size > 2 * 1024 * 1024) {
+                if (this.files2.length > 0 && this.files2[0].size > 20 * 1024 * 1024) {
                     this._fuseConfirmationService.open({
                         title: 'ขนาดไฟล์เกินขีดจำกัด',
-                        message: 'ขนาดไฟล์สูงสุดคือ 2MB',
-                        icon: { show: true, name: 'heroicons_outline:exclamation-circle', color: 'warning' },
+                        message: 'ขนาดไฟล์สูงสุดคือ 5MB',
+                        icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
                         actions: { confirm: { show: true, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                         dismissible: true,
                     });
                     return;  // ไม่ทำการส่งฟอร์มหากไฟล์เกินขนาด
                 }
-                
-    
+
+
                 if (!this.Id) {
                     this._service.create(formData).subscribe({
                         next: (resp: any) => {
@@ -149,7 +149,7 @@ export class FormComponent implements OnInit {
                                 alert('กรุณาเลือกไฟล์ก่อนส่ง');
                                 return;
                             }
-                            
+
                             this._fuseConfirmationService.open({
                                 title: 'ไม่สามารถบันทึกข้อมูลได้',
                                 message: err.error.message,
@@ -179,7 +179,7 @@ export class FormComponent implements OnInit {
             }
         });
     }
-    
+
 
     files: File[] = [];
     url_logo: string;
