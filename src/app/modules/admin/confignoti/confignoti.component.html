@@ -125,7 +125,7 @@
                               <!-- Loop through item.days array -->
                               <div *ngFor="let day of item.days" class="bg-gray-100 p-2 rounded mb-1 flex justify-between">
                                <div>
-                                <div>
+                                <div> 
                                   <strong>เวลาแจ้งเตือน: </strong>{{ day.time ?? '-' }}  <!-- Replace someField with the correct field from days array -->
                                 </div>
                                 <div>
@@ -133,14 +133,14 @@
                                 </div>
                             </div>
                             <div>
-                                <button mat-icon-button color="accent" (click)="deletesub(item.id)">
+                                <button mat-icon-button color="accent" (click)="deletesub(day.id)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </div>
                               </div>
                             </td>
                             <td class="">
-                                <button mat-icon-button color="accent" (click)="delete(item.id)">
+                                <button mat-icon-button color="accent" (click)="delete(item.date)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </td>

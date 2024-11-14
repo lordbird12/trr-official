@@ -78,11 +78,15 @@ getDate(name: string): Observable<any> {
 }
 
 
-  delete(id: number): Observable<any> {
-    return this.http.delete(environment.baseURL + `/api/notify_alert/${id}`);
+  // delete(id: number): Observable<any> {
+  //   return this.http.delete(environment.baseURL + `/api/AutoNotify_del_date`);
+  // }
+
+  delete(data: any,): Observable<any> {
+    return this.http.post(environment.baseURL + `/api/AutoNotify_del_date`, data);
   }
   deletesub(id: number): Observable<any> {
-    return this.http.delete(environment.baseURL + `/api/notify_alert_day/${id}`);
+    return this.http.delete(environment.baseURL + `/api/AutoNotify_del/${id}`);
   }
 
 }

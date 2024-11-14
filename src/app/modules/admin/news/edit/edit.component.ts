@@ -18,6 +18,8 @@ export class EditComponent implements OnInit {
     permissiondata: any[];
     item: any;
     imageUrls: string[] = [];
+
+    
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -34,6 +36,7 @@ export class EditComponent implements OnInit {
             image: '',
             notify_status: '',
             status: '',
+            
         });
     }
 

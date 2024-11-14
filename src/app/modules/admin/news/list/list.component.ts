@@ -21,6 +21,7 @@ export interface PeriodicElement {
     position: string;
     phoneNumber: string;
     status: string;
+    is_use: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [];
@@ -51,12 +52,14 @@ export class ListComponent implements OnInit {
         'position',
         'phoneNumber',
         'status',
+        'is_use',
     ];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     @ViewChild(MatSort) sort: MatSort;
     flashMessage: null;
     flashErrorMessage: null;
     private _matDialog: any;
+    
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -264,4 +267,20 @@ export class ListComponent implements OnInit {
             .afterClosed()
             .subscribe(() => {});
     }
+
+    // toggleStatus(item: any): void {
+    //     // สลับสถานะระหว่าง active และ inactive
+    //     if (item.status === 'active') {
+    //         item.status = 'inactive'; // เปลี่ยนเป็น inactive
+    //     } else {
+    //         item.status = 'active'; // เปลี่ยนเป็น active
+    //     }
+        
+    //     // แจ้งให้ Angular ทราบเกี่ยวกับการเปลี่ยนแปลงสถานะ
+    //     this._changeDetectorRef.detectChanges();
+    // }
+    
+    
+    
+    
 }

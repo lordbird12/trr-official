@@ -23,6 +23,11 @@ export class FormComponent implements OnInit {
     srcResult: any;
     defaultImages: string[] = ['https://logowik.com/content/uploads/images/adobe-pdf3324.jpg'];
 
+    status: any[] = [
+        { name: 'Active', value: '1' },
+        { name: 'Inactive', value: '0' },
+    ];
+
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -38,6 +43,7 @@ export class FormComponent implements OnInit {
             id:'',
             question: '',
             answer: '',
+            status: false,
         });
     }
 
@@ -81,6 +87,7 @@ export class FormComponent implements OnInit {
         // this.addForm.patchValue({
         //   register_date:end
         // })
+
         const confirmation = this._fuseConfirmationService.open({
             title: 'เพิ่มข้อมูล',
             message: 'คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ?',
@@ -107,6 +114,10 @@ export class FormComponent implements OnInit {
         confirmation.afterClosed().subscribe((result) => {
             // If the confirm button pressed...
             if (result === 'confirmed') {
+             
+
+               
+            
                 const formData = new FormData();
                 Object.entries(this.addForm.value).forEach(
                     ([key, value]: any[]) => {
@@ -114,6 +125,7 @@ export class FormComponent implements OnInit {
                     }
                 );
                 if (!this.Id) {
+
                     this._service.create(formData).subscribe({
                         next: (resp: any) => {
                             this._router

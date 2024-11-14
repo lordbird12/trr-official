@@ -29,10 +29,10 @@
                             เลือกสถานะ
                         </mat-option>
                         <mat-option [value]="'active'">
-                            Active
+                            เปิดใช้งาน
                         </mat-option>
                         <mat-option [value]="'inactive'">
-                            Inactive
+                            ปิดใช้งาน
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -59,9 +59,10 @@
                         <td>{{item.title}}</td>
                         <td> {{item.views}}</td>
                         <td>
-                            <span class="bg-[#1bb394] rounded-xl p-1 px-5 text-xs text-white">
-                                เปิดใช้งาน
-                            </span>
+                            <div class="bg-[#1bb394] rounded-xl p-1 px-5 text-xs text-white" 
+                            [ngClass]="item.is_use == '1' ? 'bg-[#1bb394]' : 'bg-[#ed5666]'">
+                                {{item.is_use == '1' ? 'เปิดใช้งาน' : 'ปิดใช้งาน'}}
+                            </div>
                        
                         </td>
                         <td>

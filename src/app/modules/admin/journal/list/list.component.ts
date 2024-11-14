@@ -263,4 +263,5 @@ export class ListComponent implements OnInit {
             .afterClosed()
             .subscribe(() => {});
     }
+    
 }

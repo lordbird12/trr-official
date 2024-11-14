@@ -76,29 +76,29 @@
                 <input type="text" placeholder="ค้นหา..." class="border p-2 rounded-md w-1/5" [(ngModel)]="searchTerm"
                     (ngModelChange)="onSearchChange($event)">
             </div>
-            <table class="table row-border hover w-full text-center whitespace-nowrap">
+            <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full text-center whitespace-nowrap">
                 <thead class="bg-gray-700 text-black">
                     <tr class="bg-gray-200">
-                        <th class="border-b-2 w-1/9 p-3">เลขบัตรประชาชน</th>
-                        <th class="border-b-2 w-1/9 p-3">ชื่อเกษตรกร</th>
-                        <th class="border-b-2 w-1/9 p-3">เลขที่โควต้า</th>
-                        <th class="border-b-2 w-1/9 p-3">เบอร์ติดต่อ</th>
                         <th class="border-b-2 w-1/9 p-3">เขต</th>
-                        <th class="border-b-2 w-1/9 p-3">พื้นที่ (ไร่)</th>
+                        <th class="border-b-2 w-1/9 p-3">เลขที่โควต้า</th>
+                        <th class="border-b-2 w-1/9 p-3">ชื่อเกษตรกร</th>
                         <th class="border-b-2 w-1/9 p-3">จำนวนแปลง</th>
+                        <th class="border-b-2 w-1/9 p-3">พื้นที่ (ไร่)</th>
+                        <th class="border-b-2 w-1/9 p-3">เลขบัตรประชาชน</th>
+                        <th class="border-b-2 w-1/9 p-3">เบอร์ติดต่อ</th>
                         <th class="border-b-2 w-1/9 p-3">สถานะการบันทึกกิจกรรม</th>
                         <th class="border-b-2 w-1/9 p-3"></th>
                     </tr>
                 </thead>
                 <tbody *ngIf="farmmer?.length != 0">
                     <tr *ngFor="let item of farmmer; let i = index" class="hover:bg-gray-100 whitespace-nowrap">
-                        <td class="p-3">{{ item.id_card_number ?? '-' }}</td>
-                        <td class="p-3">{{ item.First_name ?? '-' }} {{ item.Last_name ?? '-' }}</td>
-                        <td class="p-3">{{ item.Quota_id ?? '-' }}</td>
-                        <td class="p-3">{{ item.phone_number ?? '-' }}</td>
                         <td class="p-3">{{ item.area ?? '-' }}</td>
-                        <td class="p-3">{{ item.station_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.Quota_id ?? '-' }}</td>
+                        <td class="p-3">{{ item.First_name ?? '-' }} {{ item.Last_name ?? '-' }}</td>
                         <td class="p-3">{{ item.area_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.station_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.id_card_number ?? '-' }}</td>
+                        <td class="p-3">{{ item.phone_number ?? '-' }}</td>
                         <td class="p-3">
                             <div class="grid-container">
                                 <ng-container *ngFor="let month of months; let n = index">
