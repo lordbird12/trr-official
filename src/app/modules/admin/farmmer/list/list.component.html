@@ -85,8 +85,7 @@
                 <input type="text" placeholder="ค้นหา..." class="border p-2 rounded-md w-1/5" [(ngModel)]="searchTerm"
                     (ngModelChange)="onSearchChange($event)">
             </div>
-            
-            <table  class="table row-border hover w-full text-center whitespace-nowrap">
+            <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full text-center whitespace-nowrap">
                 <thead class="bg-gray-700 text-black">
                     <tr class="bg-gray-200">
                         <th class="border-b-2 w-1/9 p-3">เขต</th>
@@ -115,7 +114,7 @@
                                     <ng-container *ngIf="month.quota_id == item.Quota_id">
                                         <div class="grid-item border-2 border-black-600 bg-green-600" *ngIf="month?.months?.jan == true">1</div>
                                         <div class="grid-item" *ngIf="month?.months?.jan == false">1</div>
-                                        
+
                                         <div class="grid-item border-2 border-black-600 bg-green-600" *ngIf="month?.months?.feb == true">2</div>
                                         <div class="grid-item" *ngIf="month?.months?.feb == false">2</div>
 
@@ -176,16 +175,16 @@
                 <!-- ปุ่มสำหรับย้อนกลับไปหน้าก่อนหน้า -->
                 <button *ngIf="currentPage > 1" class="  text-black py-2 px-4 rounded hover:bg-slate-800 hover:text-white"
                     (click)="changePage(currentPage - 1)">ก่อนหน้า
-                   
+
                 </button>
-            
+
                 <!-- ข้อความแสดงหน้าปัจจุบันและหน้าทั้งหมด -->
                 <p class="border py-2 px-3 rounded">{{ currentPage }} / {{ totalPages }}</p>
-            
+
                 <!-- ปุ่มสำหรับไปยังหน้าถัดไป -->
                 <button *ngIf="currentPage < totalPages" class="  text-black py-2 px-4 rounded hover:bg-slate-800 hover:text-white"
                     (click)="changePage(currentPage + 1)">ถัดไป
-                    
+
                 </button>
                 <button *ngIf="currentPage < totalPages" class="  text-black py-2 px-3 rounded hover:bg-slate-800 hover:text-white"
                     (click)="changePage(totalPages)">

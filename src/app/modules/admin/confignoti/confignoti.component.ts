@@ -200,19 +200,19 @@ export class ConfignotiComponent implements OnInit {
         // ตรวจสอบว่า form ถูกต้องหรือไม่
         if (this.addForm.invalid) {
             // แสดงข้อความผิดพลาดสำหรับฟิลด์ที่ไม่ถูกต้อง
-            let errorMessage = "";
-            
+            let errorMessage = "กรุณากรอกข้อมูลให้ครบถ้วน:";
+
             // ตรวจสอบฟิลด์แต่ละฟิลด์และเพิ่มข้อความผิดพลาดที่เกี่ยวข้อง
             if (this.addForm.get('title').hasError('required')) {
-                errorMessage += "\n กรุณาระบุประเภทการแจ้งเตือน";
+                errorMessage += "\n- กรุณาระบุชื่อเรื่อง";
             }
             if (this.addForm.get('body').hasError('required')) {
-                errorMessage += "\n กรุณาระบุรายละเอียด";
+                errorMessage += "\n- กรุณาระบุเนื้อหาของการแจ้งเตือน";
             }
             // if (this.addForm.get('date').invalid || this.addForm.get('date').value.length === 0) {
             //     errorMessage += "\n- กรุณาระบุวันที่";
             // }
-    
+
             // แสดงข้อความผิดพลาดโดยใช้ FuseConfirmationService
             this._fuseConfirmationService.open({
                 title: 'ข้อมูลไม่ครบถ้วน',
@@ -235,10 +235,10 @@ export class ConfignotiComponent implements OnInit {
                 },
                 dismissible: true,
             });
-    
+
             return; // หยุดการส่งข้อมูลถ้าฟอร์มไม่ถูกต้อง
         }
-    
+
         // หากฟอร์มถูกต้อง ให้ทำการบันทึกข้อมูล
         const formattedData = this.addForm.value.date.map((group: any) => {
             return {
@@ -246,12 +246,12 @@ export class ConfignotiComponent implements OnInit {
                 day: this.datePipe.transform(group.day, 'yyyy-MM-dd')  // แปลงวันที่เป็นรูปแบบ yyyy-MM-dd
             };
         });
-    
+
         const formData = {
             ...this.addForm.value,
             date: formattedData  // ใช้ข้อมูลที่แปลงแล้ว
         };
-    
+
         const confirmation = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
@@ -273,7 +273,7 @@ export class ConfignotiComponent implements OnInit {
             },
             dismissible: true,
         });
-    
+
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 this._service.Savedata(formData).subscribe({
@@ -303,7 +303,7 @@ export class ConfignotiComponent implements OnInit {
                     },
                     error: (err: any) => {
                         const errorMessage = "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาระบุวันที่และเวลา"; // ข้อความกำกัย
-                    
+
                         this._fuseConfirmationService.open({
                             title: 'เกิดข้อผิดพลาด',
                             message: errorMessage,  // ใช้ข้อความกำกัยแทนข้อความที่ได้จาก error
@@ -326,12 +326,12 @@ export class ConfignotiComponent implements OnInit {
                             dismissible: true,
                         });
                     },
-                    
+
                 });
             }
         });
     }
-    
+
 
     refreshTable() {
         this._service.getDate(this.addForm.value.title).subscribe((data) => {
@@ -339,7 +339,7 @@ export class ConfignotiComponent implements OnInit {
             this.cdr.detectChanges(); // แจ้งให้ Angular อัปเดตตาราง
         });
     }
-    
+
     data(data: any, formData: FormData) {
         throw new Error('Method not implemented.');
     }
@@ -368,5 +368,5 @@ export class ConfignotiComponent implements OnInit {
     backTo() {
         this._router.navigate(['config/edit/1']);
     }
-    
+
 }
