@@ -154,34 +154,7 @@ export class EditDialogComponent implements OnInit {
                         formData.append(key, value);
                     }
                 );
-                this._Service.update(formData).subscribe({
-                    next: (resp: any) => {
-                        this.dialogRef.close();
-                    },
-                    error: (err: any) => {
-                        this._fuseConfirmationService.open({
-                            title: 'กรุณาระบุข้อมูล',
-                            message: err.error.message,
-                            icon: {
-                                show: true,
-                                name: 'heroicons_outline:exclamation',
-                                color: 'warning',
-                            },
-                            actions: {
-                                confirm: {
-                                    show: false,
-                                    label: 'ยืนยัน',
-                                    color: 'primary',
-                                },
-                                cancel: {
-                                    show: false,
-                                    label: 'ยกเลิก',
-                                },
-                            },
-                            dismissible: true,
-                        });
-                    },
-                });
+                
             }
         });
     }

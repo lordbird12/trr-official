@@ -80,7 +80,8 @@ export class NewChatComponent implements OnInit, OnDestroy {
         name: chat?.frammer?.name ?? "Guest",
         meeting: chat?.meeting  ?? "-",
         image: this.env + chat?.frammer?.image,
-        chat_msgs: chat?.chat_msgs ?? "-"
+        chat_msgs: chat?.chat_msgs ?? "-",
+        noti: chat?.noti ?? "-"
       }));
 
       if (this.selectedChatId !== null) {
