@@ -48,7 +48,7 @@ export class FormComponent implements OnInit {
             file: '',
             image: '',
             notify_status: '',
-            is_use: false,
+            is_use: '',
         });
     }
 
@@ -126,11 +126,11 @@ export class FormComponent implements OnInit {
                 });
     
                 // ตรวจสอบขนาดไฟล์ก่อนการส่งข้อมูล
-                if (this.files2.length > 0 && this.files2[0].size > 20 * 1024 * 1024) {
+                if (this.files2.length > 0 && this.files2[0].size > 2 * 1024 * 1024) {
                     this._fuseConfirmationService.open({
                         title: 'ขนาดไฟล์เกินขีดจำกัด',
-                        message: 'ขนาดไฟล์สูงสุดคือ 5MB',
-                        icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                        message: 'ขนาดไฟล์สูงสุดคือ 2MB',
+                        icon: { show: true, name: 'heroicons_outline:exclamation-circle', color: 'warning' },
                         actions: { confirm: { show: true, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                         dismissible: true,
                     });
@@ -145,6 +145,11 @@ export class FormComponent implements OnInit {
                         },
                         error: (err: any) => {
                             this.addForm.enable();
+                            if (!this.addForm.value.file) {
+                                alert('กรุณาเลือกไฟล์ก่อนส่ง');
+                                return;
+                            }
+                            
                             this._fuseConfirmationService.open({
                                 title: 'ไม่สามารถบันทึกข้อมูลได้',
                                 message: err.error.message,

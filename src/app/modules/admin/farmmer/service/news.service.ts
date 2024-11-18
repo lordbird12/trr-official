@@ -65,18 +65,18 @@ export class NewsService {
                 })
             );
     }
-    getAPIFarmmer(search: any, page: number): Observable<any> {
+    getAPIFarmmer(search: any, page: number,perpage:number): Observable<any> {
         return this._httpClient
             .post('https://canegrow.com:28099/api/profile_farmer', {
                 FacID: '0',
                 page: page.toString(),
                 skip: '1',
-                take: '10',
+                take: perpage,
                 search: search,
             })
             .pipe(
                 switchMap((response: any) => {
-                    return of(response.data);
+                    return of(response);
                 })
             );
     }

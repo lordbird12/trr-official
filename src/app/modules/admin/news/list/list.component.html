@@ -24,14 +24,14 @@
 
             <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4 justify-center">
                 <mat-form-field [ngClass]="formFieldHelpers" class="fuse-mat-dense min-w-56 px-2 items-center mt-5">
-                    <mat-select [formControl]="status">
+                    <mat-select [formControl]="is_use"  (selectionChange)="getData()">
                         <mat-option [value]="''">
                             เลือกสถานะ
                         </mat-option>
-                        <mat-option [value]="'active'">
+                        <mat-option [value]="1">
                             เปิดใช้งาน
                         </mat-option>
-                        <mat-option [value]="'inactive'">
+                        <mat-option [value]="0">
                             ปิดใช้งาน
                         </mat-option>
                     </mat-select>

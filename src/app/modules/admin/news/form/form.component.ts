@@ -42,7 +42,7 @@ export class FormComponent implements OnInit {
             detail: '<p>Hello Quill</p>..',
             image: '',
             notify_status: '',
-            is_use: false,
+            is_use: ['1'],
         });
     }
 
