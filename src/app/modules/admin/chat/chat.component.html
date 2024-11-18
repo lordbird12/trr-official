@@ -23,11 +23,18 @@
                                         </div>
                                         <span *ngIf="name?.name != null" class="pl-2">{{name?.name}}</span>
                                         <span *ngIf="name?.name == null" class="pl-2">ผู้ใช้งานหมายเลข {{name?.id}}</span>
+                                        
+                                        <!-- Unread message notification -->
+                                        <span *ngIf="name?.noti > 0" class="ml-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex justify-center items-center">
+                                            {{name?.noti}}
+                                        </span>
+                        
                                         <span *ngIf="name?.meeting === 0" class="text-red-500 pl-2"><i class="pi pi-circle-on"></i></span>
                                     </div>
                                 </div>
                             </li>
                         </ul>
+                        
                     </div>
                 </div>
             </div>

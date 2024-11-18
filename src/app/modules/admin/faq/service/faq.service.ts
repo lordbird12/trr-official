@@ -11,7 +11,7 @@ export class FaqService {
     //     throw new Error('Method not implemented.');
     // }
 
-    constructor(private _httpClient: HttpClient) {}
+    constructor(private _httpClient: HttpClient) { }
 
     getPage(dataTablesParameters: any): Observable<any> {
         return this._httpClient
@@ -55,9 +55,9 @@ export class FaqService {
             );
     }
 
-    update(formData: FormData): Observable<any> {
+    update(item: any, id: any): Observable<any> {
         return this._httpClient
-            .post(environment.baseURL + `/api/update_faq`, formData)
+            .put(environment.baseURL + `/api/faq/${id}`, item)
             .pipe();
     }
 

@@ -75,12 +75,7 @@ export class FormComponent implements OnInit {
     }
 
     Submit(): void {
-        console.log(this.addForm.value);
-        // const end =  moment(this.addForm.value.register_date).format('YYYY-MM-DD')
-        // console.log(end)
-        // this.addForm.patchValue({
-        //   register_date:end
-        // })
+
         const confirmation = this._fuseConfirmationService.open({
             title: 'เพิ่มข้อมูล',
             message: 'คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ?',
@@ -149,7 +144,7 @@ export class FormComponent implements OnInit {
                         },
                     });
                 } else {
-                    this._service.update(formData).subscribe({
+                    this._service.update(this.addForm.value,this.Id).subscribe({
                         next: (resp: any) => {
                             this._router
                                 .navigateByUrl('admin/faq/list')

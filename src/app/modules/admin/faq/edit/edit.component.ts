@@ -17,6 +17,7 @@ export class EditComponent implements OnInit {
     addForm: FormGroup;
     permissiondata: any[];
     item: any;
+    id: any;
     imageUrls: string[] = [];
     constructor(
         private _router: Router,
@@ -40,8 +41,8 @@ export class EditComponent implements OnInit {
     ngOnInit(): void {
         this.activatedRoute.params.subscribe((params) => {
             // console.log(params);
-            const id = params.id;
-            this._service.getById(id).subscribe((resp: any) => {
+            this.id = params.id;
+            this._service.getById(this.id).subscribe((resp: any) => {
                 this.item = resp;
                 this.addForm.patchValue({
                     ...this.item,
@@ -94,27 +95,13 @@ export class EditComponent implements OnInit {
         confirmation.afterClosed().subscribe((result) => {
             // If the confirm button pressed...
             if (result === 'confirmed') {
-                const formData = new FormData();
-                Object.entries(this.addForm.value).forEach(
-                    ([key, value]: any[]) => {
-                        if (
-                            value !== '' &&
-                            value !== 'null' &&
-                            value !== null
-                        ) {
-                            formData.append(key, value);
-                        }
-                        if (key === 'image') {
-                            formData.append(key, this.selectedFile);
-                        }
-                    }
-                );
+alert(1)
                 this._service
-                    .update(formData)
+                    .update(this.addForm.value,this.id)
                     .subscribe({
                         next: (resp: any) => {
                             this._router
-                                .navigateByUrl('news/list')
+                                .navigateByUrl('faq/list')
                                 .then(() => {});
                         },
 
