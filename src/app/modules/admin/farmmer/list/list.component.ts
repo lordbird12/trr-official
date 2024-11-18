@@ -142,9 +142,10 @@ rowsPerPage = 10; // จำนวนแถวที่แสดงต่อห�
 
 
     loadFarmers(): void {
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage).subscribe((resp: any) => {
-            this.farmmer = resp;
-            this.quotas = [];
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+            this.farmmer = resp.data;
+            this.totalrecord = +resp.total-210
+            this.totalPages = Math.ceil(  this.totalrecord / this.row);
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
 
