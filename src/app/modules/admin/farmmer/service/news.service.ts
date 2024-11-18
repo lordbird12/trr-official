@@ -65,7 +65,7 @@ export class NewsService {
                 })
             );
     }
-    getAPIFarmmer(search: any, page: number,perpage:number): Observable<any> {
+    getAPIFarmmer(search: any, page: number,perpage?:number): Observable<any> {
         return this._httpClient
             .post('https://canegrow.com:28099/api/profile_farmer', {
                 FacID: '0',
@@ -356,7 +356,7 @@ export class NewsService {
     receive(Id: any): Observable<any> {
         const currentYear = new Date().getFullYear();
         const previousYear = currentYear - 1;
-        const beginDate = `12/01/${previousYear}`; 
+        const beginDate = `12/01/${previousYear}`;
         const endDate = `03/31/${currentYear}`;
         console.log("previousYear ",beginDate," currentYear ",endDate)
         return this._httpClient
