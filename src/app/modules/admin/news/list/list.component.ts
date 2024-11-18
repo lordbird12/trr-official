@@ -20,7 +20,7 @@ export interface PeriodicElement {
     email: string;
     position: string;
     phoneNumber: string;
-    status: string;
+    // status: string;
     is_use: string;
 }
 
@@ -35,7 +35,7 @@ const ELEMENT_DATA: PeriodicElement[] = [];
     styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-    status = new FormControl('');    
+    is_use = new FormControl('');    
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     dtOptions: DataTables.Settings = {};
@@ -51,7 +51,7 @@ export class ListComponent implements OnInit {
         'email',
         'position',
         'phoneNumber',
-        'status',
+        // 'status',
         'is_use',
     ];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
@@ -226,6 +226,7 @@ export class ListComponent implements OnInit {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
             },
             ajax: (dataTablesParameters: any, callback) => {
+                dataTablesParameters.is_use = this.is_use.value;
                 that._Service
                     .getPage(dataTablesParameters)
                     .subscribe((resp) => {
@@ -280,7 +281,9 @@ export class ListComponent implements OnInit {
     //     this._changeDetectorRef.detectChanges();
     // }
     
-    
+    getData() {
+        this.rerender();
+    }
     
     
 }

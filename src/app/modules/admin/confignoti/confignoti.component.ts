@@ -200,14 +200,14 @@ export class ConfignotiComponent implements OnInit {
         // ตรวจสอบว่า form ถูกต้องหรือไม่
         if (this.addForm.invalid) {
             // แสดงข้อความผิดพลาดสำหรับฟิลด์ที่ไม่ถูกต้อง
-            let errorMessage = "กรุณากรอกข้อมูลให้ครบถ้วน:";
+            let errorMessage = "";
             
             // ตรวจสอบฟิลด์แต่ละฟิลด์และเพิ่มข้อความผิดพลาดที่เกี่ยวข้อง
             if (this.addForm.get('title').hasError('required')) {
-                errorMessage += "\n- กรุณาระบุชื่อเรื่อง";
+                errorMessage += "\n กรุณาระบุประเภทการแจ้งเตือน";
             }
             if (this.addForm.get('body').hasError('required')) {
-                errorMessage += "\n- กรุณาระบุเนื้อหาของการแจ้งเตือน";
+                errorMessage += "\n กรุณาระบุรายละเอียด";
             }
             // if (this.addForm.get('date').invalid || this.addForm.get('date').value.length === 0) {
             //     errorMessage += "\n- กรุณาระบุวันที่";
@@ -309,7 +309,7 @@ export class ConfignotiComponent implements OnInit {
                             message: errorMessage,  // ใช้ข้อความกำกัยแทนข้อความที่ได้จาก error
                             icon: {
                                 show: true,
-                                name: 'heroicons_outline:exclamation',
+                                name: 'heroicons_outline:exclamation-circle',
                                 color: 'warning',
                             },
                             actions: {
