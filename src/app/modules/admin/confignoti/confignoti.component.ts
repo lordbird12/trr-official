@@ -55,11 +55,12 @@ export class ConfignotiComponent implements OnInit {
         private _service: ConfignotiService,
         public activatedRoute: ActivatedRoute,
         private http: HttpClient,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private cdr: ChangeDetectorRef,
     ) {
         this.addForm = this.formBuilder.group({
-            title: '',
-            body: '',
+            title: ['', Validators.required],
+            body: ['', Validators.required],
             date: this.formBuilder.array([]),
         });
     }
@@ -119,7 +120,7 @@ export class ConfignotiComponent implements OnInit {
         }
         formvalueday.push(t);
     }
-    delete(itemid: any) {
+    delete(date: any) {
         const confirmation = this._fuseConfirmationService.open({
             title: 'ลบข้อมูล',
             message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
@@ -143,8 +144,8 @@ export class ConfignotiComponent implements OnInit {
         });
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                this._service.delete(itemid).subscribe((resp) => {
-                    this.rerender();
+                this._service.delete({date: date}).subscribe((resp) => {
+                    this.refreshTable();
                 });
             }
             error: (err: any) => {};
@@ -175,7 +176,7 @@ export class ConfignotiComponent implements OnInit {
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 this._service.deletesub(itemid).subscribe((resp) => {
-                    this.rerender();
+                    this.refreshTable();
                 });
             }
             error: (err: any) => {};
@@ -196,7 +197,49 @@ export class ConfignotiComponent implements OnInit {
         f.removeAt(index);
     }
     Submit(): void {
+        // ตรวจสอบว่า form ถูกต้องหรือไม่
+        if (this.addForm.invalid) {
+            // แสดงข้อความผิดพลาดสำหรับฟิลด์ที่ไม่ถูกต้อง
+            let errorMessage = "กรุณากรอกข้อมูลให้ครบถ้วน:";
 
+            // ตรวจสอบฟิลด์แต่ละฟิลด์และเพิ่มข้อความผิดพลาดที่เกี่ยวข้อง
+            if (this.addForm.get('title').hasError('required')) {
+                errorMessage += "\n- กรุณาระบุชื่อเรื่อง";
+            }
+            if (this.addForm.get('body').hasError('required')) {
+                errorMessage += "\n- กรุณาระบุเนื้อหาของการแจ้งเตือน";
+            }
+            // if (this.addForm.get('date').invalid || this.addForm.get('date').value.length === 0) {
+            //     errorMessage += "\n- กรุณาระบุวันที่";
+            // }
+
+            // แสดงข้อความผิดพลาดโดยใช้ FuseConfirmationService
+            this._fuseConfirmationService.open({
+                title: 'ข้อมูลไม่ครบถ้วน',
+                message: errorMessage,
+                icon: {
+                    show: true,
+                    name: 'heroicons_outline:exclamation-circle',
+                    color: 'accent',
+                },
+                actions: {
+                    confirm: {
+                        show: true,
+                        label: 'ตกลง',
+                        color: 'primary',
+                    },
+                    cancel: {
+                        show: true,
+                        label: 'ยกเลิก',
+                    },
+                },
+                dismissible: true,
+            });
+
+            return; // หยุดการส่งข้อมูลถ้าฟอร์มไม่ถูกต้อง
+        }
+
+        // หากฟอร์มถูกต้อง ให้ทำการบันทึกข้อมูล
         const formattedData = this.addForm.value.date.map((group: any) => {
             return {
                 ...group,
@@ -231,74 +274,72 @@ export class ConfignotiComponent implements OnInit {
             dismissible: true,
         });
 
-        // Subscribe to the confirmation dialog closed action
         confirmation.afterClosed().subscribe((result) => {
-            // If the confirm button pressed...
             if (result === 'confirmed') {
-                // const formData = new FormData();
-                // Object.entries(this.addForm.value).forEach(
-                //     ([key, value]: any[]) => {
-                //         if (value !== '' && value !== 'null' && value !== null){
-                //             formData.append(key, value);
-                //         }
-                //     }
-                // );
-                this._service
-                    .Savedata(formData)
-                    .subscribe({
-                        next: (resp: any) => {
-                            this._fuseConfirmationService.open({
-                                title: 'สำเร็จ',
-                                message: "บันทึกข้อมูลสำเร็จ",
-                                icon: {
+                this._service.Savedata(formData).subscribe({
+                    next: (resp: any) => {
+                        this.refreshTable();
+                        this._fuseConfirmationService.open({
+                            title: 'สำเร็จ',
+                            message: "บันทึกข้อมูลสำเร็จ",
+                            icon: {
+                                show: true,
+                                name: 'heroicons_outline:check-circle',
+                                color: 'success',
+                            },
+                            actions: {
+                                confirm: {
+                                    show: false,
+                                    label: 'ตกลง',
+                                    color: 'primary',
+                                },
+                                cancel: {
                                     show: true,
-                                    name: 'heroicons_outline:exclamation',
-                                    color: 'success',
-                                },
-                                actions: {
-                                    confirm: {
-                                        show: false,
-                                        label: 'ตกลง',
-                                        color: 'primary',
-                                    },
-                                    cancel: {
-                                        show: false,
-                                        label: 'ยกเลิก',
-                                    },
-                                },
-                                dismissible: true,
-                            });
-                        },
+                                    label: 'ตกลง',
+                                }
+                            },
+                            dismissible: true,
+                        });
+                    },
+                    error: (err: any) => {
+                        const errorMessage = "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาระบุวันที่และเวลา"; // ข้อความกำกัย
 
-                        error: (err: any) => {
-                            console.log(err);
-                            this.addForm.enable();
-                            this._fuseConfirmationService.open({
-                                title: 'เกิดข้อผิดพลาด',
-                                message: err.error.message,
-                                icon: {
+                        this._fuseConfirmationService.open({
+                            title: 'เกิดข้อผิดพลาด',
+                            message: errorMessage,  // ใช้ข้อความกำกัยแทนข้อความที่ได้จาก error
+                            icon: {
+                                show: true,
+                                name: 'heroicons_outline:exclamation-circle',
+                                color: 'warning',
+                            },
+                            actions: {
+                                confirm: {
+                                    show: false,
+                                    label: 'ตกลง',
+                                    color: 'primary',
+                                },
+                                cancel: {
                                     show: true,
-                                    name: 'heroicons_outline:exclamation',
-                                    color: 'warning',
+                                    label: 'ตกลง',
                                 },
-                                actions: {
-                                    confirm: {
-                                        show: false,
-                                        label: 'ตกลง',
-                                        color: 'primary',
-                                    },
-                                    cancel: {
-                                        show: false,
-                                        label: 'ยกเลิก',
-                                    },
-                                },
-                                dismissible: true,
-                            });
-                        },
-                    });
+                            },
+                            dismissible: true,
+                        });
+                    },
+
+                });
             }
         });
     }
+
+
+    refreshTable() {
+        this._service.getDate(this.addForm.value.title).subscribe((data) => {
+            this.datenoti = data; // อัปเดต dataSource
+            this.cdr.detectChanges(); // แจ้งให้ Angular อัปเดตตาราง
+        });
+    }
+
     data(data: any, formData: FormData) {
         throw new Error('Method not implemented.');
     }
@@ -327,4 +368,5 @@ export class ConfignotiComponent implements OnInit {
     backTo() {
         this._router.navigate(['config/edit/1']);
     }
+
 }

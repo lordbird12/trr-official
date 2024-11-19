@@ -14,6 +14,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { PictureComponent } from '../picture/picture.component';
 import { FormControl } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { co } from '@fullcalendar/core/internal-common';
 declare var jQuery: any;
 export interface PeriodicElement {
     no: number;
@@ -61,10 +62,16 @@ export class ListComponent implements OnInit {
     farmmer: any[] = []
     data = new FormControl('1');
     searchTerm: string = '';
+    row: number = 10;
     currentPage: number = 1;
     totalPages: number = 1;
     quotas: any[] = []
     months: any[] = []
+    totalrecord: number;
+
+
+totalRows = 25; // จำนวนแถวทั้งหมด
+rowsPerPage = 10; // จำนวนแถวที่แสดงต่อหน้า
 
     constructor(
         private dialog: MatDialog,
@@ -78,8 +85,10 @@ export class ListComponent implements OnInit {
             this.province = resp;
             this._changeDetectorRef.markForCheck();
         });
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage).subscribe((resp: any) => {
-            this.farmmer = resp;
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+            this.farmmer = resp.data;
+            this.totalrecord = +resp.total-210
+            this.totalPages = Math.ceil(  this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
@@ -98,15 +107,18 @@ export class ListComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.loadTable();
-        this.searchFarmers();
-        this.loadFarmers();
+        // this.loadTable();
+        // this.searchFarmers();
+        // this.loadFarmers();
     }
 
     // ฟังก์ชันที่เรียกใช้เมื่อต้องการค้นหา
     searchFarmers(): void {
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage).subscribe((resp: any) => {
-            this.farmmer = resp;
+        this.currentPage = 1;
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+            this.farmmer = resp.data;
+            this.totalrecord = +resp.total-210
+            this.totalPages = Math.ceil(  this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
@@ -128,10 +140,12 @@ export class ListComponent implements OnInit {
         this.searchFarmers();
     }
 
+
     loadFarmers(): void {
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage).subscribe((resp: any) => {
-            this.farmmer = resp;
-            this.quotas = [];
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+            this.farmmer = resp.data;
+            this.totalrecord = +resp.total-210
+            this.totalPages = Math.ceil(  this.totalrecord / this.row);
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
 
@@ -142,8 +156,8 @@ export class ListComponent implements OnInit {
                 console.log(this.months);
             });
             // console.log(this.quotas);
-            console.log("เปลี่ยนหน้า page, this.farmmer", this.farmmer);
-            this.totalPages = resp.length
+            // console.log("เปลี่ยนหน้า page, this.farmmer", this.farmmer);
+            // this.totalPages = resp.length
             console.log("เปลี่ยนหน้า page, this.farmmer", this.totalPages);
             this._changeDetectorRef.markForCheck();
         });
@@ -304,53 +318,75 @@ export class ListComponent implements OnInit {
     }
     dataTablesParameters: any
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
-    loadTable(): void {
-        const that = this;
-        this.dtOptions = {
-            pagingType: 'full_numbers',
-            pageLength: 10,
-            serverSide: true,
-            processing: true,
-            order: [[0, 'desc']],
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
-            },
-            ajax: (dataTablesParameters: any, callback) => {
-                that._Service.getPage(dataTablesParameters).subscribe((resp) => {
-                    // this.dataRow = resp.data;
-                    this.pages.current_page = resp.current_page;
-                    this.pages.last_page = resp.last_page;
-                    this.pages.per_page = resp.per_page;
-                    if (parseInt(resp.current_page) > 1) {
-                        this.pages.begin =
-                            parseInt(resp.per_page) *
-                            (parseInt(resp.current_page) - 1);
-                    } else {
-                        this.pages.begin = 0;
-                    }
-                    that.dataRow = this.farmmer;
-                    this._changeDetectorRef.markForCheck();
 
-                    callback({
-                        recordsTotal: resp.total,
-                        recordsFiltered: resp.total,
-                        data: [],
-                    });
-                });
-            },
-            // columns: [
-            //     { data: 'id_card_number', orderable: false },
-            //     { data: 'name', orderable: false },
-            //     { data: 'qouta', orderable: false },
-            //     { data: 'phone', orderable: false },
-            //     // { data: 'no', orderable: false },
-            //     { data: 'no', orderable: false },
-            //     { data: 'area', orderable: false },
-            //     { data: 'count_area', orderable: false },
-            //     { data: 'action', orderable: false },
-            // ],
-        };
+
+    onPageLengthChange(event: Event): void {
+        console.log(event.target,this.row)
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+            this.farmmer = resp.data;
+            this.totalrecord = +resp.total-210
+
+            this.totalPages = Math.ceil(  this.totalrecord / this.row);
+            this.quotas = [];
+            this.farmmer.forEach(element => {
+                this.quotas.push(element.Quota_id);
+
+            });
+
+            this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                this.months = resp;
+                console.log(this.months);
+            });
+            this._changeDetectorRef.markForCheck();
+        });
     }
+    // loadTable(): void {
+    //     const that = this;
+    //     this.dtOptions = {
+    //         pagingType: 'full_numbers',
+    //         pageLength: 10, // ค่าเริ่มต้น 10f
+    //         serverSide: true,
+    //         processing: true,
+    //         order: [[0, 'desc']],
+    //         searching: false,
+    //         language: {
+    //             url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
+    //         },
+    //         ajax: (dataTablesParameters: any, callback) => {
+    //             that._Service
+    //                 .getAPIFarmmer(this.searchTerm, this.currentPage,this.row)
+    //                 .subscribe((resp) => {
+    //                     this.pages.current_page = resp.current_page;
+    //                     this.pages.last_page = resp.last_page;
+    //                     this.pages.per_page = resp.per_page;
+    //                     if (parseInt(resp.current_page) > 1) {
+    //                         this.pages.begin =
+    //                             parseInt(resp.per_page) *
+    //                             (parseInt(resp.current_page) - 1);
+    //                     } else {
+    //                         this.pages.begin = 0;
+    //                     }
+    //                     that.farmmer = resp.data;
+    //                     callback({
+    //                         recordsTotal: resp.total,
+    //                         recordsFiltered: resp.total,
+    //                         data: [],
+    //                     });
+    //                 });
+    //         },
+    //         columns: [
+    //             { data: 'id_card_number', orderable: false },
+    //             { data: 'name', orderable: false },
+    //             { data: 'qouta', orderable: false },
+    //             { data: 'phone', orderable: false },
+    //             { data: 'no', orderable: false },
+    //             { data: 'area', orderable: false },
+    //             { data: 'count_area', orderable: false },
+    //             { data: 'action', orderable: false },
+    //         ],
+    //     };
+    // }
+
 
 
     // loadTable(): void {
@@ -406,4 +442,15 @@ export class ListComponent implements OnInit {
         console.log(data);
         return data === false ? 'bg-red' : 'bg-green';
     }
+
+    get startRow() {
+        return (this.currentPage - 1) * this.rowsPerPage + 1;
+    }
+
+    get endRow() {
+        return Math.min(this.currentPage * this.rowsPerPage, this.totalRows);
+    }
+
+
+
 }

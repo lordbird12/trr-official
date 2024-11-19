@@ -126,7 +126,7 @@ permissions: any[] = [];
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
                 const updatedData = this.editForm.value;
-                this._service.update(updatedData, this.data.data.id).subscribe({
+                this._service.update(updatedData).subscribe({
                     next: (resp: any) => {
                         this.showFlashMessage('success');
                         this.dialogRef.close(resp);

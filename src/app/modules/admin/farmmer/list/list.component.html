@@ -72,40 +72,49 @@
                     </tr>
                 </tbody> -->
 
-            <div class="flex justify-end mb-4">
+            <div class="flex justify-between mb-4">
+                <div class="flex items-center">
+                    <label for="rowSelect" class="">แสดง</label>
+                    <select id="rowSelect" [(ngModel)]="row" (change)="onPageLengthChange($event)" class="border rounded-md p-2 mx-2 w-16 text-center">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                    </select>
+                    <span>แถว</span>
+                </div>
                 <input type="text" placeholder="ค้นหา..." class="border p-2 rounded-md w-1/5" [(ngModel)]="searchTerm"
                     (ngModelChange)="onSearchChange($event)">
             </div>
-            <table class="table row-border hover w-full text-center whitespace-nowrap">
+            <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full text-center whitespace-nowrap">
                 <thead class="bg-gray-700 text-black">
                     <tr class="bg-gray-200">
-                        <th class="border-b-2 w-1/9 p-3">เลขบัตรประชาชน</th>
-                        <th class="border-b-2 w-1/9 p-3">ชื่อเกษตรกร</th>
-                        <th class="border-b-2 w-1/9 p-3">เลขที่โควต้า</th>
-                        <th class="border-b-2 w-1/9 p-3">เบอร์ติดต่อ</th>
                         <th class="border-b-2 w-1/9 p-3">เขต</th>
-                        <th class="border-b-2 w-1/9 p-3">พื้นที่ (ไร่)</th>
+                        <th class="border-b-2 w-1/9 p-3">เลขที่โควต้า</th>
+                        <th class="border-b-2 w-1/9 p-3">ชื่อเกษตรกร</th>
                         <th class="border-b-2 w-1/9 p-3">จำนวนแปลง</th>
+                        <th class="border-b-2 w-1/9 p-3">พื้นที่ (ไร่)</th>
+                        <th class="border-b-2 w-1/9 p-3">เลขบัตรประชาชน</th>
+                        <th class="border-b-2 w-1/9 p-3">เบอร์ติดต่อ</th>
                         <th class="border-b-2 w-1/9 p-3">สถานะการบันทึกกิจกรรม</th>
                         <th class="border-b-2 w-1/9 p-3"></th>
                     </tr>
                 </thead>
                 <tbody *ngIf="farmmer?.length != 0">
                     <tr *ngFor="let item of farmmer; let i = index" class="hover:bg-gray-100 whitespace-nowrap">
-                        <td class="p-3">{{ item.id_card_number ?? '-' }}</td>
-                        <td class="p-3">{{ item.First_name ?? '-' }} {{ item.Last_name ?? '-' }}</td>
-                        <td class="p-3">{{ item.Quota_id ?? '-' }}</td>
-                        <td class="p-3">{{ item.phone_number ?? '-' }}</td>
                         <td class="p-3">{{ item.area ?? '-' }}</td>
-                        <td class="p-3">{{ item.station_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.Quota_id ?? '-' }}</td>
+                        <td class="p-3">{{ item.First_name ?? '-' }} {{ item.Last_name ?? '-' }}</td>
                         <td class="p-3">{{ item.area_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.station_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.id_card_number ?? '-' }}</td>
+                        <td class="p-3">{{ item.phone_number ?? '-' }}</td>
                         <td class="p-3">
                             <div class="grid-container">
                                 <ng-container *ngFor="let month of months; let n = index">
                                     <ng-container *ngIf="month.quota_id == item.Quota_id">
                                         <div class="grid-item border-2 border-black-600 bg-green-600" *ngIf="month?.months?.jan == true">1</div>
                                         <div class="grid-item" *ngIf="month?.months?.jan == false">1</div>
-                                        
+
                                         <div class="grid-item border-2 border-black-600 bg-green-600" *ngIf="month?.months?.feb == true">2</div>
                                         <div class="grid-item" *ngIf="month?.months?.feb == false">2</div>
 
@@ -159,17 +168,29 @@
             </table>
 
             <div class="flex items-center space-x-1 justify-end w-full pr-4 py-2">
-                <button *ngIf="currentPage >= 2" class="bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500"
-                    (click)="changePage(currentPage - 1)" [disabled]="currentPage <= 1">&laquo;
+                <button *ngIf="currentPage > 1" class=" text-black py-2 px-3 rounded hover:bg-slate-800 hover:text-white"
+                    (click)="changePage(1)">
+                    หน้าแรก
                 </button>
-                <p class="border py-2 px-3 rounded ">{{ currentPage }}</p>
-                <button *ngIf="farmmer?.length == 10" class="bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500"
-                    (click)="changePage(currentPage + 1)">
-                    &raquo;
+                <!-- ปุ่มสำหรับย้อนกลับไปหน้าก่อนหน้า -->
+                <button *ngIf="currentPage > 1" class="  text-black py-2 px-4 rounded hover:bg-slate-800 hover:text-white"
+                    (click)="changePage(currentPage - 1)">ก่อนหน้า
+
+                </button>
+
+                <!-- ข้อความแสดงหน้าปัจจุบันและหน้าทั้งหมด -->
+                <p class="border py-2 px-3 rounded">{{ currentPage }} / {{ totalPages }}</p>
+
+                <!-- ปุ่มสำหรับไปยังหน้าถัดไป -->
+                <button *ngIf="currentPage < totalPages" class="  text-black py-2 px-4 rounded hover:bg-slate-800 hover:text-white"
+                    (click)="changePage(currentPage + 1)">ถัดไป
+
+                </button>
+                <button *ngIf="currentPage < totalPages" class="  text-black py-2 px-3 rounded hover:bg-slate-800 hover:text-white"
+                    (click)="changePage(totalPages)">
+                    หน้าสุดท้าย
                 </button>
             </div>
-
-
         </div>
     </div>
 </div>

@@ -20,6 +20,11 @@ export class FormComponent implements OnInit {
     editorContent = '<p>Hello Quill</p>';
     uploadedImages: any;
 
+    is_use: any[] = [
+        { name: 'Active', value: '1' },
+        { name: 'Inactive', value: '0' },
+    ];
+
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -37,6 +42,7 @@ export class FormComponent implements OnInit {
             detail: '<p>Hello Quill</p>..',
             image: '',
             notify_status: '',
+            is_use: ['1'],
         });
     }
 
@@ -50,6 +56,7 @@ export class FormComponent implements OnInit {
                     this.item = resp;
                     this.addForm.patchValue({
                         ...this.item,
+                        // is_use: this.item.is_use,
                     });
 
                     this.addForm.patchValue({

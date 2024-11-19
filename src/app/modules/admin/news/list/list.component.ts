@@ -21,6 +21,7 @@ export interface PeriodicElement {
     position: string;
     phoneNumber: string;
     status: string;
+    is_use: string;
 }
 
 const ELEMENT_DATA: PeriodicElement[] = [];
@@ -34,7 +35,7 @@ const ELEMENT_DATA: PeriodicElement[] = [];
     styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-    status = new FormControl('');    
+    is_use = new FormControl('');
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     dtOptions: DataTables.Settings = {};
@@ -51,12 +52,14 @@ export class ListComponent implements OnInit {
         'position',
         'phoneNumber',
         'status',
+        'is_use',
     ];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     @ViewChild(MatSort) sort: MatSort;
     flashMessage: null;
     flashErrorMessage: null;
     private _matDialog: any;
+
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -223,6 +226,7 @@ export class ListComponent implements OnInit {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
             },
             ajax: (dataTablesParameters: any, callback) => {
+                dataTablesParameters.is_use = this.is_use.value;
                 that._Service
                     .getPage(dataTablesParameters)
                     .subscribe((resp) => {
@@ -264,4 +268,22 @@ export class ListComponent implements OnInit {
             .afterClosed()
             .subscribe(() => {});
     }
+
+    // toggleStatus(item: any): void {
+    //     // สลับสถานะระหว่าง active และ inactive
+    //     if (item.status === 'active') {
+    //         item.status = 'inactive'; // เปลี่ยนเป็น inactive
+    //     } else {
+    //         item.status = 'active'; // เปลี่ยนเป็น active
+    //     }
+
+    //     // แจ้งให้ Angular ทราบเกี่ยวกับการเปลี่ยนแปลงสถานะ
+    //     this._changeDetectorRef.detectChanges();
+    // }
+
+    getData() {
+        this.rerender();
+    }
+
+
 }

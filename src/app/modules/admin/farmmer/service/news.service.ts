@@ -17,7 +17,7 @@ export class NewsService {
     getPage(dataTablesParameters: any): Observable<any> {
         return this._httpClient
             // .post('https://asha-tech.co.th/trr-api/public/api/frammer_page', dataTablesParameters)
-            .post(environment.baseURL + 'api/frammer_page', dataTablesParameters)
+            .post(environment.baseURL + '/api/frammer_page', dataTablesParameters)
             .pipe(
                 switchMap((response: any) => {
                     return of(response.data);
@@ -65,18 +65,18 @@ export class NewsService {
                 })
             );
     }
-    getAPIFarmmer(search: any, page: number): Observable<any> {
+    getAPIFarmmer(search: any, page: number,perpage?:number): Observable<any> {
         return this._httpClient
             .post('https://canegrow.com:28099/api/profile_farmer', {
                 FacID: '0',
                 page: page.toString(),
                 skip: '1',
-                take: '10',
+                take: perpage,
                 search: search,
             })
             .pipe(
                 switchMap((response: any) => {
-                    return of(response.data);
+                    return of(response);
                 })
             );
     }
@@ -356,7 +356,7 @@ export class NewsService {
     receive(Id: any): Observable<any> {
         const currentYear = new Date().getFullYear();
         const previousYear = currentYear - 1;
-        const beginDate = `12/01/${previousYear}`; 
+        const beginDate = `12/01/${previousYear}`;
         const endDate = `03/31/${currentYear}`;
         console.log("previousYear ",beginDate," currentYear ",endDate)
         return this._httpClient
