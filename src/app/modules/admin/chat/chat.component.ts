@@ -20,7 +20,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
   selectedChatId: number | null = null;
   uploadProgress: number = 0;
   private intervalId: any;
-    userdata: any;
+  userdata: any;
   constructor(private chatService: ChatService, private cdr: ChangeDetectorRef) {
     this.userdata = JSON.parse(localStorage.getItem('user'))
   }
@@ -78,7 +78,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
       this.member = resp.data.data.map((chat: any) => ({
         id: chat?.id,
         name: chat?.frammer?.name ?? "Guest",
-        meeting: chat?.meeting  ?? "-",
+        meeting: chat?.meeting ?? "-",
         image: this.env + chat?.frammer?.image,
         chat_msgs: chat?.chat_msgs ?? "-",
         noti: chat?.noti ?? "-"
@@ -99,24 +99,33 @@ export class NewChatComponent implements OnInit, OnDestroy {
   checkNewMessages() {
     this.getMessages();
   }
-  uploadfile(){
+  uploadfile() {
     console.log(this.fileInput)
   }
   name: string;
   iduser: any;
-  selectContact(contactId: number) {
+  selectContact(contactId: number): void {
+    this.chatService.updateChatStatus(contactId).subscribe();
+  
+    // Update the selected chat details
     this.selectedChatId = contactId;
-    console.log(contactId)
+    console.log(contactId);
+  
     const selectedChat = this.member.find(contact => contact.id === contactId);
-
-    this.name = selectedChat?.name;
-    this.iduser = selectedChat?.id;
+  
     if (selectedChat) {
-      this.chat_msgs = selectedChat?.chat_msgs;
+      // Destructure the selected chat data
+      const { name, id, chat_msgs } = selectedChat;
+      this.name = name;
+      this.iduser = id;
+      this.chat_msgs = chat_msgs;
+  
+      // Scroll to bottom and trigger change detection
       setTimeout(() => this.scrollToBottom(), 100);
       this.cdr.detectChanges();
     }
   }
+  
 
   sendMessage() {
     if (this.newMessage.trim().length === 0 || this.selectedChatId === null) {
@@ -132,7 +141,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
     console.log(filePath);
 
     if (this.selectedChatId === null) return;
-    this.chatService.sendMessages(this.selectedChatId, filePath, this.userdata?.id,type).subscribe((resp: any) => {
+    this.chatService.sendMessages(this.selectedChatId, filePath, this.userdata?.id, type).subscribe((resp: any) => {
       const newMessageData = {
         id: resp?.data?.id,
         message: filePath,
@@ -154,7 +163,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
     console.log(event)
     if (this.selectedChatId === null) {
       console.log('No selected chat, file upload aborted.');
-      return ;
+      return;
     }
 
     const file: File = event.target.files[0];
@@ -164,7 +173,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
         this.chatService.uploadImage(this.selectedChatId, file).subscribe((event: HttpEvent<any>) => {
           this.handleUploadEvent(event, 'image');
           console.log('Image upload completed.');
-          console.log(event,'eventimage');
+          console.log(event, 'eventimage');
         });
       } else {
         console.log('Uploading file:', file?.name);
@@ -180,8 +189,8 @@ export class NewChatComponent implements OnInit, OnDestroy {
 
 
   handleUploadEvent(event: any, type: string) {
-    console.log(event,'path')
-    console.log(type,'type')
+    console.log(event, 'path')
+    console.log(type, 'type')
     this.sendMessageWithFile(event.data, type);
     // switch (event.type) {
     //   case HttpEventType.UploadProgress:

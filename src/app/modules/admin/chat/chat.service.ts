@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
-    userdata: any;
+  userdata: any;
+  private _data: BehaviorSubject<any | null> = new BehaviorSubject(null);
+
   constructor(private http: HttpClient) {
     this.userdata = JSON.parse(localStorage.getItem('user'))
-   }
+  }
 
   getMessages(): Observable<any> {
     const headers = new HttpHeaders({
@@ -35,7 +37,7 @@ export class ChatService {
     }, { headers: headers });
   }
 
-  sendMessages(chatId: number, message: string,userid: number, type: string): Observable<any> {
+  sendMessages(chatId: number, message: string, userid: number, type: string): Observable<any> {
     return this.http.post(environment.baseURL + `/api/chat_msg`, {
       "chat_id": chatId,
       "user_id": userid,
@@ -62,6 +64,17 @@ export class ChatService {
 
   deleteMessage(messageId: number): Observable<any> {
     return this.http.delete(environment.baseURL + `/api/chat_msg/${messageId}`);
+  }
+
+
+  updateChatStatus(id: any): Observable<any> {
+    return this.http
+      .get<any>(environment.baseURL + '/api/update_chat_status/' + id)
+      .pipe(
+        tap((result) => {
+          this._data.next(result);
+        })
+      );
   }
 }
 

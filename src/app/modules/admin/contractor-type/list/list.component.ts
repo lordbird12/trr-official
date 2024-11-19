@@ -173,7 +173,7 @@ export class ListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _Service: VendorService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) { }
 
     ngOnInit(): void {
         this.loadTable();
@@ -269,71 +269,101 @@ export class ListComponent implements OnInit {
             dtInstance.ajax.reload();
         });
     }
-    delete(itemid: any) {
-        const confirmation = this._fuseConfirmationService.open({
-            title: 'ลบข้อมูล',
-            message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
-            icon: {
-                show: true,
-                name: 'heroicons_outline:exclamation-triangle',
-                color: 'warning',
-            },
-            actions: {
-                confirm: {
+    delete(item: any) {
+        if (item.feature_contractors.length > 0) {
+            const confirmation = this._fuseConfirmationService.open({
+                title: 'พบปัญหา',
+                message: 'ไม่สามารถลบข้อมูลได้เนื่องจากมีข้อมูลเกษตรกรอยู่ในระบบ',
+                icon: {
                     show: true,
-                    label: 'Remove',
-                    color: 'warn',
+                    name: 'heroicons_outline:exclamation-triangle',
+                    color: 'warning',
                 },
-                cancel: {
+                actions: {
+                    confirm: {
+                        show: true,
+                        label: 'เข้าใจแล้ว',
+                        color: 'warn',
+                    },
+                    cancel: {
+                        show: false,
+                        label: 'ยกเลิก',
+                    },
+                },
+                dismissible: true,
+            });
+            confirmation.afterClosed().subscribe((result) => {
+                if (result === 'confirmed') {
+                    
+                }
+                error: (err: any) => { };
+            });
+        } else {
+            const confirmation = this._fuseConfirmationService.open({
+                title: 'ลบข้อมูล',
+                message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
+                icon: {
                     show: true,
-                    label: 'Cancel',
+                    name: 'heroicons_outline:exclamation-triangle',
+                    color: 'warning',
                 },
-            },
-            dismissible: true,
-        });
-        confirmation.afterClosed().subscribe((result) => {
-            if (result === 'confirmed') {
-                this._Service.delete(itemid).subscribe((resp) => {
-                    this.loadTable();
-                });
-            }
-            error: (err: any) => {};
-        });
+                actions: {
+                    confirm: {
+                        show: true,
+                        label: 'ยืนยัน',
+                        color: 'warn',
+                    },
+                    cancel: {
+                        show: true,
+                        label: 'ยกเลิก',
+                    },
+                },
+                dismissible: true,
+            });
+            confirmation.afterClosed().subscribe((result) => {
+                if (result === 'confirmed') {
+                    this._Service.delete(item.id).subscribe((resp) => {
+                        this.loadTable();
+                    });
+                }
+                error: (err: any) => { };
+            });
+        }
     }
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
 
     loadTable(): void {
         const that = this;
         that._Service
-        .getPage({
-            "draw": 1,
-            "order": [
-                {
-                    "column": 0,
-                    "dir": "asc"
+            .getPage({
+                "draw": 1,
+                "order": [
+                    {
+                        "column": 0,
+                        "dir": "asc"
+                    }
+                ],
+                "start": 0,
+                "length": 10,
+                "search": {
+                    "value": "",
+                    "regex": false
                 }
-            ],
-            "start": 0,
-            "length": 10,
-            "search": {
-                "value": "",
-                "regex": false
-            }
-        })
-        .subscribe((resp) => {
-            this.pages.current_page = resp.current_page;
-            this.pages.last_page = resp.last_page;
-            this.pages.per_page = resp.per_page;
-            if (parseInt(resp.current_page) > 1) {
-                this.pages.begin =
-                    parseInt(resp.per_page) *
-                    (parseInt(resp.current_page) - 1);
-            } else {
-                this.pages.begin = 0;
-            }
-            that.dataRow = resp.data;
+            })
+            .subscribe((resp) => {
+                this.pages.current_page = resp.current_page;
+                this.pages.last_page = resp.last_page;
+                this.pages.per_page = resp.per_page;
+                if (parseInt(resp.current_page) > 1) {
+                    this.pages.begin =
+                        parseInt(resp.per_page) *
+                        (parseInt(resp.current_page) - 1);
+                } else {
+                    this.pages.begin = 0;
+                }
+                that.dataRow = resp.data;
 
-        });
+            });
     }
     showPicture(imgObject: any): void {
         this.dialog
@@ -344,6 +374,6 @@ export class ListComponent implements OnInit {
                 },
             })
             .afterClosed()
-            .subscribe(() => {});
+            .subscribe(() => { });
     }
 }

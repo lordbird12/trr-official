@@ -28,7 +28,7 @@
             <button *ngFor="let item of dataRow; let i = index"
                 class="relative flex flex-col items-center w-50 h-50 bg-[#ededf5] hover:bg-[#d9d9e0] m-10 p-5 rounded-md justify-between">
                 <div class="absolute top-2 right-2">
-                    <mat-icon (click)="delete(item.id)" class="cursor-pointer"
+                    <mat-icon (click)="delete(item)" class="cursor-pointer"
                         [svgIcon]="'heroicons_outline:trash'"></mat-icon>
                 </div>
                 <div class="flex-shrink-0">
