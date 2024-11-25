@@ -53,9 +53,9 @@ export class NewsService {
             );
     }
 
-    update(Id: any, data: any): Observable<any> {
+    update(data: any, Id: any): Observable<any> {
         return this._httpClient
-            .post(environment.baseURL + `api/update_news`, data)
+            .put(environment.baseURL + `/api/contractor/${Id}`, data)
             .pipe();
     }
 
