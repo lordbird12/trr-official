@@ -43,6 +43,7 @@ export class FormComponent implements OnInit {
             id:'',
             question: '',
             answer: '',
+            is_use: '',
             status: false,
         });
     }
@@ -65,6 +66,7 @@ export class FormComponent implements OnInit {
                 id:'',
                 question: '',
                 answer: '',
+                is_use: '',
             });
         }
     }
