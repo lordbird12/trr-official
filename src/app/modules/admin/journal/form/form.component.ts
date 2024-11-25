@@ -17,7 +17,7 @@ export class FormComponent implements OnInit {
     permissiondata: any[];
     Id: any;
     item: any;
-    editorContent = '<p>Hello Quill</p>';
+    editorContent = '';
     uploadedImages: any;
     uploadedFile: any;
     srcResult: any;

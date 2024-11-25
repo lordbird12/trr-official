@@ -78,7 +78,7 @@ export class DetailComponent implements OnInit {
     permissiondata: any[];
     Id: any;
     item: any;
-    editorContent = '<p>Hello Quill</p>';
+    editorContent = '';
     uploadedImages: any;
     uploadedImages1: any;
     uploadedImages2: any;

@@ -37,7 +37,7 @@ export class FormComponent implements OnInit {
     permissiondata: any[];
     Id: any;
     item: any;
-    editorContent = '<p>Hello Quill</p>';
+    editorContent = '';
     uploadedImages: any;
     isLoading: boolean = false;
 
@@ -67,7 +67,7 @@ export class FormComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             id: '',
             title: '',
-            detail: '<p>Hello Quill</p>..',
+            detail: '..',
             status: '',
         });
     }
