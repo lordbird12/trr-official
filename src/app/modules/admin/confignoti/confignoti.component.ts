@@ -204,10 +204,10 @@ export class ConfignotiComponent implements OnInit {
 
             // ตรวจสอบฟิลด์แต่ละฟิลด์และเพิ่มข้อความผิดพลาดที่เกี่ยวข้อง
             if (this.addForm.get('title').hasError('required')) {
-                errorMessage += "\n- กรุณาระบุชื่อเรื่อง";
+                errorMessage += "\n- กรุณาระบุประเภทการแจ้งเตือน";
             }
             if (this.addForm.get('body').hasError('required')) {
-                errorMessage += "\n- กรุณาระบุเนื้อหาของการแจ้งเตือน";
+                errorMessage += "\n- กรุณาระบุรายละเอียดการแจ้งเตือน";
             }
             // if (this.addForm.get('date').invalid || this.addForm.get('date').value.length === 0) {
             //     errorMessage += "\n- กรุณาระบุวันที่";
