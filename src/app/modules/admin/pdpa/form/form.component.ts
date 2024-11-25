@@ -173,7 +173,7 @@ export class FormComponent implements OnInit {
         if (this.Id) {
             title = 'แก้ไขข้อมูล';
         } else {
-            title = 'เพิ่มข้อมูล';
+            title = 'บันทึกข้อมูล';
         }
 
         const confirmation = this._fuseConfirmationService.open({

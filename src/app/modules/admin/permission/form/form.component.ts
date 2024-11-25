@@ -136,8 +136,8 @@ export class FormComponent implements OnInit, AfterViewInit, OnDestroy {
 
     create(): void {
         const confirmation = this._fuseConfirmationService.open({
-            title: 'เพิ่มข้อมูล',
-            message: 'คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ?',
+            title: 'บันทึกข้อมูล',
+            message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: false,
                 name: 'heroicons_outline:exclamation',
