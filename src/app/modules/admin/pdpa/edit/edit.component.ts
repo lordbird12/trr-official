@@ -110,7 +110,7 @@ export class EditComponent implements OnInit {
                     }
                 );
                 this._service
-                    .update(formData)
+                    .update(formData,null)
                     .subscribe({
                         next: (resp: any) => {
                             this._router

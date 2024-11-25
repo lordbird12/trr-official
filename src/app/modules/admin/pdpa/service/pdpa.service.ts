@@ -63,17 +63,17 @@ export class PdpaService {
             );
     }
 
-    update(formData: FormData): Observable<any> {
-        return this._httpClient
-            .post(environment.baseURL + `/api/update_news`, formData)
-            .pipe();
-    }
-
-    // update(Id: any, data: FormData): Observable<any> {
+    // update(formData: FormData): Observable<any> {
     //     return this._httpClient
-    //         .put(environment.baseURL + `api/customer/${Id}`, data)
+    //         .post(environment.baseURL + `/api/pdpa`, formData)
     //         .pipe();
     // }
+
+    update(data: FormData,Id: any): Observable<any> {
+        return this._httpClient
+            .put(environment.baseURL + `/api/pdpa/${Id}`, data)
+            .pipe();
+    }
 
     delete(Id: any): Observable<any> {
         return this._httpClient

@@ -85,7 +85,7 @@ export class FormComponent implements OnInit {
                         ...this.item,
                     });
 
-          
+
                     // console.log(this.item.image);
                     // this.files.push(this.item.image);
                     if (this.item.image) this.uploadedImages = this.item.image;
@@ -163,15 +163,22 @@ export class FormComponent implements OnInit {
     }
 
     Submit(): void {
-        console.log(this.addForm.value);
+        // console.log(this.addForm.value);
         // const end =  moment(this.addForm.value.register_date).format('YYYY-MM-DD')
         // console.log(end)
         // this.addForm.patchValue({
         //   register_date:end
         // })
+        let title = "";
+        if (this.Id) {
+            title = 'แก้ไขข้อมูล';
+        } else {
+            title = 'เพิ่มข้อมูล';
+        }
+
         const confirmation = this._fuseConfirmationService.open({
-            title: 'เพิ่มข้อมูล',
-            message: 'คุณต้องการเพิ่มข้อมูลใช่หรือไม่ ?',
+            title: title,
+            message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: false,
                 name: 'heroicons_outline:exclamation',
@@ -195,14 +202,9 @@ export class FormComponent implements OnInit {
         confirmation.afterClosed().subscribe((result) => {
             // If the confirm button pressed...
             if (result === 'confirmed') {
-                const formData = new FormData();
-                Object.entries(this.addForm.value).forEach(
-                    ([key, value]: any[]) => {
-                        formData.append(key, value);
-                    }
-                );
+
                 if (!this.Id) {
-                    this._service.create(formData).subscribe({
+                    this._service.create(this.addForm.value).subscribe({
                         next: (resp: any) => {
                             this._router
                                 .navigateByUrl('admin/pdpa/list')
@@ -210,7 +212,6 @@ export class FormComponent implements OnInit {
                         },
 
                         error: (err: any) => {
-                            console.log(err);
                             this.addForm.enable();
                             this._fuseConfirmationService.open({
                                 title: 'ไม่สามารถบันทึกข้อมูลได้',
@@ -233,19 +234,17 @@ export class FormComponent implements OnInit {
                                 },
                                 dismissible: true,
                             });
-                            console.log(err.error.message);
                         },
                     });
                 } else {
-                    this._service.update(formData).subscribe({
+                    this._service.update(this.addForm.value,this.Id).subscribe({
                         next: (resp: any) => {
                             this._router
-                                .navigateByUrl('admin/news/list')
+                                .navigateByUrl('admin/pdpa/list')
                                 .then(() => { });
                         },
 
                         error: (err: any) => {
-                            console.log(err);
                             this.addForm.enable();
                             this._fuseConfirmationService.open({
                                 title: 'เกิดข้อผิดพลาด',
@@ -268,7 +267,6 @@ export class FormComponent implements OnInit {
                                 },
                                 dismissible: true,
                             });
-                            console.log(err.error.message);
                         },
                     });
                 }
@@ -298,6 +296,6 @@ export class FormComponent implements OnInit {
     }
 
     backTo() {
-        this._router.navigate(['admin/news/list']);
+        this._router.navigate(['admin/pdpa/list']);
     }
 }
