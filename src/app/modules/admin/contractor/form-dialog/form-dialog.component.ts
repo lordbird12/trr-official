@@ -206,6 +206,11 @@ export class FormDialogComponent implements OnInit {
 
     }
 
+    onPhoneInput(event: any): void {
+        const input = event.target;
+        input.value = input.value.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
+      }
+      
 
     addFeature(featureId: number) {
         const features = this.addForm.get('features') as FormArray;
