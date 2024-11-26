@@ -70,8 +70,8 @@ export class ListComponent implements OnInit {
     totalrecord: number;
 
 
-totalRows = 25; // จำนวนแถวทั้งหมด
-rowsPerPage = 10; // จำนวนแถวที่แสดงต่อหน้า
+    totalRows = 25; // จำนวนแถวทั้งหมด
+    rowsPerPage = 10; // จำนวนแถวที่แสดงต่อหน้า
 
     constructor(
         private dialog: MatDialog,
@@ -85,10 +85,10 @@ rowsPerPage = 10; // จำนวนแถวที่แสดงต่อห�
             this.province = resp;
             this._changeDetectorRef.markForCheck();
         });
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total-210
-            this.totalPages = Math.ceil(  this.totalrecord / this.row);
+            this.totalrecord = +resp.total - 210
+            this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
@@ -115,10 +115,10 @@ rowsPerPage = 10; // จำนวนแถวที่แสดงต่อห�
     // ฟังก์ชันที่เรียกใช้เมื่อต้องการค้นหา
     searchFarmers(): void {
         this.currentPage = 1;
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total-210
-            this.totalPages = Math.ceil(  this.totalrecord / this.row);
+            this.totalrecord = +resp.total - 210
+            this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
@@ -142,10 +142,10 @@ rowsPerPage = 10; // จำนวนแถวที่แสดงต่อห�
 
 
     loadFarmers(): void {
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total-210
-            this.totalPages = Math.ceil(  this.totalrecord / this.row);
+            this.totalrecord = +resp.total - 210
+            this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
 
@@ -224,6 +224,52 @@ rowsPerPage = 10; // จำนวนแถวที่แสดงต่อห�
 
     goToProfile(id: string) {
         this._router.navigate(['profile/page/edit/' + id]);
+    }
+    goToDelete(id: string) {
+        const confirmation = this._fuseConfirmationService.open({
+            title: 'ลบข้อมูล',
+            message: 'การลบข้อมูลจะมีผลทำให้ข้อมูลการยอมรับ PDPA และกิจกรรมหายไปจากระบบ ยืนยันใช่หรือไม่',
+            icon: {
+                show: true,
+                name: 'heroicons_outline:exclamation-triangle',
+                color: 'warning',
+            },
+            actions: {
+                confirm: {
+                    show: true,
+                    label: 'ยืนยัน',
+                    color: 'warn',
+                },
+                cancel: {
+                    show: true,
+                    label: 'ยกเลิก',
+                },
+            },
+            dismissible: true,
+        });
+        confirmation.afterClosed().subscribe((result) => {
+            if (result === 'confirmed') {
+                this._Service.delete(id).subscribe((resp) => {
+                    this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
+                        this.farmmer = resp.data;
+                        this.totalrecord = +resp.total - 210
+                        this.totalPages = Math.ceil(this.totalrecord / this.row);
+                        this.quotas = [];
+                        this.farmmer.forEach(element => {
+                            this.quotas.push(element.Quota_id);
+
+                        });
+
+                        this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                            this.months = resp;
+                            console.log(this.months);
+                        });
+                        this._changeDetectorRef.markForCheck();
+                    });
+                });
+            }
+            error: (err: any) => { };
+        });
     }
     editElement(element: any) {
         const dialogRef = this.dialog.open(EditDialogComponent, {
@@ -321,12 +367,12 @@ rowsPerPage = 10; // จำนวนแถวที่แสดงต่อห�
 
 
     onPageLengthChange(event: Event): void {
-        console.log(event.target,this.row)
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage,this.row).subscribe((resp: any) => {
+        console.log(event.target, this.row)
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total-210
+            this.totalrecord = +resp.total - 210
 
-            this.totalPages = Math.ceil(  this.totalrecord / this.row);
+            this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);

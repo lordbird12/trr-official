@@ -285,7 +285,7 @@ export class NewsService {
 
     delete(Id: any): Observable<any> {
         return this._httpClient
-            .delete(environment.baseURL + `api/news/${Id}`)
+            .delete(environment.baseURL + `/api/frammer/${Id}`)
             .pipe(
                 switchMap((response: any) => {
                     return of(response.data);

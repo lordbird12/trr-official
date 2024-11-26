@@ -99,6 +99,7 @@
                         <th class="border-b-2 w-1/9 p-3">เบอร์ติดต่อ</th>
                         <th class="border-b-2 w-1/9 p-3">สถานะการบันทึกกิจกรรม</th>
                         <th class="border-b-2 w-1/9 p-3"></th>
+                        <th class="border-b-2 w-1/9 p-3"></th>
                     </tr>
                 </thead>
                 <tbody *ngIf="farmmer">
@@ -170,6 +171,12 @@
                                 <button (click)="goToProfile(item.Quota_id)"
                                     class="border-2 border-green-500 text-green-500 w-full rounded-md p-2 font-bold hover:bg-green-500 hover:text-white">
                                     <span class="whitespace-nowrap ml-2 mr-1">รายละเอียด</span>
+                                </button>
+                            </td>
+                            <td class="p-3">
+                                <button (click)="goToDelete(item.Quota_id)"
+                                    class="border-2 border-red-500 text-red-500 w-full rounded-md p-2 font-bold hover:bg-red-500 hover:text-white">
+                                    <span class="whitespace-nowrap ml-2 mr-1">ลบบัญชี</span>
                                 </button>
                             </td>
                         </tr>
