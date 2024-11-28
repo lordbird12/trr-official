@@ -285,6 +285,19 @@ export const appRoutes: Route[] = [
                         ],
                     },
                     {
+                        path: 'condition',
+                        canActivate: [],
+                        children: [
+                            {
+                                path: '',
+                                loadChildren: () =>
+                                    import(
+                                        'app/modules/admin/condition/condition.module'
+                                    ).then((m) => m.ConditionModule),
+                            },
+                        ],
+                    },
+                    {
                         path: 'company',
                         canActivate: [],
                         children: [
