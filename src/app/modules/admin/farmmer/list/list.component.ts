@@ -96,8 +96,8 @@ export class ListComponent implements OnInit {
             });
 
             this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                this.months = [];
                 this.months = resp;
-                console.log(this.months);
             });
             this._changeDetectorRef.markForCheck();
         });
@@ -126,8 +126,8 @@ export class ListComponent implements OnInit {
             });
 
             this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                this.months = [];
                 this.months = resp;
-                console.log(this.months);
             });
             this._changeDetectorRef.markForCheck();
         });
@@ -152,8 +152,8 @@ export class ListComponent implements OnInit {
             });
 
             this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                this.months = [];
                 this.months = resp;
-                console.log(this.months);
             });
             // console.log(this.quotas);
             // console.log("เปลี่ยนหน้า page, this.farmmer", this.farmmer);
@@ -167,7 +167,6 @@ export class ListComponent implements OnInit {
         if (page >= 1) {
             this.currentPage = page;
             this.loadFarmers();
-            console.log("เปลี่ยนหน้า page", this.farmmer);
         }
     }
 
@@ -261,8 +260,8 @@ export class ListComponent implements OnInit {
                         });
 
                         this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                            this.months = [];
                             this.months = resp;
-                            console.log(this.months);
                         });
                         this._changeDetectorRef.markForCheck();
                     });
@@ -380,8 +379,8 @@ export class ListComponent implements OnInit {
             });
 
             this._Service.getEvents(this.quotas).subscribe((resp: any) => {
+                this.months = [];
                 this.months = resp;
-                console.log(this.months);
             });
             this._changeDetectorRef.markForCheck();
         });
