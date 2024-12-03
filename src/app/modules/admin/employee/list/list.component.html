@@ -44,7 +44,7 @@
                             <th class="border-bottom-0 w-50">เบอร์ติดต่อ</th>
                             <th class="border-bottom-0 w-50">สังกัดโรงงาน</th>
                             <th class="border-bottom-0 w-20">สถานะ</th>
-                            <th class="border-bottom-0 w-[190px]"></th>
+                            <th class="border-bottom-0 w-[190px]">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="dataRow?.length != 0">
@@ -76,8 +76,8 @@
                             </td>
 
                             <td>
-                                <button class="border-2 border-green-200 w-fit rounded-md p-2 font-black hover:bg-slate-50" (click)="editDialog(item)">
-                                    <span class="ml-2 mr-1">รายละเอียด</span>
+                                <button mat-icon-button color="accent" (click)="editDialog(item)">
+                                    <mat-icon>edit</mat-icon>
                                 </button>
                                 <button mat-icon-button color="accent" (click)="delete(item.id)">
                                     <mat-icon>delete</mat-icon>
