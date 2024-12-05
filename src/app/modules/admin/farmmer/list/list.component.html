@@ -196,11 +196,12 @@
                     <p class="text-black font-bold">จำนวนทั้งหมด:</p>
                     <p class="ml-2 border px-3 py-2 rounded">{{ totalrecord }}</p>
                 </div>
-            
+
                 <!-- ปุ่มนำทาง ชิดขวา -->
                 <div class="flex items-center space-x-1">
                     <button *ngIf="currentPage > 1"
-                        class="text-black py-2 px-3 rounded hover:bg-slate-800 hover:text-white" (click)="changePage(1)">
+                        class="text-black py-2 px-3 rounded hover:bg-slate-800 hover:text-white"
+                        (click)="changePage(1)">
                         หน้าแรก
                     </button>
                     <button *ngIf="currentPage > 1"
@@ -219,7 +220,7 @@
                     </button>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
