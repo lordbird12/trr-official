@@ -91,6 +91,7 @@ export class FormDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        console.log('data', this.data);
         if (this.data) {
             this.addForm.patchValue({
                 ...this.data,
@@ -103,7 +104,7 @@ export class FormDialogComponent implements OnInit {
                 });
                 factories.push(a);
             });
-            console.log('data', this.addForm.value);
+          
 
             this._changeDetectorRef.detectChanges();
         }
@@ -137,7 +138,38 @@ export class FormDialogComponent implements OnInit {
         // Subscribe to the confirmation dialog closed action
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-              
+              if(this.data) {
+                this._service.update(this.addForm.value).subscribe({
+                    next: (resp: any) => {
+                        this.showFlashMessage('success');
+                        this.dialogRef.close(resp);
+                    },
+                    error: (err: any) => {
+                        this._fuseConfirmationService.open({
+                            "title": "กรุณาระบุข้อมูล",
+                            "message": err.error.message,
+                            "icon": {
+                                "show": true,
+                                "name": "heroicons_outline:exclamation",
+                                "color": "warning"
+                            },
+                            "actions": {
+                                "confirm": {
+                                    "show": false,
+                                    "label": "ยืนยัน",
+                                    "color": "primary"
+                                },
+                                "cancel": {
+                                    "show": false,
+                                    "label": "ยกเลิก",
+
+                                }
+                            },
+                            "dismissible": true
+                        });
+                    }
+                })
+              } else {
                 this._service.create(this.addForm.value).subscribe({
                     next: (resp: any) => {
                         this.showFlashMessage('success');
@@ -168,6 +200,8 @@ export class FormDialogComponent implements OnInit {
                         });
                     },
                 });
+              }
+              
             }
         });
 
@@ -235,4 +269,9 @@ export class FormDialogComponent implements OnInit {
           factories.removeAt(index);
         }
       }
+
+      isFactoryChecked(factorie_id: number): boolean {
+        const factoriesFormArray = this.addForm.get('factories') as FormArray;
+        return factoriesFormArray.value.some((value: any) => value.factorie_id === factorie_id);
+    }
 }

@@ -88,14 +88,12 @@ export class ListComponent implements OnInit, AfterViewInit {
 
     // เพิ่มเมธอด editElement(element) และ deleteElement(element)
     editDialog(element: any) {
-        const dialogRef = this.dialog.open(EditDialogComponent, {
+        const dialogRef = this.dialog.open(FormDialogComponent, {
             width: '700px', // กำหนดความกว้างของ Dialog
             height: '750px',
             disableClose: false,
             autoFocus: false,
-            data: {
-                data: element,
-            }, // ส่งข้อมูลเริ่มต้นไปยัง Dialog
+            data: element
         });
 
         dialogRef.afterClosed().subscribe((result) => {

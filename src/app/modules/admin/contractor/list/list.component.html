@@ -21,7 +21,7 @@
                         <mat-option [value]="''">
                             เลือกโรงงาน
                         </mat-option>
-                        <mat-option [value]="item.name" *ngFor="let item of factoryData; let i = index">
+                        <mat-option [value]="item.id" *ngFor="let item of factoryData; let i = index">
                             {{item.name}}
                         </mat-option>
                     </mat-select>
