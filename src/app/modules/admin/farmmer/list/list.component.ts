@@ -142,6 +142,7 @@ export class ListComponent implements OnInit {
 
 
     loadFarmers(): void {
+        this.quotas = [];
         this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
             this.totalrecord = +resp.total - 210
@@ -159,6 +160,7 @@ export class ListComponent implements OnInit {
             // console.log("เปลี่ยนหน้า page, this.farmmer", this.farmmer);
             // this.totalPages = resp.length
             console.log("เปลี่ยนหน้า page, this.farmmer", this.totalPages);
+
             this._changeDetectorRef.markForCheck();
         });
     }
@@ -166,6 +168,7 @@ export class ListComponent implements OnInit {
     changePage(page: number): void {
         if (page >= 1) {
             this.currentPage = page;
+            this.months = [];
             this.loadFarmers();
         }
     }
