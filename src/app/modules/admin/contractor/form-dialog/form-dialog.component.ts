@@ -47,9 +47,9 @@ export class FormDialogComponent implements OnInit {
         })
         this.addForm = this.formBuilder.group({
             id: '',
-            name: [''],
-            phone: [''],
-            detail: [''],
+            name: ['', Validators.required],
+            phone: ['',Validators.required],
+            detail: ['',Validators.required],
             status: ['Yes'],
             features: this.formBuilder.array([]),
             factories: this.formBuilder.array([]),

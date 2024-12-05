@@ -9,6 +9,7 @@
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>ชื่อ - นามสกุล</mat-label>
                         <input matInput [placeholder]="'ชื่อ - นามสกุล'" [formControlName]="'name'">
+                        <mat-error>กรุณากรอกชื่อ</mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -23,6 +24,7 @@
                             type="tel"
                             maxlength="10"
                             (input)="onPhoneInput($event)">
+                            <mat-error>กรุณากรอกเบอร์ติดต่อ</mat-error>
                     </mat-form-field>
                     
                 </div>
@@ -33,6 +35,7 @@
                         <mat-label>รายละเอียด</mat-label>
                         <textarea type="text" matInput [placeholder]="'กรอกรายละเอียด'" row="5"
                             [formControlName]="'detail'"></textarea>
+                            <mat-error>กรุณากรอกรายละเอียด</mat-error>
                     </mat-form-field>
                 </div>
             </div>
