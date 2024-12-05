@@ -87,6 +87,16 @@
                     </div>
                 </div>
             </div>
+            <div class="mb-4 mt-4">
+                <div class="md:w-full px-3">
+                    <ngx-dropzone (change)="onSelect($event)" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <ngx-dropzone-label>เลือกรูปภาพ</ngx-dropzone-label>
+                        <div *ngFor="let f of files">
+                            <ngx-dropzone-image-preview [file]="f" [removable]="true" (removed)="onRemove(f)" class="h-auto max-w-full"></ngx-dropzone-image-preview>
+                        </div>
+                    </ngx-dropzone>
+                </div>
+            </div>
           
             <div class="mb-4 mt-4">
                 <label class="block text-md font-medium text-gray-700">สถานะ</label>

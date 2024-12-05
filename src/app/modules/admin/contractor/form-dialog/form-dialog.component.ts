@@ -48,9 +48,10 @@ export class FormDialogComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             id: '',
             name: ['', Validators.required],
-            phone: ['',Validators.required],
-            detail: ['',Validators.required],
+            phone: ['', Validators.required],
+            detail: ['', Validators.required],
             status: ['Yes'],
+            image: '',
             features: this.formBuilder.array([]),
             factories: this.formBuilder.array([]),
 
@@ -61,10 +62,11 @@ export class FormDialogComponent implements OnInit {
 
         if (this.data) {
             this.addForm.patchValue({
-                ...this.data
+                ...this.data,
+                image: '',
             })
-            console.log(this.data , 'data');
-            
+            console.log(this.data, 'data');
+
             this.data.feature_contractors.forEach((data: any) => {
                 const features = this.addForm.get('features') as FormArray;
                 const a = this.formBuilder.group({
@@ -110,7 +112,7 @@ export class FormDialogComponent implements OnInit {
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: false,
-                name: 'heroicons_outline:exclamation',
+                name: 'heroicons_outline:exclamation-triangle',
                 color: 'warning',
             },
             actions: {
@@ -149,7 +151,7 @@ export class FormDialogComponent implements OnInit {
                                 message: err.error.message,
                                 icon: {
                                     show: true,
-                                    name: 'heroicons_outline:exclamation',
+                                    name: 'heroicons_outline:exclamation-triangle',
                                     color: 'warning',
                                 },
                                 actions: {
@@ -181,7 +183,7 @@ export class FormDialogComponent implements OnInit {
                                 message: err.error.message,
                                 icon: {
                                     show: true,
-                                    name: 'heroicons_outline:exclamation',
+                                    name: 'heroicons_outline:exclamation-triangle',
                                     color: 'warning',
                                 },
                                 actions: {
@@ -208,8 +210,8 @@ export class FormDialogComponent implements OnInit {
     onPhoneInput(event: any): void {
         const input = event.target;
         input.value = input.value.replace(/[^0-9]/g, ''); // กรองเฉพาะตัวเลข
-      }
-      
+    }
+
 
     addFeature(featureId: number) {
         const features = this.addForm.get('features') as FormArray;
@@ -254,6 +256,44 @@ export class FormDialogComponent implements OnInit {
     isFeatureChecked(featureId: number): boolean {
         const features = this.addForm.get('features') as FormArray;
         return features.value.some((value: any) => value.feature_id === featureId);
+    }
+
+    files: File[] = [];
+    url_logo: string;
+    onSelect(event: { addedFiles: File[] }): void {
+        this.files.push(...event.addedFiles);
+        const file = this.files[0];
+        // this.addForm.patchValue({
+        //     image: file,
+        // });
+        let data = {
+            image: file,
+            path: 'images/contractor/'
+        }
+
+        this.uploadImage(data)
+
+    }
+
+    onRemove(file: File): void {
+        const index = this.files.indexOf(file);
+        if (index >= 0) {
+            this.files.splice(index, 1);
+        }
+    }
+
+    uploadImage(data: any) {
+        const formData = new FormData();
+        Object.entries(data).forEach(
+            ([key, value]: any[]) => {
+                formData.append(key, value);
+            }
+        );
+        this._service.image(formData).subscribe((resp: any) => {
+            this.addForm.patchValue({
+                image: resp
+            })
+        })
     }
 }
 

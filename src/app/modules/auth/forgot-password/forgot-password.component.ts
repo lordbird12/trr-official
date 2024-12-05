@@ -160,7 +160,7 @@ export class AuthForgotPasswordComponent implements OnInit
                     message: err.errors.email[0],
                     icon: {
                         show: true,
-                        name: 'heroicons_outline:exclamation',
+                        name: 'heroicons_outline:exclamation-triangle',
                         color: 'warning',
                     },
                     actions: {

@@ -126,7 +126,7 @@ export class ConfignotiComponent implements OnInit {
             message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: true,
-                name: 'heroicons_outline:exclamation-triangle',
+                name: 'heroicons_outline:exclamation-triangle-triangle',
                 color: 'warning',
             },
             actions: {
@@ -157,7 +157,7 @@ export class ConfignotiComponent implements OnInit {
             message: 'คุณต้องการลบข้อมูลแจ้งเตือนย่อยใช่หรือไม่ ?',
             icon: {
                 show: true,
-                name: 'heroicons_outline:exclamation-triangle',
+                name: 'heroicons_outline:exclamation-triangle-triangle',
                 color: 'warning',
             },
             actions: {
@@ -219,7 +219,7 @@ export class ConfignotiComponent implements OnInit {
                 message: errorMessage,
                 icon: {
                     show: true,
-                    name: 'heroicons_outline:exclamation-circle',
+                    name: 'heroicons_outline:exclamation-triangle-circle',
                     color: 'accent',
                 },
                 actions: {
@@ -257,7 +257,7 @@ export class ConfignotiComponent implements OnInit {
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: false,
-                name: 'heroicons_outline:exclamation',
+                name: 'heroicons_outline:exclamation-triangle',
                 color: 'warning',
             },
             actions: {
@@ -309,7 +309,7 @@ export class ConfignotiComponent implements OnInit {
                             message: errorMessage,  // ใช้ข้อความกำกัยแทนข้อความที่ได้จาก error
                             icon: {
                                 show: true,
-                                name: 'heroicons_outline:exclamation-circle',
+                                name: 'heroicons_outline:exclamation-triangle-circle',
                                 color: 'warning',
                             },
                             actions: {

@@ -27,7 +27,7 @@ export const folders = [
         id   : '0197c436-2ef3-424d-b546-8b7f49186e15',
         title: 'Spam',
         slug : 'spam',
-        icon : 'heroicons_outline:exclamation-triangle',
+        icon : 'heroicons_outline:exclamation-triangle-triangle',
     },
     {
         id   : '2fa74637-d362-4fd2-9a88-f7195a88bdde',
@@ -47,7 +47,7 @@ export const filters = [
         id   : '71bba1ec-a90e-4a71-9932-4bab0a99aa1c',
         title: 'Important',
         slug : 'important',
-        icon : 'heroicons_outline:exclamation-circle',
+        icon : 'heroicons_outline:exclamation-triangle-circle',
     },
 ];
 export const labels = [
