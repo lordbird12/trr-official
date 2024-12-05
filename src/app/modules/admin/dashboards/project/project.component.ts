@@ -660,6 +660,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
 
     private apiKey: string = 'AIzaSyBgko4WThN-06_Cnn_OOwctoIgaUBcaQ_o';
+    
     getMapImageUrl(lat: number, lng: number, coOrPoints: number[][]): string {
         const zoom = 13; // Adjust as needed
         const size = '200x100'; // Adjust as needed

@@ -71,7 +71,7 @@ export class FormComponent implements OnInit {
             this.addForm.patchValue({
                 id: '',
                 title: '',
-                detail: '<p>กรอกรายระเอียด</p>',
+                detail: '',
                 image: '',
                 notify_status: '1',
             });
