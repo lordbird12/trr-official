@@ -97,7 +97,7 @@ export class ListComponent implements OnInit {
 
             this._Service.getEvents(this.quotas).subscribe((resp: any) => {
                 this.months = [];
-                this.months = resp;
+                this.months = resp; 
             });
             this._changeDetectorRef.markForCheck();
         });
