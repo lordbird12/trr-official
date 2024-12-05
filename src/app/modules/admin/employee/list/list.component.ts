@@ -98,7 +98,8 @@ export class ListComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                // เมื่อ Dialog ถูกปิด ดำเนินการตามผลลัพธ์ที่คุณได้รับจาก Dialog
+                this.rerender();
+                this._changeDetectorRef.markForCheck();
             }
         });
     }
