@@ -273,7 +273,7 @@ export class FormComponent implements OnInit {
             }
         });
     }
-
+    
     files: File[] = [];
     url_logo: string;
     onSelect(event: { addedFiles: File[] }): void {
