@@ -18,6 +18,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
+import CryptoJS from 'crypto-js';
 
 @Component({
     selector: 'auth-sign-in',
@@ -57,7 +58,7 @@ export class AuthSignInComponent implements OnInit {
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
         private _router: Router
-    ) {}
+    ) { }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -67,12 +68,13 @@ export class AuthSignInComponent implements OnInit {
      * On init
      */
     ngOnInit(): void {
+        this.checkRememberMe();
         // Create the form
-        this.signInForm = this._formBuilder.group({
-            email: ['', [Validators.required]],
-            password: ['', Validators.required],
-            rememberMe: [''],
-        });
+        // this.signInForm = this._formBuilder.group({
+        //     email: ['', [Validators.required]],
+        //     password: ['', Validators.required],
+        //     rememberMe: [false],
+        // });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -108,6 +110,16 @@ export class AuthSignInComponent implements OnInit {
 
                 // Navigate to the redirect url
                 this._router.navigateByUrl(redirectURL);
+                const { email, password, rememberMe } = this.signInForm.value;
+                if (rememberMe) {
+                    const encryptedPassword = CryptoJS.AES.encrypt(password, 'trr-official').toString();
+                    localStorage.setItem('rememberedUsername', email);
+                    localStorage.setItem('rememberedPassword', encryptedPassword);
+
+                } else {
+                    localStorage.removeItem('rememberedUsername');
+                    localStorage.removeItem('rememberedPassword');
+                }
             },
             (response) => {
                 // Re-enable the form
@@ -126,5 +138,24 @@ export class AuthSignInComponent implements OnInit {
                 this.showAlert = true;
             }
         );
+    }
+
+    checkRememberMe() {
+        const savedUsername = localStorage.getItem('rememberedUsername');
+        const savedPassword = localStorage.getItem('rememberedPassword');
+        if (savedUsername) {
+            const decryptedPasswordBytes = CryptoJS.AES.decrypt(savedPassword, 'trr-official'); const decryptedPassword = decryptedPasswordBytes.toString(CryptoJS.enc.Utf8);
+            this.signInForm = this._formBuilder.group({
+                email: [savedUsername, [Validators.required]],
+                password: [decryptedPassword, Validators.required],
+                rememberMe: [true],
+            });
+        } else {
+            this.signInForm = this._formBuilder.group({
+                email: ['', [Validators.required]],
+                password: ['', Validators.required],
+                rememberMe: [false],
+            });
+        }
     }
 }
