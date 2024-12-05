@@ -195,7 +195,7 @@ export class EditComponent implements OnInit, AfterViewInit, OnDestroy {
             "message": "คุณต้องการแก้ไขข้อมูลพระสงฆ์ใช่หรือไม่ ",
             "icon": {
                 "show": false,
-                "name": "heroicons_outline:exclamation",
+                "name": "heroicons_outline:exclamation-triangle",
                 "color": "warning"
             },
             "actions": {

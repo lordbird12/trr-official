@@ -107,7 +107,7 @@ export class FormComponent implements OnInit {
         const confirmation = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
-            icon: { show: false, name: 'heroicons_outline:exclamation', color: 'warning' },
+            icon: { show: false, name: 'heroicons_outline:exclamation-triangle', color: 'warning' },
             actions: {
                 confirm:
                 { show: true,
@@ -130,7 +130,7 @@ export class FormComponent implements OnInit {
                     this._fuseConfirmationService.open({
                         title: 'ขนาดไฟล์เกินขีดจำกัด',
                         message: 'ขนาดไฟล์สูงสุดคือ 5MB',
-                        icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                        icon: { show: true, name: 'heroicons_outline:exclamation-triangle', color: 'warning' },
                         actions: { confirm: { show: true, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                         dismissible: true,
                     });
@@ -153,7 +153,7 @@ export class FormComponent implements OnInit {
                             this._fuseConfirmationService.open({
                                 title: 'ไม่สามารถบันทึกข้อมูลได้',
                                 message: err.error.message,
-                                icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                                icon: { show: true, name: 'heroicons_outline:exclamation-triangle', color: 'warning' },
                                 actions: { confirm: { show: false, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                                 dismissible: true,
                             });
@@ -169,7 +169,7 @@ export class FormComponent implements OnInit {
                             this._fuseConfirmationService.open({
                                 title: 'เกิดข้อผิดพลาด',
                                 message: err.error.message,
-                                icon: { show: true, name: 'heroicons_outline:exclamation', color: 'warning' },
+                                icon: { show: true, name: 'heroicons_outline:exclamation-triangle', color: 'warning' },
                                 actions: { confirm: { show: false, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                                 dismissible: true,
                             });

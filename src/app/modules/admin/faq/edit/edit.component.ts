@@ -74,7 +74,7 @@ export class EditComponent implements OnInit {
             message: 'คุณต้องการแก้ไขข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: false,
-                name: 'heroicons_outline:exclamation',
+                name: 'heroicons_outline:exclamation-triangle',
                 color: 'warning',
             },
             actions: {
@@ -113,7 +113,7 @@ alert(1)
                                 message: err.error.message,
                                 icon: {
                                     show: true,
-                                    name: 'heroicons_outline:exclamation',
+                                    name: 'heroicons_outline:exclamation-triangle',
                                     color: 'warning',
                                 },
                                 actions: {

@@ -276,7 +276,7 @@ export class ListComponent implements OnInit {
                 message: 'ไม่สามารถลบข้อมูลได้เนื่องจากมีข้อมูลเกษตรกรอยู่ในระบบ',
                 icon: {
                     show: true,
-                    name: 'heroicons_outline:exclamation-triangle',
+                    name: 'heroicons_outline:exclamation-triangle-triangle',
                     color: 'warning',
                 },
                 actions: {
@@ -304,7 +304,7 @@ export class ListComponent implements OnInit {
                 message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
                 icon: {
                     show: true,
-                    name: 'heroicons_outline:exclamation-triangle',
+                    name: 'heroicons_outline:exclamation-triangle-triangle',
                     color: 'warning',
                 },
                 actions: {

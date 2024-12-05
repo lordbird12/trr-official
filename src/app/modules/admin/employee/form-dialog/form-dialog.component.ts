@@ -113,12 +113,38 @@ export class FormDialogComponent implements OnInit {
     onSaveClick(): void {
         this.flashMessage = null;
         // Open the confirmation dialog
+        if (this.addForm.value.factories.length === 0) {
+            this._fuseConfirmationService.open({
+                "title": "กรุณาระบุข้อมูล",
+                "message": 'กรุณาเลือกสังกัด!',
+                "icon": {
+                    "show": true,
+                    "name": "heroicons_outline:exclamation-triangle-triangle",
+                    "color": "warning"
+                },
+                "actions": {
+                    "confirm": {
+                        "show": false,
+                        "label": "ยืนยัน",
+                        "color": "primary"
+                    },
+                    "cancel": {
+                        "show": false,
+                        "label": "ยกเลิก",
+
+                    }
+                },
+                "dismissible": true
+            });
+            return;
+        }
+        
         const confirmation = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ',
             icon: {
                 show: false,
-                name: 'heroicons_outline:exclamation',
+                name: 'heroicons_outline:exclamation-triangle',
                 color: 'warning',
             },
             actions: {
@@ -150,7 +176,7 @@ export class FormDialogComponent implements OnInit {
                             "message": err.error.message,
                             "icon": {
                                 "show": true,
-                                "name": "heroicons_outline:exclamation",
+                                "name": "heroicons_outline:exclamation-triangle",
                                 "color": "warning"
                             },
                             "actions": {
@@ -182,7 +208,7 @@ export class FormDialogComponent implements OnInit {
                             message: err.error.message,
                             icon: {
                                 show: true,
-                                name: 'heroicons_outline:exclamation',
+                                name: 'heroicons_outline:exclamation-triangle',
                                 color: 'warning',
                             },
                             actions: {

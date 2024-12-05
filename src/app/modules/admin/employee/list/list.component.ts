@@ -181,7 +181,7 @@ export class ListComponent implements OnInit, AfterViewInit {
             message: 'คุณต้องการลบข้อมูลใช่หรือไม่ ?',
             icon: {
                 show: true,
-                name: 'heroicons_outline:exclamation-triangle',
+                name: 'heroicons_outline:exclamation-triangle-triangle',
                 color: 'warning',
             },
             actions: {
