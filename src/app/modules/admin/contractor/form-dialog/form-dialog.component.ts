@@ -51,6 +51,7 @@ export class FormDialogComponent implements OnInit {
             phone: ['', Validators.required],
             detail: ['', Validators.required],
             status: ['Yes'],
+            image: '',
             features: this.formBuilder.array([]),
             factories: this.formBuilder.array([]),
 
@@ -61,7 +62,8 @@ export class FormDialogComponent implements OnInit {
 
         if (this.data) {
             this.addForm.patchValue({
-                ...this.data
+                ...this.data,
+                image: '',
             })
             console.log(this.data, 'data');
 

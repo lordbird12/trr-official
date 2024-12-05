@@ -50,6 +50,7 @@
                 <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full">
                     <thead>
                         <tr class="text-center bg-slate-50 mt-10">
+                            <th class="border-bottom-0 w-20">รูปภาพ</th>
                             <th class="border-bottom-0 w-50">ชื่อผู้ใช้งาน</th>
                             <th class="border-bottom-0 w-50">ประเภทผู้รับเหมา</th>
                             <th class="border-bottom-0 w-50">เบอร์ติดต่อ</th>
@@ -60,6 +61,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of dataRow; let i = index">
+                            <td>
+                                <img *ngIf="!item.image" class="rounded-full w-12 h-12 border-2 border-yellow-900"
+                                    src="assets/images/no_image.png" alt="image description">
+                                <img *ngIf="item.image" class="rounded-full w-12 h-12 border-2 border-yellow-900"
+                                    src="{{item.image}}" alt="image description">
+                            </td>
                             <td>{{item.name}}</td>
                             <!-- <td>{{item.contractor_type_id ? item.contractor : '-'}}</td> -->
                             <td>
@@ -73,10 +80,10 @@
                                 </ng-container>
                             </td>
                             <td>{{item.phone}}</td>
-                            <td>
+                            <td >
                                 <ng-container *ngIf="item.facetories_contractors?.length != 0">
                                     <ng-container *ngFor="let fac of item.facetories_contractors">
-                                        {{fac.facetorie?.name + (i == item.facetories_contractors.length - 1 ? '' : ', ')}}
+                                      <p class="text-clip overflow-hidden">{{fac.facetorie?.name + (i == item.facetories_contractors.length - 1 ? '' : ', ')}}</p>  
                                     </ng-container>
                                 </ng-container>
                                 <ng-container *ngIf="item.facetories_contractors?.length == 0">
