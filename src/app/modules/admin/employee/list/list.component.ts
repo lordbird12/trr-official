@@ -67,13 +67,17 @@ export class ListComponent implements OnInit, AfterViewInit {
     positions: any[];
     public dataRow: any[];
     formFieldHelpers: string[] = ['fuse-mat-dense'];
+    user: any
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     constructor(
         private dialog: MatDialog,
         private _changeDetectorRef: ChangeDetectorRef,
         private _service: PageService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) 
+    {
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
 
     ngOnInit() {
         this.loadTable();

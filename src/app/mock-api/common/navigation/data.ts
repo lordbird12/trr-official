@@ -101,6 +101,17 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'จัดการผู้ใช้งาน',
                 type: 'basic',
                 link: '/admin/employee/list',
+                // hidden: (item) => {
+
+                //     var role = JSON.parse(localStorage.getItem('user'))
+        
+                //     if (role.type == 'Management') {
+                //         return false
+                //     }
+                //     else {
+                //         return true
+                //     }
+                // },
             },
         ],
     },

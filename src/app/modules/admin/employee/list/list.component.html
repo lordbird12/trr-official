@@ -28,7 +28,7 @@
                         </mat-option>
                     </mat-select>
                 </mat-form-field> -->
-                <button class="ml-4 w-full rounded-md bg-[#0a1c3a] text-white" mat-flat-button (click)="addElement()">
+                <button class="ml-4 w-full rounded-md bg-[#0a1c3a] text-white" mat-flat-button (click)="addElement()" *ngIf="this.user.type === 'Management'">
                     <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                     <span class="ml-2 mr-1">เพิ่มผู้ใช้งาน</span>
                 </button>
@@ -79,7 +79,7 @@
                                 <button mat-icon-button color="accent" (click)="editDialog(item)">
                                     <mat-icon>edit</mat-icon>
                                 </button>
-                                <button mat-icon-button color="accent" (click)="delete(item.id)">
+                                <button mat-icon-button color="accent" (click)="delete(item.id)" *ngIf="this.user.type === 'Management'">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </td>
