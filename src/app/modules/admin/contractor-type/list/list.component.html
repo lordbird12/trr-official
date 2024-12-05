@@ -34,7 +34,7 @@
                 <div class="flex-shrink-0">
                     <img [src]="item.image" class="w-30 h-30 rounded p-5" alt="..." />
                 </div>
-                <div class="text-xl font-bold mt-auto text-center">
+                <div class="text-xl font-bold mt-auto text-center" (click)="editElement(item)">
                     {{ item.name }}
                 </div>
             </button>

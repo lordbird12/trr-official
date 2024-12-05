@@ -11,11 +11,11 @@ export class VendorService {
     //     throw new Error('Method not implemented.');
     // }
 
-    constructor(private _httpClient: HttpClient) {}
+    constructor(private _httpClient: HttpClient) { }
 
     getPage(dataTablesParameters: any): Observable<any> {
         return this._httpClient
-            .post(environment.baseURL +'/api/feature_page', dataTablesParameters)
+            .post(environment.baseURL + '/api/feature_page', dataTablesParameters)
             .pipe(
                 switchMap((response: any) => {
                     return of(response.data);
@@ -25,7 +25,7 @@ export class VendorService {
 
     Savedata(formData: FormData): Observable<any> {
         return this._httpClient
-        // .post(environment.baseURL + '/api/vendor', formData)
+            // .post(environment.baseURL + '/api/vendor', formData)
             .post(environment.baseURL + '/api/feature', formData)
             .pipe(
                 switchMap((response: any) => {

@@ -27,7 +27,7 @@ import { ThaiDatePipe } from 'app/shared/date-thai.component.pipe';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { HttpClient } from '@angular/common/http';
-
+import moment from 'moment';
 @Component({
     selector: 'detail',
     templateUrl: './detail.component.html',
@@ -104,7 +104,7 @@ export class DetailComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             factory_id: 1,
             // factory_affiliation: '',
-            head_office:'',
+            head_office: '',
             phone: '',
             email: '',
             time_start: '',
@@ -124,11 +124,11 @@ export class DetailComponent implements OnInit {
         });
         this.imagepath = this.formBuilder.group({
             image: '',
-            path:'images/company/',
+            path: 'images/company/',
         });
-        
+
     }
-    itemData:any;
+    itemData: any;
     ngOnInit(): void {
         // this.http.get('https://asha-tech.co.th/trr-api/public/api/get_company_byfactory/1').subscribe(response => {
         //     this.itemData = response;
@@ -187,13 +187,14 @@ export class DetailComponent implements OnInit {
                 console.error('Error 888:', error);
             }
         );
-       
+
     }
 
 
     Submit(): void {
-        console.log(this.addForm.value);
-
+        let formValue = this.addForm.value
+        formValue.date_start =  moment(this.addForm.value.date_start).format('YYYY-MM-DD')
+        formValue.date_end =  moment(this.addForm.value.date_end).format('YYYY-MM-DD')
         const confirmation = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
@@ -223,66 +224,66 @@ export class DetailComponent implements OnInit {
                 //         formData.append(key, value);
                 //     }
                 // );
-                const formData = this.addForm.value
-                    this._service.create(formData).subscribe({
-                        next: (resp: any) => {
-                            this._fuseConfirmationService.open({
-                                title: 'สำเร็จ',
-                                message: "บันทึกข้อมูลสำเร็จ",
-                                icon: {
-                                    show: true,
-                                    name: 'heroicons_outline:exclamation',
-                                    color: 'success',
+               
+                this._service.create(formValue).subscribe({
+                    next: (resp: any) => {
+                        this._fuseConfirmationService.open({
+                            title: 'สำเร็จ',
+                            message: "บันทึกข้อมูลสำเร็จ",
+                            icon: {
+                                show: true,
+                                name: 'heroicons_outline:exclamation',
+                                color: 'success',
+                            },
+                            actions: {
+                                confirm: {
+                                    show: false,
+                                    label: 'ตกลง',
+                                    color: 'primary',
                                 },
-                                actions: {
-                                    confirm: {
-                                        show: false,
-                                        label: 'ตกลง',
-                                        color: 'primary',
-                                    },
-                                    cancel: {
-                                        show: false,
-                                        label: 'ยกเลิก',
-                                    },
+                                cancel: {
+                                    show: false,
+                                    label: 'ยกเลิก',
                                 },
-                                dismissible: true,
-                            });
-                        },
+                            },
+                            dismissible: true,
+                        });
+                    },
 
-                        error: (err: any) => {
-                            console.log(err);
-                            this.addForm.enable();
-                            this._fuseConfirmationService.open({
-                                title: 'เกิดข้อผิดพลาด',
-                                message: err.error.message,
-                                icon: {
-                                    show: true,
-                                    name: 'heroicons_outline:exclamation',
-                                    color: 'warning',
+                    error: (err: any) => {
+                        console.log(err);
+                        this.addForm.enable();
+                        this._fuseConfirmationService.open({
+                            title: 'เกิดข้อผิดพลาด',
+                            message: err.error.message,
+                            icon: {
+                                show: true,
+                                name: 'heroicons_outline:exclamation',
+                                color: 'warning',
+                            },
+                            actions: {
+                                confirm: {
+                                    show: false,
+                                    label: 'ตกลง',
+                                    color: 'primary',
                                 },
-                                actions: {
-                                    confirm: {
-                                        show: false,
-                                        label: 'ตกลง',
-                                        color: 'primary',
-                                    },
-                                    cancel: {
-                                        show: false,
-                                        label: 'ยกเลิก',
-                                    },
+                                cancel: {
+                                    show: false,
+                                    label: 'ยกเลิก',
                                 },
-                                dismissible: true,
-                            });
-                            console.log(err.error.message);
-                        },
-                    });
+                            },
+                            dismissible: true,
+                        });
+                        console.log(err.error.message);
+                    },
+                });
 
             }
         });
     }
 
 
-        // files: File[] = [];
+    // files: File[] = [];
     // onSelect(event: { addedFiles: File[] }): void {
     //     this.files = [];
 
@@ -296,11 +297,11 @@ export class DetailComponent implements OnInit {
     // }
 
     files: File[] = [];
-    file1:any;
-    file2:any;
-    file3:any;
-    file4:any;
-    file5:any;
+    file1: any;
+    file2: any;
+    file3: any;
+    file4: any;
+    file5: any;
     onSelect1(event: { addedFiles: File[] }): void {
         this.files = [];
         this.uploadedImages1 = null;
@@ -404,7 +405,7 @@ export class DetailComponent implements OnInit {
         );
         this._service.image(formData).subscribe((resp: any) => {
             this.file4 = resp
-            console.log("ดู profiles ชื่อ บัตร",this.file4);
+            console.log("ดู profiles ชื่อ บัตร", this.file4);
             this.addForm.patchValue({
                 image4: this.file4,
             });
@@ -434,7 +435,7 @@ export class DetailComponent implements OnInit {
         );
         this._service.image(formData).subscribe((resp: any) => {
             this.file5 = resp
-            console.log("ดู profiles ชื่อ บัตร",this.file5);
+            console.log("ดู profiles ชื่อ บัตร", this.file5);
             this.addForm.patchValue({
                 image5: this.file5,
             });

@@ -378,8 +378,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
             //     this.cdr.detectChanges();
             // });
             if (this.dbincome && this.dbincome.Income && this.dbincome.Income.length > 0 && this.dbincome.Deduct && this.dbincome.Deduct.length > 0) {
-                const income = parseFloat(this.dbincome.Income[0]) || 0;
-                const deduct = parseFloat(this.dbincome.Deduct[0]) || 0;
+                const income:number = parseFloat((parseFloat(this.dbincome.Income[0]) || 0).toFixed(2));
+                const deduct:number = parseFloat((parseFloat(this.dbincome.Deduct[0]) || 0).toFixed(2));
                 this.income = income;
                 this.deduct = deduct;
                 console.log("ดู กิจกรรมมม", income, deduct);
@@ -407,7 +407,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
                     };
                 } else {
                     this.chartOptions = {
-                        series: [deduct, this.totalAmountPaid],
+                        series: [deduct, parseFloat((parseFloat(this.totalAmountPaid) || 0).toFixed(2))],
                         chart: {
                             type: "donut"
                         },
@@ -439,14 +439,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
             this.dbactivity = resp.data
             console.log("ดู this.dbactivity", this.dbactivity);
             if (this.dbactivity) {
-                const price1 = parseFloat(this.dbactivity[0]?.total_paid) || 0;
-                const price2 = parseFloat(this.dbactivity[1]?.total_paid) || 0;
-                const price3 = parseFloat(this.dbactivity[2]?.total_paid) || 0;
-                const price4 = parseFloat(this.dbactivity[3]?.total_paid) || 0;
-                const price5 = parseFloat(this.dbactivity[4]?.total_paid) || 0;
-                const price6 = parseFloat(this.dbactivity[5]?.total_paid) || 0;
-                const price7 = parseFloat(this.dbactivity[6]?.total_paid) || 0;
-                const price8 = parseFloat(this.dbactivity[7]?.total_paid) || 0;
+                const price1 = parseFloat((parseFloat(this.dbactivity[0]?.total_paid) || 0).toFixed(2));
+                const price2 = parseFloat((parseFloat(this.dbactivity[1]?.total_paid) || 0).toFixed(2));
+                const price3 = parseFloat((parseFloat(this.dbactivity[2]?.total_paid) || 0).toFixed(2));
+                const price4 = parseFloat((parseFloat(this.dbactivity[3]?.total_paid) || 0).toFixed(2));
+                const price5 = parseFloat((parseFloat(this.dbactivity[4]?.total_paid) || 0).toFixed(2));
+                const price6 = parseFloat((parseFloat(this.dbactivity[5]?.total_paid) || 0).toFixed(2));
+                const price7 = parseFloat((parseFloat(this.dbactivity[6]?.total_paid) || 0).toFixed(2));
+                const price8 = parseFloat((parseFloat(this.dbactivity[7]?.total_paid) || 0).toFixed(2));
 
                 console.log("ดู กิจกรรมมม8888888", price1, price2);
 
@@ -454,6 +454,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
                     console.warn('ทั้งรายรับและรายจ่ายเป็น 0 ไม่สามารถแสดงแผนภูมิได้');
                     this.chartOptions1 = null;
                 } else {
+                    
                     this.chartOptions1 = {
                         series: [price1, price2, price3, price4, price5, price6, price7, price8],
                         chart: {
@@ -1513,5 +1514,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 },
             },
         };
+    }
+
+    formatNumber(num: number): string { 
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
     }
 }

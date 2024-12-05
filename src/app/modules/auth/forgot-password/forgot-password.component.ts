@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { AuthService } from 'app/core/auth/auth.service';
 import { finalize } from 'rxjs';
 
@@ -51,7 +52,8 @@ export class AuthForgotPasswordComponent implements OnInit
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
+        private _router: Router,
+        private _fuseConfirmationService: FuseConfirmationService
     ) {}
 
     // -----------------------------------------------------------------------------------------------------
@@ -123,7 +125,61 @@ export class AuthForgotPasswordComponent implements OnInit
     }
 
     email(){
-        console.log(this.signInForm.get('email').value);
+        this._authService.forgotPassword(this.signInForm.value).subscribe({
+            next: (resp: any) => {
+                this._fuseConfirmationService.open({
+                    title: 'ดำเนินการสำเร็จ',
+                    message: resp.message,
+                    icon: {
+                        show: true,
+                        name: 'heroicons_outline:check-circle',
+                        color: 'primary',
+                    },
+                    actions: {
+                        confirm: {
+                            show: false,
+                            label: 'Confirm',
+                            color: 'primary',
+                        },
+                        cancel: {
+                            show: false,
+                            label: 'Cancel',
+                        },
+                    },
+                    dismissible: true,
+                });
+                const redirectURL =
+                    this._activatedRoute.snapshot.queryParamMap.get(
+                        'redirectURL'
+                    ) || '/signed-in-redirect';
+                this._router.navigateByUrl(redirectURL);
+            },
+            error: (err: any) => {
+                this._fuseConfirmationService.open({
+                    title: 'เกิดข้อผิดพลาด',
+                    message: err.errors.email[0],
+                    icon: {
+                        show: true,
+                        name: 'heroicons_outline:exclamation',
+                        color: 'warning',
+                    },
+                    actions: {
+                        confirm: {
+                            show: false,
+                            label: 'Confirm',
+                            color: 'primary',
+                        },
+                        cancel: {
+                            show: false,
+                            label: 'Cancel',
+                        },
+                    },
+                    dismissible: true,
+                });
+              
+            },
+        });
+       
     }
 
 }

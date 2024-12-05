@@ -22,6 +22,7 @@ export class FormDialogComponent implements OnInit {
         private _service: VendorService
     ) {
         this.addForm = this.formBuilder.group({
+            id: '',
             image: '',
             name: ['', Validators.required],
             tax_id: ['', Validators.required],
@@ -40,10 +41,24 @@ export class FormDialogComponent implements OnInit {
 
     ngOnInit(): void {
         // สร้าง Reactive Form
+
         this._service.getPermission().subscribe((res: any) => {
             this.permissiondata = res;
             console.log(this.permissiondata);
         });
+
+        if (this.data) {
+            this.addForm.patchValue({
+                ...this.data,
+                image: ''
+            })
+            console.log(this.addForm.value);
+            
+        } else {
+            console.log('new');
+            
+        } 
+
     }
 
     onSaveClick(): void {
@@ -112,38 +127,72 @@ export class FormDialogComponent implements OnInit {
                         }
                     }
                 );
-                this._service.Savedata(formData).subscribe({
-                    next: (resp: any) => {
-                        this.onCancelClick();
-                    },
-
-                    error: (err: any) => {
-                        console.log(err);
-                        this.addForm.enable();
-                        this._fuseConfirmationService.open({
-                            title: 'เกิดข้อผิดพลาด',
-                            message: err.error.message,
-                            icon: {
-                                show: true,
-                                name: 'heroicons_outline:exclamation',
-                                color: 'warning',
-                            },
-                            actions: {
-                                confirm: {
-                                    show: false,
-                                    label: 'Confirm',
-                                    color: 'primary',
+                if(this.data) {
+                    this._service.update(this.data.id, formData).subscribe({
+                        next: (resp: any) => {
+                            this.onCancelClick();
+                        },
+                        error: (err: any) => {
+                            console.log(err);
+                            this.addForm.enable();
+                            this._fuseConfirmationService.open({
+                                title: 'เกิดข้อผิดพลาด',
+                                message: err.error.message,
+                                icon: {
+                                    show: true,
+                                    name: 'heroicons_outline:exclamation',
+                                    color: 'warning',
                                 },
-                                cancel: {
-                                    show: false,
-                                    label: 'Cancel',
+                                actions: {
+                                    confirm: {
+                                        show: false,
+                                        label: 'Confirm',
+                                        color: 'primary',
+                                    },
+                                    cancel: {
+                                        show: false,
+                                        label: 'Cancel',
+                                    },
                                 },
-                            },
-                            dismissible: true,
-                        });
-                        console.log(err.error.message);
-                    },
-                });
+                                dismissible: true,
+                            });
+                            console.log(err.error.message);
+                        },
+                    });
+                } else {
+                    this._service.Savedata(formData).subscribe({
+                        next: (resp: any) => {
+                            this.onCancelClick();
+                        },
+                        error: (err: any) => {
+                            console.log(err);
+                            this.addForm.enable();
+                            this._fuseConfirmationService.open({
+                                title: 'เกิดข้อผิดพลาด',
+                                message: err.error.message,
+                                icon: {
+                                    show: true,
+                                    name: 'heroicons_outline:exclamation',
+                                    color: 'warning',
+                                },
+                                actions: {
+                                    confirm: {
+                                        show: false,
+                                        label: 'Confirm',
+                                        color: 'primary',
+                                    },
+                                    cancel: {
+                                        show: false,
+                                        label: 'Cancel',
+                                    },
+                                },
+                                dismissible: true,
+                            });
+                            console.log(err.error.message);
+                        },
+                    });
+                }
+               
             }
         });
     }

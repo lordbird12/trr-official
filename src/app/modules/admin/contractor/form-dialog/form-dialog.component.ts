@@ -63,22 +63,21 @@ export class FormDialogComponent implements OnInit {
             this.addForm.patchValue({
                 ...this.data
             })
-            this.data.features.forEach((data: any) => {
+            console.log(this.data , 'data');
+            
+            this.data.feature_contractors.forEach((data: any) => {
                 const features = this.addForm.get('features') as FormArray;
                 const a = this.formBuilder.group({
                     feature_id: data.feature_id
-
                 });
                 features.push(a);
             })
-            this.data.factories.forEach((data: any) => {
+            this.data.facetories_contractors.forEach((data: any) => {
                 const factories = this.addForm.get('factories') as FormArray;
                 const a = this.formBuilder.group({
                     factorie_id: data.factorie_id
-
                 });
                 factories.push(a);
-
             })
             console.log('data', this.addForm.value);
 

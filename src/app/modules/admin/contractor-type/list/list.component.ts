@@ -224,7 +224,7 @@ export class ListComponent implements OnInit {
         });
     }
     editElement(element: any) {
-        const dialogRef = this.dialog.open(EditDialogComponent, {
+        const dialogRef = this.dialog.open(FormDialogComponent, {
             width: '400px', // กำหนดความกว้างของ Dialog
             height: 'auto',
             data: element, // ส่งข้อมูลเริ่มต้นไปยัง Dialog
