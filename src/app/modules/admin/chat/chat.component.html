@@ -20,7 +20,7 @@
                                     <div class="flex justify-start items-center">
                                         <div class="flex-0 w-10 h-10 rounded-full overflow-hidden">
                                             <!-- <img class="w-full h-full object-cover" src="{{name?.image}}"> -->
-                                            <img *ngIf="!name.image"
+                                            <img *ngIf="name.image == '{}' || name.image == null"
                                                 class="rounded-full w-12 h-12 border-2 border-yellow-900"
                                                 src="assets/images/no_image.png" alt="image description">
                                             <img *ngIf="name.image"
