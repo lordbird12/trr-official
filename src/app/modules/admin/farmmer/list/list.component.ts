@@ -87,7 +87,7 @@ export class ListComponent implements OnInit {
         });
         this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total - 210
+            this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
@@ -117,7 +117,7 @@ export class ListComponent implements OnInit {
         this.currentPage = 1;
         this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total - 210
+            this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
@@ -145,7 +145,7 @@ export class ListComponent implements OnInit {
         this.quotas = [];
         this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total - 210
+            this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
@@ -372,7 +372,7 @@ export class ListComponent implements OnInit {
         console.log(event.target, this.row)
         this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
             this.farmmer = resp.data;
-            this.totalrecord = +resp.total - 210
+            this.totalrecord = +resp.total
 
             this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
