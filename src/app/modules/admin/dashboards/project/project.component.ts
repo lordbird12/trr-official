@@ -810,22 +810,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 });
             });
             this.range.valueChanges.subscribe(val => {
-                if (val.start) {
+                // if (val.start) {
+                //     this.startday = this.datePipe.transform(val.start, 'yyyy-MM-dd');
+           
+                // }
+                // if (val.end) {
+                //     this.endday = this.datePipe.transform(val.end, 'yyyy-MM-dd');
+                //     console.log("สิ้นสุดวันนน", this.endday);
+                // }
+                if (val.start && val.end) {
                     this.startday = this.datePipe.transform(val.start, 'yyyy-MM-dd');
-                    console.log("เริ่มวันนน", this.startday);
-                }
-                if (val.end) {
                     this.endday = this.datePipe.transform(val.end, 'yyyy-MM-dd');
-                    console.log("สิ้นสุดวันนน", this.endday);
-                }
-                if (val.start || val.end) {
                     this._farmmerService.getsugarcane(this.Id, this.startday, this.endday, this.sugartype, this.search, this.plot, this.activitys, this.page).subscribe((resp: any) => {
                         this.cane = resp.data
                         console.log("ดู กิจกรรมมม", this.cane);
                         this.cdr.detectChanges();
                     });
                 }
-                console.log(`Start Date: ${this.startday}, End Date: ${this.endday}`);  // เพื่อตรวจสอบค่าใน console
+                // console.log(`Start Date: ${this.startday}, End Date: ${this.endday}`);  // เพื่อตรวจสอบค่าใน console
 
             });
         }
@@ -880,15 +882,17 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 });
             });
             this.range.valueChanges.subscribe(val => {
-                if (val.start) {
+                // if (val.start) {
+                //     this.startday = this.datePipe.transform(val.start, 'yyyy-MM-dd');
+                //     console.log("เริ่มวันนน", this.startday);
+                // }
+                // if (val.end) {
+                //     this.endday = this.datePipe.transform(val.end, 'yyyy-MM-dd');
+                //     console.log("สิ้นสุดวันนน", this.endday);
+                // }
+                if (val.start && val.end) {
                     this.startday = this.datePipe.transform(val.start, 'yyyy-MM-dd');
-                    console.log("เริ่มวันนน", this.startday);
-                }
-                if (val.end) {
                     this.endday = this.datePipe.transform(val.end, 'yyyy-MM-dd');
-                    console.log("สิ้นสุดวันนน", this.endday);
-                }
-                if (val.start || val.end) {
                     this._farmmerService.getsugarcane(this.Id, this.startday, this.endday, this.sugartype, this.search, this.plot, this.activitys, this.page).subscribe((resp: any) => {
                         this.cane = resp.data
                         console.log("ดู กิจกรรมมม", this.cane);
