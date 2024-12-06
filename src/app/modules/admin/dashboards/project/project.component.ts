@@ -692,8 +692,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
         const selectedTabIndex = event.index;
         const tabLabel = event.tab.textLabel;
 
-        console.log(`Selected Tab Index: ${selectedTabIndex}`);
-        console.log(`Selected Tab Label: ${tabLabel}`);
         if (selectedTabIndex == 0) {
             this._farmmerService.dashboardactivitytype(this.Id).subscribe((resp: any) => {
                 this.dbactivity = resp.data

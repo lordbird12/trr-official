@@ -19,7 +19,13 @@
                                     [class.bg-white]="selectedChatId !== name?.id">
                                     <div class="flex justify-start items-center">
                                         <div class="flex-0 w-10 h-10 rounded-full overflow-hidden">
-                                            <img class="w-full h-full object-cover" src="{{name?.image}}">
+                                            <!-- <img class="w-full h-full object-cover" src="{{name?.image}}"> -->
+                                            <img *ngIf="!name.image"
+                                                class="rounded-full w-12 h-12 border-2 border-yellow-900"
+                                                src="assets/images/no_image.png" alt="image description">
+                                            <img *ngIf="name.image"
+                                                class="rounded-full w-12 h-12 border-2 border-yellow-900"
+                                                src="{{name.image}}" alt="image description">
                                         </div>
                                         <span *ngIf="name?.name != null" class="pl-2">{{name?.name}}</span>
                                         <span *ngIf="name?.name == null" class="pl-2">ผู้ใช้งานหมายเลข
