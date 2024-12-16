@@ -42,16 +42,6 @@ export class ListComponent implements OnInit {
     dtElement!: DataTableDirective;
     dataRow: any = [];
     isLoading: boolean = false;
-
-    displayedColumns: string[] = [
-        'manage',
-        'no',
-        'name',
-        'email',
-        'position',
-        'phoneNumber',
-        'status',
-    ];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
     @ViewChild(MatSort) sort: MatSort;
     flashMessage: null;
@@ -218,7 +208,6 @@ export class ListComponent implements OnInit {
             pageLength: 10,
             serverSide: true,
             processing: true,
-            order: [[0, 'desc']],
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
             },
@@ -245,10 +234,12 @@ export class ListComponent implements OnInit {
                     });
             },
             columns: [
-                { data: 'actioon', orderable: false },
-                { data: 'no', orderable: false },
-                { data: 'code', orderable: false },
-                { data: 'name', orderable: false },
+                { data: 'no', orderable: true },
+                { data: 'title', orderable: true },
+                { data: 'views', orderable: true },
+                { data: 'is_use', orderable: true },
+                { data: 'created_at', orderable: true },
+                { data: 'action', orderable: false },
             ],
         };
     }

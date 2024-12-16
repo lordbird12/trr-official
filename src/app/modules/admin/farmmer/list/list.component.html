@@ -71,7 +71,13 @@
                         </td>
                     </tr>
                 </tbody> -->
-
+            <div class="flex justify-between mb-4">
+                <input type="text" placeholder="กรุณาระบุปี..." class="border p-2 rounded-md w-1/5"
+                    [(ngModel)]="yearTerm">
+                <button class="border-2 border-blue-500 rounded-md font-black hover:bg-blue-50 w-fit mx-2">
+                    <span class="mx-5 text-blue-600" (click)="searchFarmers()">ค้นหา</span>
+                </button>
+            </div>
             <div class="flex justify-between mb-4">
                 <div class="flex items-center">
                     <label for="rowSelect" class="">แสดง</label>
@@ -86,110 +92,55 @@
                 <input type="text" placeholder="ค้นหา..." class="border p-2 rounded-md w-1/5" [(ngModel)]="searchTerm"
                     (ngModelChange)="onSearchChange($event)">
             </div>
-            <table datatable [dtOptions]="dtOptions"
-                class="table row-border hover w-full text-center whitespace-nowrap">
+            <table class="table row-border hover w-full text-center whitespace-nowrap">
                 <thead class="bg-gray-700 text-black">
                     <tr class="bg-gray-200">
-                        <th class="border-b-2 w-1/9 p-3">เขต</th>
-                        <th class="border-b-2 w-1/9 p-3">เลขที่โควต้า</th>
-                        <th class="border-b-2 w-1/9 p-3">ชื่อเกษตรกร</th>
-                        <th class="border-b-2 w-1/9 p-3">จำนวนแปลง</th>
-                        <th class="border-b-2 w-1/9 p-3">พื้นที่ (ไร่)</th>
-                        <th class="border-b-2 w-1/9 p-3">เลขบัตรประชาชน</th>
-                        <th class="border-b-2 w-1/9 p-3">เบอร์ติดต่อ</th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('zone_farmer')">เขต</th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('Quota_id')">เลขที่โควต้า</th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('First_name')">ชื่อเกษตรกร
+                        </th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('station_total')">จำนวนแปลง
+                        </th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('area_total')">พื้นที่ (ไร่)
+                        </th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('id_card_number')">
+                            เลขบัตรประชาชน</th>
+                        <th class="border-b-2 w-1/9 p-3 cursor-pointer" (click)="sortData('phone_number')">เบอร์ติดต่อ
+                        </th>
                         <th class="border-b-2 w-1/9 p-3">สถานะการบันทึกกิจกรรม</th>
-                        <th class="border-b-2 w-1/9 p-3"></th>
                         <th class="border-b-2 w-1/9 p-3"></th>
                     </tr>
                 </thead>
-                <tbody *ngIf="farmmer">
-                    <ng-container *ngIf="farmmer?.length != 0">
-                        <tr *ngFor=" let item of farmmer; let i=index" class="hover:bg-gray-100 whitespace-nowrap">
-                            <td class="p-3">{{ item.area ?? '-' }}</td>
-                            <td class="p-3">{{ item.Quota_id ?? '-' }}</td>
-                            <td class="p-3">{{ item.First_name ?? '-' }} {{ item.Last_name ?? '-' }}</td>
-                            <td class="p-3">{{ item.station_total ?? '-' }}</td>
-                            <td class="p-3">{{ item.area_total ?? '-' }}</td>
-                            <td class="p-3">{{ item.id_card_number ?? '-' }}</td>
-                            <td class="p-3">{{ item.phone_number ?? '-' }}</td>
-                            <td class="p-3">
-                                <div class="grid-container">
-                                    <ng-container *ngFor="let month of months; let n = index">
-                                        <ng-container *ngIf="month.quota_id == item.Quota_id">
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.jan == true">1</div>
-                                            <div class="grid-item" *ngIf="month?.months?.jan == false">1</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.feb == true">2</div>
-                                            <div class="grid-item" *ngIf="month?.months?.feb == false">2</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.mar == true">3</div>
-                                            <div class="grid-item" *ngIf="month?.months?.mar == false">3</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.apr == true">4</div>
-                                            <div class="grid-item" *ngIf="month?.months?.apr == false">4</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.may == true">5</div>
-                                            <div class="grid-item" *ngIf="month?.months?.may == false">5</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.jun == true">6</div>
-                                            <div class="grid-item" *ngIf="month?.months?.jun == false">6</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.jul == true">7</div>
-                                            <div class="grid-item" *ngIf="month?.months?.jul == false">7</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.aug == true">8</div>
-                                            <div class="grid-item" *ngIf="month?.months?.aug == false">8</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.sep == true">9</div>
-                                            <div class="grid-item" *ngIf="month?.months?.sep == false">9</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.oct == true">10</div>
-                                            <div class="grid-item" *ngIf="month?.months?.oct == false">10</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.nov == true">11</div>
-                                            <div class="grid-item" *ngIf="month?.months?.nov == false">11</div>
-
-                                            <div class="grid-item border-2 border-black-600 bg-green-600"
-                                                *ngIf="month?.months?.dec == true">12</div>
-                                            <div class="grid-item" *ngIf="month?.months?.dec == false">12</div>
-                                        </ng-container>
-                                    </ng-container>
-                                </div>
-                            </td>
-                            <td class="p-3">
-                                <button (click)="goToProfile(item.Quota_id)"
-                                    class="border-2 border-green-500 text-green-500 w-full rounded-md p-2 font-bold hover:bg-green-500 hover:text-white">
-                                    <span class="whitespace-nowrap ml-2 mr-1">รายละเอียด</span>
-                                </button>
-                            </td>
-                            <td class="p-3">
-                                <button (click)="goToDelete(item.Quota_id)"
-                                    class="border-2 border-red-500 text-red-500 w-full rounded-md p-2 font-bold hover:bg-red-500 hover:text-white">
-                                    <span class="whitespace-nowrap ml-2 mr-1">ลบบัญชี</span>
-                                </button>
-                            </td>
-                        </tr>
-                    </ng-container>
-
-                </tbody>
-
-                <tbody *ngIf="!farmmer">
-                    <tr>
-                        <td colspan="" class="no-data-available text-center">ไม่มีข้อมูล !</td>
+                <tbody *ngIf="farmmer?.length" class="border-b-2">
+                    <tr *ngFor="let item of farmmer; trackBy: trackByQuotaId" 
+                        class="hover:bg-gray-100 whitespace-nowrap">
+                        <td class="p-3">{{ item.zone_farmer ?? '-' }}</td>
+                        <td class="p-3">{{ item.Quota_id ?? '-' }}</td>
+                        <td class="p-3">{{ item.First_name ?? '-' }} {{ item.Last_name ?? '-' }}</td>
+                        <td class="p-3">{{ item.station_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.area_total ?? '-' }}</td>
+                        <td class="p-3">{{ item.id_card_number ?? '-' }}</td>
+                        <td class="p-3">{{ item.phone_number ?? '-' }}</td>
+                        <td class="p-3">
+                            <div class="grid-container">
+                                <ng-container *ngFor="let monthKey of monthKeys; let index = index">
+                                    <div class="grid-item"
+                                        [ngClass]="{'border-2 border-black-600 bg-green-600': isMonthActive(item, monthKey)}">
+                                        {{ index + 1 }}
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </td>
+                        <td class="p-3">
+                            <button (click)="goToProfile(item.Quota_id)"
+                                class="border-2 border-green-500 text-green-500 w-full rounded-md p-2 font-bold">
+                                รายละเอียด
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
+
             <div class="flex items-center justify-between w-full pr-4 py-2">
                 <!-- แสดงยอดรวม totalrecord ชิดซ้าย -->
                 <div class="flex items-center">
