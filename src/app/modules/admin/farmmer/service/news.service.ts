@@ -65,14 +65,16 @@ export class NewsService {
                 })
             );
     }
-    getAPIFarmmer(search: any, page: number,perpage?:number): Observable<any> {
+    getAPIFarmmer(search: any, page: number,perpage?:number, year?:any): Observable<any> {
         return this._httpClient
             .post('https://canegrow.com:28099/api/profile_farmer', {
+                search: search,
                 FacID: '0',
+                Year: year,
                 page: page.toString(),
                 skip: '1',
                 take: perpage,
-                search: search,
+
             })
             .pipe(
                 switchMap((response: any) => {
@@ -189,9 +191,11 @@ export class NewsService {
         return this._httpClient
             .post('https://canegrow.com:28099/api/ccs', {
                 factory_id: 1,
-                quota_id: id,
-                begin_date: begin_date,
-                end_date: end_date,
+                quota_id: 327,
+                Begin_date: '01/01/2023',
+                End_date: '12/31/2023',
+
+
                 // begin_date: '2023-12-01',
                 // end_date: '2023-12-31',
             })
