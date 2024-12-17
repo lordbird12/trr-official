@@ -221,7 +221,6 @@ export class ListComponent implements OnInit {
             pageLength: 10,
             serverSide: true,
             processing: true,
-            order: [[0, 'desc']],
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
             },
@@ -250,10 +249,10 @@ export class ListComponent implements OnInit {
                     });
             },
             columns: [
-                { data: 'actioon', orderable: false },
-                { data: 'no', orderable: false },
-                { data: 'code', orderable: false },
-                { data: 'name', orderable: false },
+                { data: 'title', orderable: true },
+                { data: 'views', orderable: true },
+                { data: 'status', orderable: true },
+                { data: 'created_at', orderable: true },
             ],
         };
     }

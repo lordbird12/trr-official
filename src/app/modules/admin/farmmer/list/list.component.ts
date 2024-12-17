@@ -62,13 +62,14 @@ export class ListComponent implements OnInit {
     farmmer: any[] = []
     data = new FormControl('1');
     searchTerm: string = '';
+    yearTerm: string = '';
     row: number = 10;
     currentPage: number = 1;
     totalPages: number = 1;
     quotas: any[] = []
     months: any[] = []
     totalrecord: number;
-
+    year: any[] = []
 
     totalRows = 25; // จำนวนแถวทั้งหมด
     rowsPerPage = 10; // จำนวนแถวที่แสดงต่อหน้า
@@ -85,14 +86,13 @@ export class ListComponent implements OnInit {
             this.province = resp;
             this._changeDetectorRef.markForCheck();
         });
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm).subscribe((resp: any) => {
             this.farmmer = resp.data;
             this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
             this.quotas = [];
             this.farmmer.forEach(element => {
                 this.quotas.push(element.Quota_id);
-
             });
 
             this._Service.getEvents(this.quotas).subscribe((resp: any) => {
@@ -106,7 +106,10 @@ export class ListComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this._Service.groupyear(null).subscribe((resp: any) => {
+            console.log(resp);
 
+        })
         // this.loadTable();
         // this.searchFarmers();
         // this.loadFarmers();
@@ -115,7 +118,7 @@ export class ListComponent implements OnInit {
     // ฟังก์ชันที่เรียกใช้เมื่อต้องการค้นหา
     searchFarmers(): void {
         this.currentPage = 1;
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm).subscribe((resp: any) => {
             this.farmmer = resp.data;
             this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
@@ -140,10 +143,28 @@ export class ListComponent implements OnInit {
         this.searchFarmers();
     }
 
+    onSearchYear(): void {
+
+        this.currentPage = 1;
+        this.searchFarmers();
+    }
+
+
+    monthKeys = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+
+    isMonthActive(item: any, monthKey: string): boolean {
+        return this.months.some(
+            (month) => month.quota_id === item.Quota_id && month?.months?.[monthKey] === true
+        );
+    }
+
+    trackByQuotaId(index: number, item: any): string {
+        return item.Quota_id;
+    }
 
     loadFarmers(): void {
         this.quotas = [];
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm).subscribe((resp: any) => {
             this.farmmer = resp.data;
             this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
@@ -498,6 +519,22 @@ export class ListComponent implements OnInit {
     get endRow() {
         return Math.min(this.currentPage * this.rowsPerPage, this.totalRows);
     }
+    sortOrder: boolean = true; // true = Ascending, false = Descending
+    sortData(column: string): void {
+        this.sortOrder = !this.sortOrder; // สลับระหว่าง Ascending และ Descending
+        this.farmmer.sort((a, b) => {
+          const valueA = a[column] || ''; // ตรวจสอบค่าที่ null หรือ undefined
+          const valueB = b[column] || '';
+    
+          if (typeof valueA === 'string' && typeof valueB === 'string') {
+            return this.sortOrder
+              ? valueA.localeCompare(valueB) // Ascending
+              : valueB.localeCompare(valueA); // Descending
+          }
+    
+          return this.sortOrder ? valueA - valueB : valueB - valueA; // สำหรับตัวเลข
+        });
+      }
 
 
 
