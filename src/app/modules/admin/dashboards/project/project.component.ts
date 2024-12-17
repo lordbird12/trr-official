@@ -813,7 +813,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
             this.range.valueChanges.subscribe(val => {
                 // if (val.start) {
                 //     this.startday = this.datePipe.transform(val.start, 'yyyy-MM-dd');
-
+           
                 // }
                 // if (val.end) {
                 //     this.endday = this.datePipe.transform(val.end, 'yyyy-MM-dd');
