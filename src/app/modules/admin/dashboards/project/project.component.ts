@@ -47,7 +47,7 @@ import {
     ApexTooltip
 } from "ng-apexcharts";
 // import { log } from 'console';
-import {  MAT_DATE_FORMATS } from '@angular/material/core';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
 export type ChartsOptions = {
     series: ApexAxisChartSeries;
     chart: ApexChart;
@@ -69,24 +69,24 @@ export type ChartOptions = {
 
 export class ThaiDateAdapter extends NativeDateAdapter {
     format(date: Date, displayFormat: string): string {
-      // กำหนดรูปแบบที่ต้องการที่นี่
-      return formatDate(date, 'd/MM/yyyy', 'th-TH');
+        // กำหนดรูปแบบที่ต้องการที่นี่
+        return formatDate(date, 'd/MM/yyyy', 'th-TH');
     }
-  
-    // สามารถปรับแต่งได้เพิ่มเติมตามต้องการ
-  }
 
-  export const THAI_DATE_FORMATS = {
+    // สามารถปรับแต่งได้เพิ่มเติมตามต้องการ
+}
+
+export const THAI_DATE_FORMATS = {
     parse: {
-      dateInput: 'LL',
+        dateInput: 'LL',
     },
     display: {
-      dateInput: 'd/MM/yyyy', // แสดงวันที่ในรูปแบบวัน/เดือน/ปี
-      monthYearLabel: 'MMMM yyyy',
-      dateA11yLabel: 'd MMMM yyyy',
-      monthYearA11yLabel: 'MMMM yyyy',
+        dateInput: 'd/MM/yyyy', // แสดงวันที่ในรูปแบบวัน/เดือน/ปี
+        monthYearLabel: 'MMMM yyyy',
+        dateA11yLabel: 'd MMMM yyyy',
+        monthYearA11yLabel: 'MMMM yyyy',
     },
-  };
+};
 
 @Component({
     selector: 'project',
@@ -127,7 +127,7 @@ export class ThaiDateAdapter extends NativeDateAdapter {
         FormsModule,
         NgApexchartsModule
     ],
-    providers: [ThaiDatePipe, DatePipe,{ provide: MAT_DATE_LOCALE, useValue: 'th-TH' },{ provide: MAT_DATE_FORMATS, useValue: THAI_DATE_FORMATS }]
+    providers: [ThaiDatePipe, DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'th-TH' }, { provide: MAT_DATE_FORMATS, useValue: THAI_DATE_FORMATS }]
 })
 export class ProjectComponent implements OnInit, OnDestroy {
     dtOptions: DataTables.Settings = {};
@@ -342,17 +342,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
     startmonth: any;
     endmonth: any;
     groupyear: any;
+    groupyearEnd: any;
     income: any;
     deduct: any;
     profiles: any;
     totalAmountPaid: any;
-    img:any;
+    img: any;
     ngOnInit(): void {
 
         this.route.params.subscribe(params => {
             this.Id = params['id'];
             console.log("ดู ID", this.Id);
-          });
+        });
 
         this._farmmerService.getImg(this.Id).subscribe((resp: any) => {
             this.img = resp.image;
@@ -367,7 +368,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
 
         console.log("ดู ID", this.Id);
-        
+
         this._farmmerService.dashboardincomededuct(this.Id).subscribe((resp: any) => {
             this.dbincome = resp.data;
             // this._farmmerService.receive(this.Id).subscribe((resp: any) => {
@@ -378,8 +379,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
             //     this.cdr.detectChanges();
             // });
             if (this.dbincome && this.dbincome.Income && this.dbincome.Income.length > 0 && this.dbincome.Deduct && this.dbincome.Deduct.length > 0) {
-                const income:number = parseFloat((parseFloat(this.dbincome.Income[0]) || 0).toFixed(2));
-                const deduct:number = parseFloat((parseFloat(this.dbincome.Deduct[0]) || 0).toFixed(2));
+                const income: number = parseFloat((parseFloat(this.dbincome.Income[0]) || 0).toFixed(2));
+                const deduct: number = parseFloat((parseFloat(this.dbincome.Deduct[0]) || 0).toFixed(2));
                 this.income = income;
                 this.deduct = deduct;
                 console.log("ดู กิจกรรมมม", income, deduct);
@@ -454,7 +455,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
                     console.warn('ทั้งรายรับและรายจ่ายเป็น 0 ไม่สามารถแสดงแผนภูมิได้');
                     this.chartOptions1 = null;
                 } else {
-                    
+
                     this.chartOptions1 = {
                         series: [price1, price2, price3, price4, price5, price6, price7, price8],
                         chart: {
@@ -503,7 +504,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
                 const day5de = parseFloat(Object.values(this.dbweekly.deduct[4])[0] as string) || 0;
                 const day6de = parseFloat(Object.values(this.dbweekly.deduct[5])[0] as string) || 0;
                 const day7de = parseFloat(Object.values(this.dbweekly.deduct[6])[0] as string) || 0;
-        
+
                 console.log("ดู dbweekly", this.dbweekly);
                 console.log("ดู dbweekly", day2in);
                 console.log("ดู dbweekly", day2de);
@@ -655,12 +656,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     allValuesAreZero(): boolean {
         return this.dbweekly.income.slice(0, 8).every(item =>
-          Object.values(item).every(value => value === 0)
+            Object.values(item).every(value => value === 0)
         );
-      }
+    }
 
     private apiKey: string = 'AIzaSyBgko4WThN-06_Cnn_OOwctoIgaUBcaQ_o';
-    
+
     getMapImageUrl(lat: number, lng: number, coOrPoints: number[][]): string {
         const zoom = 13; // Adjust as needed
         const size = '200x100'; // Adjust as needed
@@ -726,9 +727,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
             this._farmmerService.groupyear(this.Id).subscribe((resp: any) => {
                 if (resp && resp.length > 0) {
                     this.groupyear = resp
-                    console.log("ดู groupyear", this.groupyear);
+                    this.startYear = this.groupyear[0]?.value;
+                    this.endYear = this.groupyear[this.groupyear.length - 1].value;
                     this.firstYear = this.groupyear[0];
                     this.lastYear = this.groupyear[this.groupyear.length - 1];
+                    this.groupyearEnd = this.groupyear.filter(item => item.value > this.startYear);
                     this._farmmerService.profile(this.Id, this.firstYear.value, this.lastYear.value).subscribe((resp: any) => {
                         this.profile = resp
                         console.log("ดู กิจกรรมมม", this.profile);
@@ -810,7 +813,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
             this.range.valueChanges.subscribe(val => {
                 // if (val.start) {
                 //     this.startday = this.datePipe.transform(val.start, 'yyyy-MM-dd');
-           
+
                 // }
                 // if (val.end) {
                 //     this.endday = this.datePipe.transform(val.end, 'yyyy-MM-dd');
@@ -1123,9 +1126,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
 
     onStartYearChange(selectedYear: number) {
-        console.log('Selected start year:', selectedYear);
+        if (selectedYear > this.endYear) {
+            alert('กรุณาเลือกปีที่น้อยกว่าปีที่สิ้นสุด')
+            this.startYear = this.endYear
+            return;
+        }
+       
+        this.groupyearEnd = this.groupyear.filter(item => item.value >= selectedYear);
+        console.log('start', selectedYear);
+        console.log(123, this.groupyearEnd);
         this.firstYear.value = selectedYear;
         this._farmmerService.profile(this.Id, selectedYear, this.lastYear.value).subscribe((resp: any) => {
+            this.startYear = selectedYear
             this.profile = resp
             console.log("ดู กิจกรรมมม", this.profile);
             this.cdr.detectChanges();
@@ -1133,6 +1145,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
 
     onEndYearChange(selectedYear: number) {
+        if (selectedYear < this.startYear) {
+            alert('กรุณาเลือกปีที่มากกว่าปีเริ่มต้น')
+            this.endYear = this.startYear
+            return;
+        }
         this.lastYear.value = selectedYear;
         console.log('Selected start year:', selectedYear);
         this._farmmerService.profile(this.Id, this.firstYear.value, selectedYear).subscribe((resp: any) => {
@@ -1519,7 +1536,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         };
     }
 
-    formatNumber(num: number): string { 
-        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
+    formatNumber(num: number): string {
+        return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 }
