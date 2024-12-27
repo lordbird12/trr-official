@@ -18,44 +18,6 @@
     <!-- Header -->
     <div class="bg-card">
         <div class="flex flex-col w-full mx-auto">
-            <!-- <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12">
-
-                <div class="flex flex-auto items-center min-w-0">
-                    <div class="flex-0 w-16 h-16 rounded-full overflow-hidden">
-                        <img class="w-full h-full object-cover" src="assets/images/avatars/brian-hughes.jpg">
-                    </div>
-                    <div class="flex flex-col min-w-0 ml-4">
-                        <ng-container *transloco="let t">
-                            <div
-                                class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
-                                {{t('ยินดีต้อนรับ')}} Admin</div>
-                        </ng-container>
-                        <div class="flex items-center">
-                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
-                            <div class="ml-1.5 leading-6 truncate text-secondary">คุณมี 15 การแจ้งเตือน</div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- <div
-                class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-5 sm:py-6 sm:px-10 border-b bg-card dark:bg-transparent">
-                <div class="flex-1 min-w-0">
-
-                    <div class="flex flex-wrap items-center font-medium">
-                        <div>
-                            <a class="whitespace-nowrap text-black-500">เกษตรกร</a>
-                        </div>
-                        <div class="flex items-center ml-1 whitespace-nowrap">/
-                            <a class="ml-1 text-black-500">รายชื่อเกษตรกร</a>
-                        </div>
-                        <div class="flex items-center ml-1 whitespace-nowrap">/
-                            <a class="ml-1 text-black-500">ชื่อ - นามสกุล</a>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
             <div
                 class="flex flex-col mt-2 sm:flex-row flex-0 sm:items-center sm:justify-between p-5 sm:py-6 sm:px-10 border-b bg-card dark:bg-transparent">
                 <div class="flex-1 min-w-0">
@@ -270,12 +232,6 @@
                                 class="sm:col-span-2 md:col-span-4 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
                                 <div class="flex flex-col sm:flex-row items-start justify-between">
                                     <div class="mt-3 sm:mt-0 sm:ml-2">
-                                        <!-- <mat-button-toggle-group value="this-week"
-                                            #githubIssuesWeekSelector="matButtonToggleGroup" class="bg-black-300">
-                                            <mat-button-toggle value="this-week">2533-2564
-                                                <mat-icon svgIcon="heroicons_outline:calendar-days"></mat-icon>
-                                            </mat-button-toggle>
-                                        </mat-button-toggle-group> -->
                                         <div *ngIf="!profile" class="flex items-center w-full">
                                             <img [src]="spinner" alt="Loading..." class="my-8 ml-100">
                                         </div>
@@ -295,7 +251,7 @@
                                                     <select (ngModelChange)="onEndYearChange($event)" id="end-year"
                                                         [(ngModel)]="endYear"
                                                         class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                                        <option *ngFor="let year of groupyear" [value]="year.value">{{ year.text }}</option>
+                                                        <option *ngFor="let year of groupyearEnd" [value]="year.value">{{ year.text }}</option>
                                                     </select>
                                                 </div>
                                             </div>
