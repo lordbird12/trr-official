@@ -22,6 +22,8 @@ export class ConfignotiComponent implements OnInit {
     addForm: FormGroup;
     permissiondata: any[];
     item: any;
+    selectTitle: any;
+
     imageUrls: string[] = [];
     datenoti: string[] = [];
     config = {
@@ -86,9 +88,9 @@ export class ConfignotiComponent implements OnInit {
         //   }
         // this.addForm.get('image').updateValueAndValidity();
     }
-    onSelectNoti(event:any){
-        console.log(event)
-        this._service.getDate(event).subscribe((resp:any)=>{
+    onSelectNoti(event: any) {
+        this.selectTitle = event;
+        this._service.getDate(event).subscribe((resp: any) => {
             this.datenoti = resp
 
         })
@@ -144,11 +146,11 @@ export class ConfignotiComponent implements OnInit {
         });
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                this._service.delete({date: date}).subscribe((resp) => {
+                this._service.delete({ title: this.selectTitle, date: date }).subscribe((resp) => {
                     this.refreshTable();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
     deletesub(itemid: any) {
@@ -179,7 +181,7 @@ export class ConfignotiComponent implements OnInit {
                     this.refreshTable();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
     rerender(): void {
