@@ -41,7 +41,7 @@ export class FormComponent implements OnInit {
             this.Id = params.id;
         });
         this.addForm = this.formBuilder.group({
-            id:'',
+            id: '',
             no: '',
             title: '',
             detail: '',
@@ -80,7 +80,7 @@ export class FormComponent implements OnInit {
             });
         } else {
             this.addForm.patchValue({
-                id:'',
+                id: '',
                 no: '',
                 title: '',
                 detail: '',
@@ -110,9 +110,11 @@ export class FormComponent implements OnInit {
             icon: { show: false, name: 'heroicons_outline:exclamation-triangle', color: 'warning' },
             actions: {
                 confirm:
-                { show: true,
+                {
+                    show: true,
                     label: 'ตกลง',
-                    color: 'primary' },
+                    color: 'primary'
+                },
                 cancel: { show: true, label: 'ยกเลิก' },
             },
             dismissible: true,
@@ -226,5 +228,17 @@ export class FormComponent implements OnInit {
 
     backTo() {
         this._router.navigate(['admin/journal/list']);
+    }
+
+    onStatusChange(): void {
+        const isUse = this.addForm.get('is_use')?.value;
+
+        if (isUse === 0) {
+            // Clear and disable notify_status
+            this.addForm.get('notify_status')?.reset({ value: 0, disabled: true });
+        } else {
+            // Enable notify_status
+            this.addForm.get('notify_status')?.reset({ value: 1, disabled: false });
+        }
     }
 }

@@ -37,6 +37,21 @@ export class ChatService {
     }, { headers: headers });
   }
 
+  getMembers(search: string, facID: string = '0', year: number = 6768): Observable<any> {
+    const apiUrl = 'https://canegrow.com:28099/api/profile_farmer';
+
+    const params = {
+      search,
+      FacID: facID,
+      Year: year,
+      page: '1',
+      skip: '1',
+      take: 100000,
+    };
+
+    return this.http.post(apiUrl, params);
+  }
+
   sendMessages(chatId: number, message: string, userid: number, type: string): Observable<any> {
     return this.http.post(environment.baseURL + `/api/chat_msg`, {
       "chat_id": chatId,
@@ -70,6 +85,16 @@ export class ChatService {
   updateChatStatus(id: any): Observable<any> {
     return this.http
       .get<any>(environment.baseURL + '/api/update_chat_status/' + id)
+      .pipe(
+        tap((result) => {
+          this._data.next(result);
+        })
+      );
+  }
+
+  createChat(id: any, name: any): Observable<any> {
+    return this.http
+      .get<any>(environment.baseURL + '/api/create_chat/' + id + '/' + name)
       .pipe(
         tap((result) => {
           this._data.next(result);

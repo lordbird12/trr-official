@@ -8,6 +8,7 @@
             <div class="w-1/4">
                 <div class="bg-white shadow-md rounded-lg h-full">
                     <h3 class="text-lg font-semibold p-4 border-b border-gray-200">รายชื่อผู้ติดต่อ</h3>
+
                     <!-- Search Box -->
                     <div class="p-4">
                         <input type="text" [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}"
@@ -18,8 +19,8 @@
                     <div class="overflow-y-auto" style="max-height: 400px;">
                         <ul>
                             <li *ngFor="let name of filteredMembers() | slice:0:20; let i = index"
-                                (click)="selectContact2(name?.id,name?.name)"
-                                [ngClass]="{'selected': selectedChatId === name?.id}" class="cursor-pointer">
+                                (click)="selectContact(name?.id)" [ngClass]="{'selected': selectedChatId === name?.id}"
+                                class="cursor-pointer">
                                 <div class="p-4 rounded-lg transition-all hover:bg-blue-50"
                                     [ngClass]="{'shadow-lg': selectedChatId === name?.id}"
                                     [class.bg-blue-100]="selectedChatId === name?.id"
@@ -48,6 +49,16 @@
                                     </div>
                                 </div>
                             </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-1/4">
+                <div class="bg-white shadow-md rounded-lg h-full">
+                    <h3 class="text-lg font-semibold p-4 border-b border-gray-200">รายชื่อผู้ติดต่อ</h3>
+                    <div class="overflow-y-auto" style="max-height: 400px;">
+                        <ul>
                             <li *ngFor="let name of member | slice:0:20; let i = index"
                                 (click)="selectContact(name?.id)" [ngClass]="{'selected': selectedChatId === name?.id}"
                                 class="cursor-pointer">
@@ -164,5 +175,3 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>

@@ -55,6 +55,13 @@ export const appRoutes: Route[] = [
                     ),
             },
             {
+                path: 'resetpass',
+                loadChildren: () =>
+                    import(
+                        'app/modules/auth/resetpass/reset-password.routes'
+                    ),
+            },
+            {
                 path: 'sign-in',
                 loadChildren: () =>
                     import('app/modules/auth/sign-in/sign-in.routes'),

@@ -21,11 +21,27 @@ export class NewChatComponent implements OnInit, OnDestroy {
   uploadProgress: number = 0;
   private intervalId: any;
   userdata: any;
+
+  member2: any[] = []; // รายชื่อผู้ติดต่อ
+  searchTerm: string = ''; // คำค้นหา
+  selectedChatId2: number | null = null; // ID ของการแชทที่เลือก
+
+
   constructor(private chatService: ChatService, private cdr: ChangeDetectorRef) {
     this.userdata = JSON.parse(localStorage.getItem('user'))
   }
 
+
   ngOnInit(): void {
+    this.fetchMembers('');
+    // ตัวอย่างข้อมูล (ดึงข้อมูลจริงจาก API หรือ Service)
+    // this.member2 = [
+    //   { id: 1, name: 'John Doe', image: null, noti: 2, meeting: 0 },
+    //   { id: 2, name: 'Jane Smith', image: null, noti: 0, meeting: 1 },
+    //   { id: 3, name: null, image: '{}', noti: 5, meeting: 0 },
+    //   // เพิ่มข้อมูลตามต้องการ
+    // ];
+
     this.env = environment.baseURL + '/'
     console.log(this.env)
     this.getMessages();
@@ -33,6 +49,62 @@ export class NewChatComponent implements OnInit, OnDestroy {
       this.checkNewMessages();
     }, 5000);
   }
+
+  fetchMembers(search: string): void {
+    this.chatService.getMembers(search).subscribe(
+      (response) => {
+        if (response?.result === 1) {
+          this.member2 = response.data.map((item: any) => ({
+            id: item.Quota_id,
+            name: `${item.First_name} ${item.Last_name}`,
+            phone: item.phone_number,
+            image: null, // Set a default or fetch from elsewhere if available
+            noti: 0, // Default notification count
+          }));
+        }
+      },
+      (error) => {
+        console.error('Error fetching members:', error);
+      }
+    );
+  }
+
+  // ฟังก์ชันกรองรายชื่อ
+  filteredMembers() {
+    if (!this.searchTerm.trim()) {
+      return []; // Return an empty array when no search term
+    }
+
+    return this.member2.filter((m) =>
+      m.name
+        ? m.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        : m.id.toString().includes(this.searchTerm)
+    );
+  }
+
+  selectContact2(contactId: number, name: string): void {
+    this.searchTerm = ''; // Clear the search term to reset filteredMembers()
+    this.selectedChatId2 = contactId;
+    this.chatService.createChat(contactId, name).subscribe(() => {
+      this.getMessages();
+    });
+
+    const selectedChat = this.member.find(contact => contact.id === contactId);
+
+    if (selectedChat) {
+      // Destructure the selected chat data
+      const { name, id, chat_msgs } = selectedChat;
+      this.name = name;
+      this.iduser = id;
+      this.chat_msgs = chat_msgs;
+
+      // Scroll to bottom and trigger change detection
+      setTimeout(() => this.scrollToBottom(), 100);
+      this.cdr.detectChanges();
+    }
+  }
+
+
 
   ngOnDestroy(): void {
     if (this.intervalId) {
@@ -75,6 +147,7 @@ export class NewChatComponent implements OnInit, OnDestroy {
   getMessages() {
     this.chatService.getMessages().subscribe((resp: any) => {
       this.messages = resp;
+      console.log(resp);
       this.member = resp.data.data.map((chat: any) => ({
         id: chat?.id,
         name: chat?.frammer?.name ?? "Guest",
@@ -106,26 +179,25 @@ export class NewChatComponent implements OnInit, OnDestroy {
   iduser: any;
   selectContact(contactId: number): void {
     this.chatService.updateChatStatus(contactId).subscribe();
-  
+
     // Update the selected chat details
     this.selectedChatId = contactId;
-    console.log(contactId);
-  
+
     const selectedChat = this.member.find(contact => contact.id === contactId);
-  
+
     if (selectedChat) {
       // Destructure the selected chat data
       const { name, id, chat_msgs } = selectedChat;
       this.name = name;
       this.iduser = id;
       this.chat_msgs = chat_msgs;
-  
+
       // Scroll to bottom and trigger change detection
       setTimeout(() => this.scrollToBottom(), 100);
       this.cdr.detectChanges();
     }
   }
-  
+
 
   sendMessage() {
     if (this.newMessage.trim().length === 0 || this.selectedChatId === null) {

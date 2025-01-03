@@ -1,12 +1,12 @@
 import { NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { FuseValidators } from '@fuse/validators';
@@ -14,33 +14,32 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { finalize } from 'rxjs';
 
 @Component({
-    selector     : 'auth-reset-password',
-    templateUrl  : './reset-password.component.html',
+    selector: 'auth-reset-password',
+    templateUrl: './reset-password.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations,
-    standalone   : true,
-    imports      : [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, RouterLink],
+    animations: fuseAnimations,
+    standalone: true,
+    imports: [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, RouterLink],
 })
-export class AuthResetPasswordComponent implements OnInit
-{
-    @ViewChild('resetPasswordNgForm') resetPasswordNgForm: NgForm;
+export class AuthResetPasswordComponent implements OnInit {
+    @ViewChild('signInNgForm') signInNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
-        type   : 'success',
+        type: 'success',
         message: '',
     };
-    resetPasswordForm: UntypedFormGroup;
+    signInForm: FormGroup;
     showAlert: boolean = false;
 
     /**
      * Constructor
      */
     constructor(
+        private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-    )
-    {
-    }
+        private _router: Router
+    ) { }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -49,17 +48,11 @@ export class AuthResetPasswordComponent implements OnInit
     /**
      * On init
      */
-    ngOnInit(): void
-    {
+    ngOnInit(): void {
         // Create the form
-        this.resetPasswordForm = this._formBuilder.group({
-                password       : ['', Validators.required],
-                passwordConfirm: ['', Validators.required],
-            },
-            {
-                validators: FuseValidators.mustMatch('password', 'passwordConfirm'),
-            },
-        );
+        this.signInForm = this._formBuilder.group({
+            otp: ['', [Validators.required, Validators.maxLength(6)]],
+        });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -67,54 +60,67 @@ export class AuthResetPasswordComponent implements OnInit
     // -----------------------------------------------------------------------------------------------------
 
     /**
-     * Reset password
+     * Sign in
      */
-    resetPassword(): void
-    {
+    signIn(): void {
         // Return if the form is invalid
-        if ( this.resetPasswordForm.invalid )
-        {
+        if (this.signInForm.invalid) {
             return;
         }
 
         // Disable the form
-        this.resetPasswordForm.disable();
+        this.signInForm.disable();
 
         // Hide the alert
         this.showAlert = false;
 
-        // Send the request to the server
-        this._authService.resetPassword(this.resetPasswordForm.get('password').value)
-            .pipe(
-                finalize(() =>
-                {
-                    // Re-enable the form
-                    this.resetPasswordForm.enable();
+        // Sign in
+        this._authService.signIn(this.signInForm.value).subscribe(
+            () => {
+                // Set the redirect url.
+                // The '/signed-in-redirect' is a dummy url to catch the request and redirect the user
+                // to the correct page after a successful sign in. This way, that url can be set via
+                // routing file and we don't have to touch here.
+                const redirectURL =
+                    this._activatedRoute.snapshot.queryParamMap.get(
+                        'redirectURL'
+                    ) || '/signed-in-redirect';
 
-                    // Reset the form
-                    this.resetPasswordNgForm.resetForm();
+                // Navigate to the redirect url
+                this._router.navigateByUrl(redirectURL);
+            },
+            (response) => {
+                // Re-enable the form
+                this.signInForm.enable();
 
-                    // Show the alert
-                    this.showAlert = true;
-                }),
-            )
-            .subscribe(
-                (response) =>
-                {
-                    // Set the alert
-                    this.alert = {
-                        type   : 'success',
-                        message: 'Your password has been reset.',
-                    };
-                },
-                (response) =>
-                {
-                    // Set the alert
-                    this.alert = {
-                        type   : 'error',
-                        message: 'Something went wrong, please try again.',
-                    };
-                },
-            );
+                // Reset the form
+                this.signInNgForm.resetForm();
+
+                // Set the alert
+                this.alert = {
+                    type: 'error',
+                    message: 'Wrong email or password',
+                };
+
+                // Show the alert
+                this.showAlert = true;
+            }
+        );
     }
+
+    email() {
+        console.log(this.signInForm.get('email').value);
+    }
+
+    verifyOtp(): void {
+        if (this.signInForm.valid) {
+            const otp = this.signInForm.get('otp')?.value;
+            console.log('OTP:', otp);
+            // ดำเนินการยืนยัน OTP เช่น เรียก API
+        } else {
+            this.showAlert = true;
+            this.alert = { type: 'error', message: 'กรุณากรอกหมายเลข OTP ที่ถูกต้อง' };
+        }
+    }
+
 }

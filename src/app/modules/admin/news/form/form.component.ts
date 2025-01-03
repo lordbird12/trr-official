@@ -133,7 +133,7 @@ export class FormComponent implements OnInit {
                         next: (resp: any) => {
                             this._router
                                 .navigateByUrl('admin/news/list')
-                                .then(() => {});
+                                .then(() => { });
                         },
 
                         error: (err: any) => {
@@ -168,7 +168,7 @@ export class FormComponent implements OnInit {
                         next: (resp: any) => {
                             this._router
                                 .navigateByUrl('admin/news/list')
-                                .then(() => {});
+                                .then(() => { });
                         },
 
                         error: (err: any) => {
@@ -226,5 +226,17 @@ export class FormComponent implements OnInit {
 
     backTo() {
         this._router.navigate(['admin/news/list']);
+    }
+
+    onStatusChange(): void {
+        const isUse = this.addForm.get('is_use')?.value;
+
+        if (isUse === 0) {
+            // Clear and disable notify_status
+            this.addForm.get('notify_status')?.reset({ value: 0, disabled: true });
+        } else {
+            // Enable notify_status
+            this.addForm.get('notify_status')?.reset({ value: 1, disabled: false });
+        }
     }
 }

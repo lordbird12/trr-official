@@ -66,7 +66,7 @@ export class AuthForgotPasswordComponent implements OnInit
     ngOnInit(): void {
         // Create the form
         this.signInForm = this._formBuilder.group({
-            email: ['', [Validators.required]],
+            phone: ['', [Validators.required]],
     
         });
     }
@@ -148,16 +148,12 @@ export class AuthForgotPasswordComponent implements OnInit
                     },
                     dismissible: true,
                 });
-                const redirectURL =
-                    this._activatedRoute.snapshot.queryParamMap.get(
-                        'redirectURL'
-                    ) || '/signed-in-redirect';
-                this._router.navigateByUrl(redirectURL);
+                this._router.navigate(['resetpass']);
             },
             error: (err: any) => {
                 this._fuseConfirmationService.open({
                     title: 'เกิดข้อผิดพลาด',
-                    message: err.errors.email[0],
+                    message: "ไม่พบหมายเลขนี้ในระบบ",
                     icon: {
                         show: true,
                         name: 'heroicons_outline:exclamation-triangle',
