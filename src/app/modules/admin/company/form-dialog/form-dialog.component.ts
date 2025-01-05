@@ -14,6 +14,7 @@ export class FormDialogComponent implements OnInit {
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     addForm: FormGroup;
     permissiondata: any[];
+    user:any;
     constructor(
         private dialogRef: MatDialogRef<FormDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -31,6 +32,7 @@ export class FormDialogComponent implements OnInit {
             lon: ['', [Validators.required]],
             factory_id: ['', [Validators.required]],
         });
+        this.user = JSON.parse(localStorage.getItem('user'))
     }
 
     ngOnInit(): void {

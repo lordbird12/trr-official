@@ -68,6 +68,7 @@ export class FormDialogComponent implements OnInit {
     factory: any[] = [];
     flashMessage: 'success' | 'error' | null = null;
     selectedFile: File = null;
+    user:any;
     constructor(
         private dialogRef: MatDialogRef<FormDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -88,6 +89,7 @@ export class FormDialogComponent implements OnInit {
             password: [''],
             factories: this.formBuilder.array([]),
         });
+        this.user = JSON.parse(localStorage.getItem('user'))
     }
 
     ngOnInit(): void {

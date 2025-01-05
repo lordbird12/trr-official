@@ -59,7 +59,7 @@ export class ListComponent implements OnInit {
     flashMessage: null;
     flashErrorMessage: null;
     private _matDialog: any;
-
+    user: any;
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -67,7 +67,9 @@ export class ListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _Service: NewsService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
 
     ngOnInit(): void {
         this.loadTable();
@@ -209,7 +211,7 @@ export class ListComponent implements OnInit {
                     this.rerender();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
@@ -265,7 +267,7 @@ export class ListComponent implements OnInit {
                 },
             })
             .afterClosed()
-            .subscribe(() => {});
+            .subscribe(() => { });
     }
 
     // toggleStatus(item: any): void {

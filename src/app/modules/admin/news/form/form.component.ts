@@ -24,7 +24,7 @@ export class FormComponent implements OnInit {
         { name: 'Active', value: '1' },
         { name: 'Inactive', value: '0' },
     ];
-
+    user: any;
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -44,6 +44,8 @@ export class FormComponent implements OnInit {
             notify_status: '',
             is_use: ['1'],
         });
+        this.user = JSON.parse(localStorage.getItem('user'))
+
     }
 
     ngOnInit(): void {

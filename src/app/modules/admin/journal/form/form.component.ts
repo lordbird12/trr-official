@@ -22,7 +22,7 @@ export class FormComponent implements OnInit {
     uploadedFile: any;
     srcResult: any;
     defaultImages: string[] = ['https://logowik.com/content/uploads/images/adobe-pdf3324.jpg'];
-
+    user: any
     is_use: any[] = [
         { name: 'Active', value: '1' },
         { name: 'Inactive', value: '0' },
@@ -50,6 +50,7 @@ export class FormComponent implements OnInit {
             notify_status: '',
             is_use: '',
         });
+        this.user = JSON.parse(localStorage.getItem('user'))
     }
 
     ngOnInit(): void {

@@ -20,7 +20,7 @@ export class EditDialogComponent implements OnInit {
     url_pro: any;
     _changeDetectorRef: any;
     _uploadService: any;
-
+    user:any;
     constructor(
         private dialogRef: MatDialogRef<EditDialogComponent>,
         @Inject(MAT_DIALOG_DATA) private data: any,
@@ -28,7 +28,10 @@ export class EditDialogComponent implements OnInit {
         private formBuilder: FormBuilder,
         private _Service: JournalService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+
+    }
 
     ngOnInit(): void {
         console.log(this.data); 

@@ -41,7 +41,7 @@ export class ListComponent implements OnInit {
     dtElement!: DataTableDirective;
     dataRow: any = [];
     isLoading: boolean = false;
-
+    user:any;
     displayedColumns: string[] = [
         'manage',
         'no',
@@ -63,7 +63,9 @@ export class ListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _Service: JournalService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
 
     ngOnInit(): void {
         this.loadTable();

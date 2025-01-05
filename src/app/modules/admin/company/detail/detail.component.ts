@@ -88,7 +88,7 @@ export class DetailComponent implements OnInit {
     uploadedFile: any;
     srcResult: any;
     defaultImages: string[] = ['https://logowik.com/content/uploads/images/adobe-pdf3324.jpg'];
-
+    user:any;
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -126,7 +126,7 @@ export class DetailComponent implements OnInit {
             image: '',
             path: 'images/company/',
         });
-
+        this.user = JSON.parse(localStorage.getItem('user'))
     }
     itemData: any;
     ngOnInit(): void {

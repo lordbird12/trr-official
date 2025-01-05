@@ -40,7 +40,7 @@ export class FormComponent implements OnInit {
     editorContent = '';
     uploadedImages: any;
     isLoading: boolean = false;
-
+    user: any
     displayedColumns: string[] = [
         'manage',
         'no',
@@ -70,6 +70,7 @@ export class FormComponent implements OnInit {
             detail: '..',
             status: '',
         });
+        this.user = JSON.parse(localStorage.getItem('user'))
     }
 
     ngOnInit(): void {

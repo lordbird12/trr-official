@@ -47,6 +47,7 @@ export class ListComponent implements OnInit {
     flashMessage: null;
     flashErrorMessage: null;
     private _matDialog: any;
+    user:any;
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -54,7 +55,10 @@ export class ListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _Service: JournalService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+
+    }
 
     ngOnInit(): void {
         this.loadTable();

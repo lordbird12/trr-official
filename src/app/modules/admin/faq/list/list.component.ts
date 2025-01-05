@@ -34,7 +34,7 @@ const ELEMENT_DATA: PeriodicElement[] = [];
     styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-    status = new FormControl('');    
+    status = new FormControl('');
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     dtOptions: DataTables.Settings = {};
@@ -42,7 +42,7 @@ export class ListComponent implements OnInit {
     dtElement!: DataTableDirective;
     dataRow: any = [];
     isLoading: boolean = false;
-
+    user: any;
     displayedColumns: string[] = [
         'manage',
         'no',
@@ -64,7 +64,9 @@ export class ListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _Service: FaqService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) {}
+    ) { 
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
 
     ngOnInit(): void {
         this.loadTable();
@@ -206,7 +208,7 @@ export class ListComponent implements OnInit {
                     this.rerender();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
     pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
@@ -261,6 +263,6 @@ export class ListComponent implements OnInit {
                 },
             })
             .afterClosed()
-            .subscribe(() => {});
+            .subscribe(() => { });
     }
 }
