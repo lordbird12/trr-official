@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormGroup, FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,6 +12,9 @@ import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { FuseValidators } from '@fuse/validators';
 import { AuthService } from 'app/core/auth/auth.service';
 import { finalize } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+
 
 @Component({
     selector: 'auth-reset-password',
@@ -19,7 +22,7 @@ import { finalize } from 'rxjs';
     encapsulation: ViewEncapsulation.None,
     animations: fuseAnimations,
     standalone: true,
-    imports: [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, RouterLink],
+    imports: [CommonModule, NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, RouterLink],
 })
 export class AuthResetPasswordComponent implements OnInit {
     @ViewChild('signInNgForm') signInNgForm: NgForm;
@@ -30,6 +33,7 @@ export class AuthResetPasswordComponent implements OnInit {
     };
     signInForm: FormGroup;
     showAlert: boolean = false;
+    otpArray = Array(6).fill(0); // Create 6 slots for OTP fields
 
     /**
      * Constructor
@@ -38,8 +42,14 @@ export class AuthResetPasswordComponent implements OnInit {
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
-    ) { }
+        private _router: Router,
+        private fb: FormBuilder,
+        private _fuseConfirmationService: FuseConfirmationService
+
+    ) {
+        this.signInForm = this.fb.group({});
+        this.initializeOtpForm();
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -50,9 +60,9 @@ export class AuthResetPasswordComponent implements OnInit {
      */
     ngOnInit(): void {
         // Create the form
-        this.signInForm = this._formBuilder.group({
-            otp: ['', [Validators.required, Validators.maxLength(6)]],
-        });
+        // this.signInForm = this._formBuilder.group({
+        //     otp: ['', [Validators.required, Validators.maxLength(6)]],
+        // });
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -112,14 +122,86 @@ export class AuthResetPasswordComponent implements OnInit {
         console.log(this.signInForm.get('email').value);
     }
 
+    initializeOtpForm(): void {
+        // Dynamically add controls for each OTP field
+        this.otpArray.forEach((_, index) => {
+            this.signInForm.addControl('otp' + index, new FormControl('', [
+                Validators.required,
+                Validators.pattern('[0-9]'), // Only numeric values
+            ]));
+        });
+    }
+
+    moveFocus(event: KeyboardEvent, index: number): void {
+        const input = event.target as HTMLInputElement;
+
+        if (input.value.length === 1 && index < this.otpArray.length - 1) {
+            const nextInput = document.querySelector(`input[formControlName='otp${index + 1}']`) as HTMLInputElement;
+            nextInput?.focus();
+        } else if (event.key === 'Backspace' && index > 0 && input.value.length === 0) {
+            const previousInput = document.querySelector(`input[formControlName='otp${index - 1}']`) as HTMLInputElement;
+            previousInput?.focus();
+        }
+    }
+
     verifyOtp(): void {
         if (this.signInForm.valid) {
-            const otp = this.signInForm.get('otp')?.value;
-            console.log('OTP:', otp);
-            // ดำเนินการยืนยัน OTP เช่น เรียก API
+            const otp = this.otpArray.map((_, index) => this.signInForm.get('otp' + index)?.value).join('');
+            console.log('Entered OTP:', otp);
+            const getotp = JSON.parse(localStorage.getItem('otp'));
+
+            this._authService.confirmOtp({ otp_code: otp, token_otp: getotp.token }).subscribe({
+                next: (resp: any) => {
+                    this._fuseConfirmationService.open({
+                        title: 'ดำเนินการสำเร็จ',
+                        message: resp.message,
+                        icon: {
+                            show: true,
+                            name: 'heroicons_outline:check-circle',
+                            color: 'primary',
+                        },
+                        actions: {
+                            confirm: {
+                                show: false,
+                                label: 'Confirm',
+                                color: 'primary',
+                            },
+                            cancel: {
+                                show: false,
+                                label: 'Cancel',
+                            },
+                        },
+                        dismissible: true,
+                    });3
+                    this._router.navigate(['reset-password']);
+                },
+                error: (err: any) => {
+                    this._fuseConfirmationService.open({
+                        title: 'เกิดข้อผิดพลาด',
+                        message: "รหัส OTP ไม่ถูกต้อง กรุณาลองใหม่",
+                        icon: {
+                            show: true,
+                            name: 'heroicons_outline:exclamation-triangle',
+                            color: 'warning',
+                        },
+                        actions: {
+                            confirm: {
+                                show: false,
+                                label: 'Confirm',
+                                color: 'primary',
+                            },
+                            cancel: {
+                                show: false,
+                                label: 'Cancel',
+                            },
+                        },
+                        dismissible: true,
+                    });
+                    return;
+                },
+            });
         } else {
-            this.showAlert = true;
-            this.alert = { type: 'error', message: 'กรุณากรอกหมายเลข OTP ที่ถูกต้อง' };
+            console.log('OTP form is invalid');
         }
     }
 

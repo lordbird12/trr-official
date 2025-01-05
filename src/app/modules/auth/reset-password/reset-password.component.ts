@@ -12,17 +12,17 @@ import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { FuseValidators } from '@fuse/validators';
 import { AuthService } from 'app/core/auth/auth.service';
 import { finalize } from 'rxjs';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 
 @Component({
-    selector     : 'auth-reset-password',
-    templateUrl  : './reset-password.component.html',
+    selector: 'auth-reset-password',
+    templateUrl: './reset-password.component.html',
     encapsulation: ViewEncapsulation.None,
-    animations   : fuseAnimations,
-    standalone   : true,
-    imports      : [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, RouterLink],
+    animations: fuseAnimations,
+    standalone: true,
+    imports: [NgIf, FuseAlertComponent, FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule, RouterLink],
 })
-export class AuthResetPasswordComponent implements OnInit
-{
+export class AuthResetPasswordComponent implements OnInit {
     @ViewChild('signInNgForm') signInNgForm: NgForm;
 
     alert: { type: FuseAlertType; message: string } = {
@@ -39,8 +39,10 @@ export class AuthResetPasswordComponent implements OnInit
         private _activatedRoute: ActivatedRoute,
         private _authService: AuthService,
         private _formBuilder: UntypedFormBuilder,
-        private _router: Router
-    ) {}
+        private _router: Router,
+        private _fuseConfirmationService: FuseConfirmationService
+
+    ) { }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Lifecycle hooks
@@ -110,8 +112,93 @@ export class AuthResetPasswordComponent implements OnInit
         );
     }
 
-    email(){
-        console.log(this.signInForm.get('email').value);
-    }
+    email() {
+        if (this.signInForm.valid) {
+            const password = this.signInForm.value.password;
+            const passwordConfirm = this.signInForm.value.passwordConfirm;
 
+            // Check if passwords match
+            if (password === passwordConfirm) {
+
+                const getotp = JSON.parse(localStorage.getItem('otp'));
+
+                this._authService.chagePassword({ phone: getotp.phone, password: this.signInForm.value.password }).subscribe({
+                    next: (resp: any) => {
+                        this._fuseConfirmationService.open({
+                            title: 'ดำเนินการสำเร็จ',
+                            message: resp.message,
+                            icon: {
+                                show: true,
+                                name: 'heroicons_outline:check-circle',
+                                color: 'primary',
+                            },
+                            actions: {
+                                confirm: {
+                                    show: false,
+                                    label: 'Confirm',
+                                    color: 'primary',
+                                },
+                                cancel: {
+                                    show: false,
+                                    label: 'Cancel',
+                                },
+                            },
+                            dismissible: true,
+                        });
+                        localStorage.removeItem('otp');
+
+                        this._router.navigate(['sign-in']);
+                    },
+                    error: (err: any) => {
+                        this._fuseConfirmationService.open({
+                            title: 'เกิดข้อผิดพลาด',
+                            message: "รหัสผ่านไม่ถูกต้องกรุณาลองใหม่ภายหลัง",
+                            icon: {
+                                show: true,
+                                name: 'heroicons_outline:exclamation-triangle',
+                                color: 'warning',
+                            },
+                            actions: {
+                                confirm: {
+                                    show: false,
+                                    label: 'Confirm',
+                                    color: 'primary',
+                                },
+                                cancel: {
+                                    show: false,
+                                    label: 'Cancel',
+                                },
+                            },
+                            dismissible: true,
+                        });
+                        return;
+                    },
+                });
+            } else {
+                this._fuseConfirmationService.open({
+                    title: 'เกิดข้อผิดพลาด',
+                    message: 'รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน กรุณาตรวจสอบอีกครั้ง',
+                    icon: {
+                        show: true,
+                        name: 'heroicons_outline:exclamation-triangle',
+                        color: 'warning',
+                    },
+                    actions: {
+                        confirm: {
+                            show: false,
+                            label: 'Confirm',
+                            color: 'primary',
+                        },
+                        cancel: {
+                            show: false,
+                            label: 'Cancel',
+                        },
+                    },
+                    dismissible: true,
+                });
+                return;
+            }
+        }
+    }
 }
+

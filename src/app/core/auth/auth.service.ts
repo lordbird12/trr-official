@@ -56,6 +56,16 @@ export class AuthService
         return this._httpClient.post(environment.baseURL + '/api/forgot_password', data);
     }
 
+    confirmOtp(data: any): Observable<any>
+    {
+        return this._httpClient.post(environment.baseURL + '/api/verify_otp_reset', data);
+    }
+
+    chagePassword(data: any): Observable<any>
+    {
+        return this._httpClient.post(environment.baseURL + '/api/change_password', data);
+    }
+
     /**
      * Reset password
      *

@@ -127,6 +127,8 @@ export class AuthForgotPasswordComponent implements OnInit
     email(){
         this._authService.forgotPassword(this.signInForm.value).subscribe({
             next: (resp: any) => {
+                localStorage.setItem('otp', JSON.stringify(resp.data));
+
                 this._fuseConfirmationService.open({
                     title: 'ดำเนินการสำเร็จ',
                     message: resp.message,
