@@ -7,10 +7,10 @@ import { environment } from 'environments/environment.development';
   providedIn: 'root'
 })
 export class ConfignotiService {
-    userdata: any;
+  userdata: any;
   constructor(private http: HttpClient) {
     this.userdata = JSON.parse(localStorage.getItem('user'))
-   }
+  }
 
   getMessages(): Observable<any> {
     const headers = new HttpHeaders({
@@ -35,7 +35,7 @@ export class ConfignotiService {
     }, { headers: headers });
   }
 
-  sendMessages(chatId: number, message: string,userid: number, type: string): Observable<any> {
+  sendMessages(chatId: number, message: string, userid: number, type: string): Observable<any> {
     return this.http.post(environment.baseURL + `/api/chat_msg`, {
       "chat_id": chatId,
       "user_id": userid,
@@ -59,23 +59,33 @@ export class ConfignotiService {
   }
   Savedata(data: any): Observable<any> {
     return this.http
-        .post(environment.baseURL + '/api/notify_alert', data)
-        .pipe(
-            switchMap((response: any) => {
-                return of(response.data);
-            })
-        );
-}
+      .post(environment.baseURL + '/api/notify_alert', data)
+      .pipe(
+        switchMap((response: any) => {
+          return of(response.data);
+        })
+      );
+  }
 
-getDate(name: string): Observable<any> {
+  getDate(name: string): Observable<any> {
     return this.http
-        .get(environment.baseURL +  `/api/get_date/${name}`)
-        .pipe(
-            switchMap((response: any) => {
-                return of(response.data);
-            })
-        );
-}
+      .get(environment.baseURL + `/api/get_date/${name}`)
+      .pipe(
+        switchMap((response: any) => {
+          return of(response.data);
+        })
+      );
+  }
+
+  get_factory(): Observable<any> {
+    return this.http
+      .get(environment.baseURL + '/api/get_factorie')
+      .pipe(
+        switchMap((response: any) => {
+          return of(response.data);
+        })
+      );
+  }
 
 
   // delete(id: number): Observable<any> {

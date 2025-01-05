@@ -23,7 +23,8 @@ export class ConfignotiComponent implements OnInit {
     permissiondata: any[];
     item: any;
     selectTitle: any;
-
+    factory: any[] = [
+    ];
     imageUrls: string[] = [];
     datenoti: string[] = [];
     config = {
@@ -64,7 +65,12 @@ export class ConfignotiComponent implements OnInit {
             title: ['', Validators.required],
             body: ['', Validators.required],
             date: this.formBuilder.array([]),
+            factories: this.formBuilder.array([]),
         });
+
+        this._service.get_factory().subscribe((resp: any) => {
+            this.factory = resp;
+        })
     }
 
     ngOnInit(): void {
@@ -95,6 +101,30 @@ export class ConfignotiComponent implements OnInit {
 
         })
     }
+
+    // ฟังก์ชันสำหรับการเพิ่ม factory จาก checkbox
+    addFactory(factoryId: number) {
+        const factories = this.addForm.get('factories') as FormArray;
+
+        // ตรวจสอบว่า factoryId มีอยู่ใน FormArray หรือไม่
+        const index = factories.value.findIndex((value: any) => value.factorie_id === factoryId);
+
+        if (index === -1) {
+            const value = this.formBuilder.group({
+                factorie_id: factoryId,
+            });
+            factories.push(value);
+        } else {
+            // ถ้ามีอยู่แล้วให้ลบออก
+            factories.removeAt(index);
+        }
+    }
+
+    isFactoryChecked(factorie_id: number): boolean {
+        const factoriesFormArray = this.addForm.get('factories') as FormArray;
+        return factoriesFormArray.value.some((value: any) => value.factorie_id === factorie_id);
+    }
+
     addDate(data?: any) {
         const d = this.formBuilder.group({
             day: '',
@@ -280,7 +310,8 @@ export class ConfignotiComponent implements OnInit {
             if (result === 'confirmed') {
                 this._service.Savedata(formData).subscribe({
                     next: (resp: any) => {
-                        this.refreshTable();
+                        this.refreshTable(); // Refresh the table or list
+                        this.addForm.reset(); // Reset the form
                         this._fuseConfirmationService.open({
                             title: 'สำเร็จ',
                             message: "บันทึกข้อมูลสำเร็จ",
