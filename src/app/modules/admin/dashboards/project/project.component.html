@@ -190,7 +190,6 @@
                                         <div class="text-lg font-medium tracking-tight leading-6 truncate">
                                             ข้อมูลรายจ่ายตามประเภท
                                         </div>
-                                        {{dbactivity|json}}
                                         <ng-container *ngIf="dbactivity">
                                             <ng-container *ngIf="dbactivity.length == 0 ">
                                                 {{"test1"}}
@@ -207,7 +206,6 @@
                                                 </div>
                                             </ng-container>
                                             <ng-container *ngIf="dbactivity.length > 0 ">
-                                                {{"test44"}}
                                                 <div class="chart flex-auto md:w-4/5 "
                                                     *ngIf="chartOptions1 && chartOptions1.series && chartOptions1.series.length > 0">
                                                     <apx-chart [series]="chartOptions1.series"
