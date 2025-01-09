@@ -59,7 +59,7 @@
                             <button mat-icon-button color="accent" (click)="edit(item.id)">
                                 <mat-icon>edit</mat-icon>
                             </button>
-                            <button mat-icon-button color="accent" (click)="delete(item.id)">
+                            <button mat-icon-button color="accent" (click)="delete(item.id)" *ngIf="this.user.type === 'Management'">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </td>
