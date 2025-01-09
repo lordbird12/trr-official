@@ -165,7 +165,7 @@ export class ListComponent implements OnInit {
             name: '+'
         },
     ];
-
+    user: any;
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -173,7 +173,9 @@ export class ListComponent implements OnInit {
         private _changeDetectorRef: ChangeDetectorRef,
         private _Service: VendorService,
         private _fuseConfirmationService: FuseConfirmationService
-    ) { }
+    ) {
+        this.user = JSON.parse(localStorage.getItem('user'))
+    }
 
     ngOnInit(): void {
         this.loadTable();
@@ -294,7 +296,7 @@ export class ListComponent implements OnInit {
             });
             confirmation.afterClosed().subscribe((result) => {
                 if (result === 'confirmed') {
-                    
+
                 }
                 error: (err: any) => { };
             });

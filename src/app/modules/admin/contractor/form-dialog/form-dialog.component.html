@@ -17,16 +17,11 @@
                 <div class="md:w-full px-3">
                     <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                         <mat-label>เบอร์ติดต่อ</mat-label>
-                        <input 
-                            matInput 
-                            [placeholder]="'เบอร์ติดต่อ'" 
-                            [formControlName]="'phone'" 
-                            type="tel"
-                            maxlength="10"
-                            (input)="onPhoneInput($event)">
-                            <mat-error>กรุณากรอกเบอร์ติดต่อ</mat-error>
+                        <input matInput [placeholder]="'เบอร์ติดต่อ'" [formControlName]="'phone'" type="tel"
+                            maxlength="10" (input)="onPhoneInput($event)">
+                        <mat-error>กรุณากรอกเบอร์ติดต่อ</mat-error>
                     </mat-form-field>
-                    
+
                 </div>
             </div>
             <div class="-mx-3 md:flex mb-6">
@@ -35,7 +30,7 @@
                         <mat-label>รายละเอียด</mat-label>
                         <textarea type="text" matInput [placeholder]="'กรอกรายละเอียด'" row="5"
                             [formControlName]="'detail'"></textarea>
-                            <mat-error>กรุณากรอกรายละเอียด</mat-error>
+                        <mat-error>กรุณากรอกรายละเอียด</mat-error>
                     </mat-form-field>
                 </div>
             </div>
@@ -43,10 +38,11 @@
                 <label class="block text-md font-medium text-gray-700">ประเภทผู้รับเหมา</label>
                 <div class="grid grid-cols-3">
                     <div class="inline-flex items-center " *ngFor="let item of contractorType;">
-                        <label class="relative flex items-center p-3 rounded-full cursor-pointer"  [for]="'feature' + item.id">
+                        <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                            [for]="'feature' + item.id">
                             <input type="checkbox" [checked]="isFeatureChecked(item.id)"
                                 class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
-                                [id]="'feature' + item.id" (change)="addFeature(item.id)"/>
+                                [id]="'feature' + item.id" (change)="addFeature(item.id)" />
                             <span
                                 class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
@@ -63,14 +59,15 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-4 " >
+            <div class="mb-4 ">
                 <label class="block text-md font-medium text-gray-700">ประจำสถานที่โรงงาน</label>
                 <div class="grid grid-cols-3">
                     <div class="inline-flex items-center " *ngFor="let item of factory;">
-                        <label class="relative flex items-center p-3 rounded-full cursor-pointer" [for]="'factory' + item.id">
+                        <label class="relative flex items-center p-3 rounded-full cursor-pointer"
+                            [for]="'factory' + item.id">
                             <input type="checkbox" [checked]="isFactoryChecked(item.id)"
                                 class="before:content[''] peer relative h-5 w-5 cursor-pointer appearance-none rounded-md border border-blue-gray-200 transition-all before:absolute before:top-2/4 before:left-2/4 before:block before:h-12 before:w-12 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity checked:border-gray-900 checked:bg-gray-900 checked:before:bg-gray-900 hover:before:opacity-10"
-                                [id]="'factory' + item.id" (change)="addFactory(item.id)"/>
+                                [id]="'factory' + item.id" (change)="addFactory(item.id)" />
                             <span
                                 class="absolute text-white transition-opacity opacity-0 pointer-events-none top-2/4 left-2/4 -translate-y-2/4 -translate-x-2/4 peer-checked:opacity-100">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 20 20"
@@ -89,15 +86,17 @@
             </div>
             <div class="mb-4 mt-4">
                 <div class="md:w-full px-3">
-                    <ngx-dropzone (change)="onSelect($event)" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                    <ngx-dropzone (change)="onSelect($event)"
+                        class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
                         <ngx-dropzone-label>เลือกรูปภาพ</ngx-dropzone-label>
                         <div *ngFor="let f of files">
-                            <ngx-dropzone-image-preview [file]="f" [removable]="true" (removed)="onRemove(f)" class="h-auto max-w-full"></ngx-dropzone-image-preview>
+                            <ngx-dropzone-image-preview [file]="f" [removable]="true" (removed)="onRemove(f)"
+                                class="h-auto max-w-full"></ngx-dropzone-image-preview>
                         </div>
                     </ngx-dropzone>
                 </div>
             </div>
-          
+
             <div class="mb-4 mt-4">
                 <label class="block text-md font-medium text-gray-700">สถานะ</label>
                 <div class="mt-1 ">
@@ -115,6 +114,6 @@
             (click)="onCancelClick()">ยกเลิก</button>
         &nbsp;
         <button mat-button class="px-4 py-2 mx-3 bg-[#0a1c3a] text-white rounded hover:bg-gray-600 ml-2"
-            (click)="Submit()">บันทึก</button>
+            *ngIf="this.user.type === 'Management'" (click)="Submit()">บันทึก</button>
     </div>
 </div>

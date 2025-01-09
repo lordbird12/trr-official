@@ -34,8 +34,8 @@ const ELEMENT_DATA: PeriodicElement[] = [];
     styleUrls: ['./list.component.scss'],
 })
 export class ListComponent implements OnInit {
-    status = new FormControl('');    
-    factory = new FormControl('');    
+    status = new FormControl('');
+    factory = new FormControl('');
     formFieldHelpers: string[] = ['fuse-mat-dense'];
     @ViewChild(MatPaginator) paginator: MatPaginator;
     dtOptions: DataTables.Settings = {};
@@ -43,7 +43,7 @@ export class ListComponent implements OnInit {
     dtElement!: DataTableDirective;
     dataRow: any = [];
     factoryData: any[] = [
-  
+
     ]
 
     displayedColumns: string[] = [
@@ -60,6 +60,7 @@ export class ListComponent implements OnInit {
     flashMessage: null;
     flashErrorMessage: null;
     private _matDialog: any;
+    user: any;
     constructor(
         private dialog: MatDialog,
         private _liveAnnouncer: LiveAnnouncer,
@@ -69,9 +70,10 @@ export class ListComponent implements OnInit {
         private _fuseConfirmationService: FuseConfirmationService
     ) {
 
-        this._Service.get_factory().subscribe((resp: any)=>{
+        this._Service.get_factory().subscribe((resp: any) => {
             this.factoryData = resp;
         })
+        this.user = JSON.parse(localStorage.getItem('user'))
 
     }
 
@@ -135,7 +137,7 @@ export class ListComponent implements OnInit {
             });
     }
 
-    addDialog() : void{
+    addDialog(): void {
         this.dialog
             .open(FormDialogComponent, {
                 width: '700px', // กำหนดความกว้างของ Dialog
@@ -153,7 +155,7 @@ export class ListComponent implements OnInit {
             });
     }
 
-    editDialog(data: any) : void{
+    editDialog(data: any): void {
         this.dialog
             .open(FormDialogComponent, {
                 width: '700px', // กำหนดความกว้างของ Dialog
@@ -225,7 +227,7 @@ export class ListComponent implements OnInit {
                     this.rerender();
                 });
             }
-            error: (err: any) => {};
+            error: (err: any) => { };
         });
     }
 
@@ -263,8 +265,8 @@ export class ListComponent implements OnInit {
                             this.pages.begin = 0;
                         }
                         that.dataRow = resp.data;
-                        console.log("ค่าใน item table",that.dataRow);
-                        console.log("ค่าใน item table",that.dataRow.facetories_contractors);
+                        console.log("ค่าใน item table", that.dataRow);
+                        console.log("ค่าใน item table", that.dataRow.facetories_contractors);
                         callback({
                             recordsTotal: resp.total,
                             recordsFiltered: resp.total,
@@ -289,6 +291,6 @@ export class ListComponent implements OnInit {
                 },
             })
             .afterClosed()
-            .subscribe(() => {});
+            .subscribe(() => { });
     }
 }

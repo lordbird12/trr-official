@@ -30,7 +30,7 @@ export class FormDialogComponent implements OnInit {
 
     ];
 
-
+    user: any;
     constructor(
         private dialogRef: MatDialogRef<FormDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -54,8 +54,8 @@ export class FormDialogComponent implements OnInit {
             image: '',
             features: this.formBuilder.array([]),
             factories: this.formBuilder.array([]),
-
         });
+        this.user = JSON.parse(localStorage.getItem('user'))
     }
 
     ngOnInit(): void {
