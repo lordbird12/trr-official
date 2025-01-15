@@ -23,20 +23,7 @@
         <div class="m-5 flex justify-between border-b-2">
             <div class="mb-5 text-xl font-extrabold tracking-tight">รายชื่อเกษตรกร</div>
         </div>
-        <!-- <div class="mx-5 mt-5 flex justify-between">
-            <div class="text-xl font-extrabold tracking-tight w-full md:w-1/4 ">
-                <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                    <mat-select [formControl]="data" value>
-                        <mat-option [value]="'1'">
-                            เลือกจังหวัด
-                        </mat-option>
-                        <mat-option *ngFor="let item of this.province;" [value]="item.name">
-                            {{item.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div> -->
+
 
         <div class="flex flex-col flex-auto p-5  sm:overflow-y-auto">
             <!-- <table datatable [dtOptions]="dtOptions" class="table row-border hover w-full">
@@ -71,13 +58,31 @@
                         </td>
                     </tr>
                 </tbody> -->
-            <div class="flex justify-between mb-4">
-                <input type="text" placeholder="กรุณาระบุปี..." class="border p-2 rounded-md w-1/5"
-                    [(ngModel)]="yearTerm">
-                <button class="border-2 border-blue-500 rounded-md font-black hover:bg-blue-50 w-fit mx-2" (click)="searchFarmers()">
-                    <span class="mx-5 text-blue-600">ค้นหา</span>
+            <div class="flex justify-between items-center mb-4">
+                <!-- กลุ่มทางซ้าย -->
+                <div class="flex items-center space-x-4">
+                    <!-- ช่องกรอกปี -->
+                    <input type="text" placeholder="กรุณาระบุปี..." class="border p-2 rounded-md h-10 w-50"
+                        [(ngModel)]="yearTerm" />
+
+                    <!-- Dropdown เลือกสังกัด -->
+                    <select class="border p-2 rounded-md h-10 w-50" [(ngModel)]="selectedProvince">
+                        <option value="" disabled selected>เลือกสังกัด</option>
+                        <option *ngFor="let item of province" [value]="item.factory_id">
+                            {{ item.name }}
+                        </option>
+                    </select>
+                </div>
+
+                <!-- ปุ่มค้นหาชิดขวา -->
+                <button class="border-2 border-blue-500 rounded-md font-black hover:bg-blue-50 px-6 text-blue-600 h-10"
+                    (click)="searchFarmers()">
+                    ค้นหา
                 </button>
             </div>
+
+
+
             <div class="flex justify-between mb-4">
                 <div class="flex items-center">
                     <label for="rowSelect" class="">แสดง</label>
@@ -112,7 +117,7 @@
                     </tr>
                 </thead>
                 <tbody *ngIf="farmmer?.length" class="border-b-2">
-                    <tr *ngFor="let item of farmmer; trackBy: trackByQuotaId" 
+                    <tr *ngFor="let item of farmmer; trackBy: trackByQuotaId"
                         class="hover:bg-gray-100 whitespace-nowrap">
                         <td class="p-3">{{ item.zone_farmer ?? '-' }}</td>
                         <td class="p-3">{{ item.Quota_id ?? '-' }}</td>

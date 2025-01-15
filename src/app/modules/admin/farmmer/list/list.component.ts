@@ -44,6 +44,8 @@ export class ListComponent implements OnInit {
     dtElement!: DataTableDirective;
     dataRow: any = [];
     numbers: number[] = [];
+    selectedProvince: string = ''; // ค่าที่เลือกใน Dropdown
+    // ตัวอย่างข้อมูล Dropdown
     displayedColumns: string[] = [
         'manage',
         'no',
@@ -117,8 +119,9 @@ export class ListComponent implements OnInit {
 
     // ฟังก์ชันที่เรียกใช้เมื่อต้องการค้นหา
     searchFarmers(): void {
+
         this.currentPage = 1;
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm, this.selectedProvince).subscribe((resp: any) => {
             this.farmmer = resp.data;
             this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
@@ -523,18 +526,18 @@ export class ListComponent implements OnInit {
     sortData(column: string): void {
         this.sortOrder = !this.sortOrder; // สลับระหว่าง Ascending และ Descending
         this.farmmer.sort((a, b) => {
-          const valueA = a[column] || ''; // ตรวจสอบค่าที่ null หรือ undefined
-          const valueB = b[column] || '';
-    
-          if (typeof valueA === 'string' && typeof valueB === 'string') {
-            return this.sortOrder
-              ? valueA.localeCompare(valueB) // Ascending
-              : valueB.localeCompare(valueA); // Descending
-          }
-    
-          return this.sortOrder ? valueA - valueB : valueB - valueA; // สำหรับตัวเลข
+            const valueA = a[column] || ''; // ตรวจสอบค่าที่ null หรือ undefined
+            const valueB = b[column] || '';
+
+            if (typeof valueA === 'string' && typeof valueB === 'string') {
+                return this.sortOrder
+                    ? valueA.localeCompare(valueB) // Ascending
+                    : valueB.localeCompare(valueA); // Descending
+            }
+
+            return this.sortOrder ? valueA - valueB : valueB - valueA; // สำหรับตัวเลข
         });
-      }
+    }
 
 
 

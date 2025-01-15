@@ -58,18 +58,18 @@ export class NewsService {
 
     getProvince(): Observable<any> {
         return this._httpClient
-            .get(environment.baseURL + '/api/get_province')
+            .get(environment.baseURL + '/api/get_factorie')
             .pipe(
                 switchMap((response: any) => {
                     return of(response.data);
                 })
             );
     }
-    getAPIFarmmer(search: any, page: number,perpage?:number, year?:any): Observable<any> {
+    getAPIFarmmer(search: any, page: number,perpage?:number, year?:any, fac?:any): Observable<any> {
         return this._httpClient
             .post('https://canegrow.com:28099/api/profile_farmer', {
                 search: search,
-                FacID: '0',
+                FacID: fac,
                 Year: year,
                 page: page.toString(),
                 skip: '1',
