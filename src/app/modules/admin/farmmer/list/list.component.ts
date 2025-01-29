@@ -167,7 +167,7 @@ export class ListComponent implements OnInit {
 
     loadFarmers(): void {
         this.quotas = [];
-        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm).subscribe((resp: any) => {
+        this._Service.getAPIFarmmer(this.searchTerm, this.currentPage, this.row, +this.yearTerm, this.selectedProvince).subscribe((resp: any) => {
             this.farmmer = resp.data;
             this.totalrecord = +resp.total
             this.totalPages = Math.ceil(this.totalrecord / this.row);
