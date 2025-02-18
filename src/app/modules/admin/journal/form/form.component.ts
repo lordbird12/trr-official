@@ -129,10 +129,10 @@ export class FormComponent implements OnInit {
                 });
 
                 // ตรวจสอบขนาดไฟล์ก่อนการส่งข้อมูล
-                if (this.files2.length > 0 && this.files2[0].size > 20 * 1024 * 1024) {
+                if (this.files2.length > 0 && this.files2[0].size > 100 * 1024 * 1024) {
                     this._fuseConfirmationService.open({
                         title: 'ขนาดไฟล์เกินขีดจำกัด',
-                        message: 'ขนาดไฟล์สูงสุดคือ 5MB',
+                        message: 'ขนาดไฟล์สูงสุดคือ 100MB',
                         icon: { show: true, name: 'heroicons_outline:exclamation-triangle', color: 'warning' },
                         actions: { confirm: { show: true, label: 'ตกลง', color: 'primary' }, cancel: { show: false } },
                         dismissible: true,
