@@ -7,6 +7,10 @@ import { HttpClient } from '@angular/common/http';
 import { ConfignotiService } from './setting.service';
 import { DatePipe } from '@angular/common';
 import { DataTableDirective } from 'angular-datatables';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
+import { yearsPerPage } from '@angular/material/datepicker';
 
 @Component({
     selector: 'app-setting',
@@ -27,6 +31,21 @@ export class SettingComponent implements OnInit {
     ];
     imageUrls: string[] = [];
     datenoti: string[] = [];
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    dtOptions: DataTables.Settings = {};
+    @ViewChild(DataTableDirective)
+    dataRow: any = [];
+    displayedColumns: string[] = [
+        'manage',
+        'no',
+        'name',
+        'email',
+        'position',
+        'phoneNumber',
+        'status',
+    ];
+    // dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+    @ViewChild(MatSort) sort: MatSort;
     config = {
         placeholder: '',
         tabsize: 2,
@@ -50,6 +69,7 @@ export class SettingComponent implements OnInit {
             'Times',
         ],
     };
+
     constructor(
         private _router: Router,
         private formBuilder: FormBuilder,
@@ -62,96 +82,66 @@ export class SettingComponent implements OnInit {
         private cdr: ChangeDetectorRef,
     ) {
         this.addForm = this.formBuilder.group({
-            title: ['', Validators.required],
-            body: ['', Validators.required],
-            date: this.formBuilder.array([]),
-            factories: this.formBuilder.array([]),
+            date: ['', Validators.required],
+            time: ['', Validators.required],
+            year: ['', Validators.required],
         });
 
-        this._service.get_factory().subscribe((resp: any) => {
-            this.factory = resp;
-        })
+
     }
 
     ngOnInit(): void {
-        this.activatedRoute.params.subscribe((params) => {
-            // console.log(params);
-            const id = params.id;
-
-        });
-        // สร้าง Reactive Form
-    }
-    get date() {
-        return this.addForm.get("date") as FormArray;
-    }
-    selectedFile: File = null;
-    onFileChange(event) {
-        this.selectedFile = (event.target as HTMLInputElement).files[0];
-
-        // if (this.selectedFile) {
-        //     // ปรับให้เก็บข้อมูลที่คุณต้องการ ในที่นี้เป็นชื่อไฟล์
-        //     this.addForm.patchValue({ image: this.selectedFile.name });
-        //   }
-        // this.addForm.get('image').updateValueAndValidity();
-    }
-    onSelectNoti(event: any) {
-        this.selectTitle = event;
-        this._service.getDate(event).subscribe((resp: any) => {
-            this.datenoti = resp
-
-        })
+     
+        this.loadTable();
     }
 
-    // ฟังก์ชันสำหรับการเพิ่ม factory จาก checkbox
-    addFactory(factoryId: number) {
-        const factories = this.addForm.get('factories') as FormArray;
+    pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
 
-        // ตรวจสอบว่า factoryId มีอยู่ใน FormArray หรือไม่
-        const index = factories.value.findIndex((value: any) => value.factorie_id === factoryId);
+    loadTable(): void {
+        const that = this;
+        this.dtOptions = {
+            pagingType: 'full_numbers',
+            pageLength: 10,
+            serverSide: true,
+            processing: true,
+            order: [[0, 'desc']],
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.11.3/i18n/th.json',
+            },
+            ajax: (dataTablesParameters: any, callback) => {
+                that._service
+                    .getPage(dataTablesParameters)
+                    .subscribe((resp) => {
+                        this.pages.current_page = resp.current_page;
+                        this.pages.last_page = resp.last_page;
+                        this.pages.per_page = resp.per_page;
+                        if (parseInt(resp.current_page) > 1) {
+                            this.pages.begin =
+                                parseInt(resp.per_page) *
+                                (parseInt(resp.current_page) - 1);
+                        } else {
+                            this.pages.begin = 0;
+                        }
+                        that.dataRow = resp.data;
 
-        if (index === -1) {
-            const value = this.formBuilder.group({
-                factorie_id: factoryId,
-            });
-            factories.push(value);
-        } else {
-            // ถ้ามีอยู่แล้วให้ลบออก
-            factories.removeAt(index);
-        }
+                        callback({
+                            recordsTotal: resp.total,
+                            recordsFiltered: resp.total,
+                            data: [],
+                        });
+                    });
+            },
+            columns: [
+                { data: 'action', orderable: false },
+                { data: 'id', orderable: false },
+                { data: 'title', orderable: false },
+                { data: 'views', orderable: false },
+                { data: 'status', orderable: false },
+            ],
+        };
     }
 
-    isFactoryChecked(factorie_id: number): boolean {
-        const factoriesFormArray = this.addForm.get('factories') as FormArray;
-        return factoriesFormArray.value.some((value: any) => value.factorie_id === factorie_id);
-    }
-
-    addDate(data?: any) {
-        const d = this.formBuilder.group({
-            day: '',
-            time: this.formBuilder.array([]),
-        });
-
-        if (data) {
-            d.patchValue({
-                ...data,
-            });
-        }
-
-        this.date.push(d);
-    }
-    addTime(data?: any) {
-        const formvalueday = data.get("time") as FormArray;
-        const t = this.formBuilder.group({
-            hour: '',
-        });
-
-        if (data) {
-            t.patchValue({
-                ...data,
-            });
-        }
-        formvalueday.push(t);
-    }
+  
     delete(date: any) {
         const confirmation = this._fuseConfirmationService.open({
             title: 'ลบข้อมูล',
@@ -176,113 +166,19 @@ export class SettingComponent implements OnInit {
         });
         confirmation.afterClosed().subscribe((result) => {
             if (result === 'confirmed') {
-                this._service.delete({ title: this.selectTitle, date: date }).subscribe((resp) => {
-                    this.refreshTable();
-                });
+               
             }
             error: (err: any) => { };
         });
     }
-    deletesub(itemid: any) {
-        const confirmation = this._fuseConfirmationService.open({
-            title: 'ลบข้อมูล',
-            message: 'คุณต้องการลบข้อมูลแจ้งเตือนย่อยใช่หรือไม่ ?',
-            icon: {
-                show: true,
-                name: 'heroicons_outline:exclamation-triangle-triangle',
-                color: 'warning',
-            },
-            actions: {
-                confirm: {
-                    show: true,
-                    label: 'Remove',
-                    color: 'warn',
-                },
-                cancel: {
-                    show: true,
-                    label: 'Cancel',
-                },
-            },
-            dismissible: true,
-        });
-        confirmation.afterClosed().subscribe((result) => {
-            if (result === 'confirmed') {
-                this._service.deletesub(itemid).subscribe((resp) => {
-                    this.refreshTable();
-                });
-            }
-            error: (err: any) => { };
-        });
-    }
+   
     rerender(): void {
         this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
             dtInstance.ajax.reload();
         });
     }
-    removeDate(index: number) {
-        this.date.removeAt(index);
-    }
-    removeTime(form: FormGroup, index: number) {
-        console.log(form, index)
-        const f = form.get("time") as FormArray;
-
-        f.removeAt(index);
-    }
+ 
     Submit(): void {
-        // ตรวจสอบว่า form ถูกต้องหรือไม่
-        if (this.addForm.invalid) {
-            // แสดงข้อความผิดพลาดสำหรับฟิลด์ที่ไม่ถูกต้อง
-            let errorMessage = "กรุณากรอกข้อมูลให้ครบถ้วน:";
-
-            // ตรวจสอบฟิลด์แต่ละฟิลด์และเพิ่มข้อความผิดพลาดที่เกี่ยวข้อง
-            if (this.addForm.get('title').hasError('required')) {
-                errorMessage += "\n- กรุณาระบุประเภทการแจ้งเตือน";
-            }
-            if (this.addForm.get('body').hasError('required')) {
-                errorMessage += "\n- กรุณาระบุรายละเอียดการแจ้งเตือน";
-            }
-            // if (this.addForm.get('date').invalid || this.addForm.get('date').value.length === 0) {
-            //     errorMessage += "\n- กรุณาระบุวันที่";
-            // }
-
-            // แสดงข้อความผิดพลาดโดยใช้ FuseConfirmationService
-            this._fuseConfirmationService.open({
-                title: 'ข้อมูลไม่ครบถ้วน',
-                message: errorMessage,
-                icon: {
-                    show: true,
-                    name: 'heroicons_outline:exclamation-triangle-circle',
-                    color: 'accent',
-                },
-                actions: {
-                    confirm: {
-                        show: true,
-                        label: 'ตกลง',
-                        color: 'primary',
-                    },
-                    cancel: {
-                        show: true,
-                        label: 'ยกเลิก',
-                    },
-                },
-                dismissible: true,
-            });
-
-            return; // หยุดการส่งข้อมูลถ้าฟอร์มไม่ถูกต้อง
-        }
-
-        // หากฟอร์มถูกต้อง ให้ทำการบันทึกข้อมูล
-        const formattedData = this.addForm.value.date.map((group: any) => {
-            return {
-                ...group,
-                day: this.datePipe.transform(group.day, 'yyyy-MM-dd')  // แปลงวันที่เป็นรูปแบบ yyyy-MM-dd
-            };
-        });
-
-        const formData = {
-            ...this.addForm.value,
-            date: formattedData  // ใช้ข้อมูลที่แปลงแล้ว
-        };
 
         const confirmation = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
@@ -295,111 +191,64 @@ export class SettingComponent implements OnInit {
             actions: {
                 confirm: {
                     show: true,
-                    label: 'ตกลง',
+                    label: 'Confirm',
                     color: 'primary',
                 },
                 cancel: {
                     show: true,
-                    label: 'ยกเลิก',
+                    label: 'Cancel',
                 },
             },
             dismissible: true,
         });
 
+        // Subscribe to the confirmation dialog closed action
         confirmation.afterClosed().subscribe((result) => {
+
             if (result === 'confirmed') {
-                this._service.Savedata(formData).subscribe({
-                    next: (resp: any) => {
-                        this.refreshTable(); // Refresh the table or list
-                        this.addForm.reset(); // Reset the form
-                        this._fuseConfirmationService.open({
-                            title: 'สำเร็จ',
-                            message: "บันทึกข้อมูลสำเร็จ",
-                            icon: {
-                                show: true,
-                                name: 'heroicons_outline:check-circle',
-                                color: 'success',
-                            },
-                            actions: {
-                                confirm: {
-                                    show: false,
-                                    label: 'ตกลง',
-                                    color: 'primary',
-                                },
-                                cancel: {
-                                    show: true,
-                                    label: 'ตกลง',
-                                }
-                            },
-                            dismissible: true,
-                        });
-                    },
-                    error: (err: any) => {
-                        const errorMessage = "เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาระบุวันที่และเวลา"; // ข้อความกำกัย
+                const formData = new FormData();
+                Object.entries(this.addForm.value).forEach(
+                    ([key, value]: any[]) => {
+                        formData.append(key, value);
+                        
+                    }
+                );
+                // this._service.create(formData).subscribe({
+                //     next: (resp: any) => {
+                //         this.onCancelClick();
+                //     },
 
-                        this._fuseConfirmationService.open({
-                            title: 'เกิดข้อผิดพลาด',
-                            message: errorMessage,  // ใช้ข้อความกำกัยแทนข้อความที่ได้จาก error
-                            icon: {
-                                show: true,
-                                name: 'heroicons_outline:exclamation-triangle-circle',
-                                color: 'warning',
-                            },
-                            actions: {
-                                confirm: {
-                                    show: false,
-                                    label: 'ตกลง',
-                                    color: 'primary',
-                                },
-                                cancel: {
-                                    show: true,
-                                    label: 'ตกลง',
-                                },
-                            },
-                            dismissible: true,
-                        });
-                    },
-
-                });
+                //     error: (err: any) => {
+                //         console.log(err);
+                //         this.addForm.enable();
+                //         this._fuseConfirmationService.open({
+                //             title: 'เกิดข้อผิดพลาด',
+                //             message: err.error.message,
+                //             icon: {
+                //                 show: true,
+                //                 name: 'heroicons_outline:exclamation-triangle',
+                //                 color: 'warning',
+                //             },
+                //             actions: {
+                //                 confirm: {
+                //                     show: false,
+                //                     label: 'Confirm',
+                //                     color: 'primary',
+                //                 },
+                //                 cancel: {
+                //                     show: false,
+                //                     label: 'Cancel',
+                //                 },
+                //             },
+                //             dismissible: true,
+                //         });
+                //         console.log(err.error.message);
+                //     },
+                // });
             }
         });
-    }
 
-
-    refreshTable() {
-        this._service.getDate(this.addForm.value.title).subscribe((data) => {
-            this.datenoti = data; // อัปเดต dataSource
-            this.cdr.detectChanges(); // แจ้งให้ Angular อัปเดตตาราง
-        });
     }
-
-    data(data: any, formData: FormData) {
-        throw new Error('Method not implemented.');
-    }
-
-    Cancel(): void {
-        this._router.navigateByUrl('config/edit/1').then(() => { });
-    }
-
-    files: File[] = [];
-    url_logo: string;
-    onSelect(event: { addedFiles: File[] }): void {
-        this.files.push(...event.addedFiles);
-        this.imageUrls = [];
-        const file = this.files[0];
-        this.addForm.patchValue({
-            image: file,
-        });
-    }
-
-    onRemove(file: File): void {
-        const index = this.files.indexOf(file);
-        if (index >= 0) {
-            this.files.splice(index, 1);
-        }
-    }
-    backTo() {
-        this._router.navigate(['config/edit/1']);
-    }
+   
 
 }

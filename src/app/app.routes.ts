@@ -318,15 +318,15 @@ export const appRoutes: Route[] = [
                         ],
                     },
                     {
-                        path: 'setting',
+                        path: 'config-year',
                         canActivate: [],
                         children: [
                             {
                                 path: '',
                                 loadChildren: () =>
                                     import(
-                                        'app/modules/admin/setting/setting.module'
-                                    ).then((m) => m.SettingModule),
+                                        'app/modules/admin/config-year/config-year.module'
+                                    ).then((m) => m.ConfigModule),
                             },
                         ],
                     },

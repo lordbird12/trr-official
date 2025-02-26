@@ -44,6 +44,16 @@ export class ConfignotiService {
     });
   }
 
+  getPage(dataTablesParameters: any): Observable<any> {
+    return this.http
+      .post(environment.baseURL + '/api/pdpa_page', dataTablesParameters)
+      .pipe(
+        switchMap((response: any) => {
+          return of(response.data);
+        })
+      );
+  }
+
   uploadFile(chatId: number, file: File): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);

@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Route, Router } from '@angular/router';
-import { PdpaService } from '../service/pdpa.service';
+import { PdpaService } from '../service/config-year.service';
 import { DataTableDirective } from 'angular-datatables';
 import { EditComponent } from '../edit/edit.component';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
@@ -29,7 +29,7 @@ const ELEMENT_DATA: PeriodicElement[] = [];
  * @title Basic use of `<table mat-table>`
  */
 @Component({
-    selector: 'app-list-pdpa',
+    selector: 'app-list-config',
     templateUrl: './list.component.html',
     styleUrls: ['./list.component.scss'],
 })
@@ -157,11 +157,11 @@ export class ListComponent implements OnInit {
         });
     }
     edit(Id: any) {
-        this._router.navigate(['admin/pdpa/edit/' + Id]);
+        this._router.navigate(['admin/config-year/edit/' + Id]);
     }
 
     new() {
-        this._router.navigate(['admin/pdpa/form']);
+        this._router.navigate(['admin/config-year/form']);
     }
     // this._Service.getById(this.data).subscribe((resp: any) => {
     //     this.itemData = resp;

@@ -117,7 +117,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id: 'admin.setting',
                 title: 'ตั้งค่าวันที่ปิดฤดูการผลิต',
                 type: 'basic',
-                link: '/admin/setting',
+                link: '/admin/config-year/list',
             },
         ],
     },
