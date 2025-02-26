@@ -318,6 +318,19 @@ export const appRoutes: Route[] = [
                         ],
                     },
                     {
+                        path: 'setting',
+                        canActivate: [],
+                        children: [
+                            {
+                                path: '',
+                                loadChildren: () =>
+                                    import(
+                                        'app/modules/admin/setting/setting.module'
+                                    ).then((m) => m.SettingModule),
+                            },
+                        ],
+                    },
+                    {
                         path: 'permission',
                         children: [
                             {

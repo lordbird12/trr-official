@@ -104,7 +104,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 // hidden: (item) => {
 
                 //     var role = JSON.parse(localStorage.getItem('user'))
-        
+
                 //     if (role.type == 'Management') {
                 //         return false
                 //     }
@@ -112,6 +112,12 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 //         return true
                 //     }
                 // },
+            },
+            {
+                id: 'admin.setting',
+                title: 'ตั้งค่าวันที่ปิดฤดูการผลิต',
+                type: 'basic',
+                link: '/admin/setting',
             },
         ],
     },
