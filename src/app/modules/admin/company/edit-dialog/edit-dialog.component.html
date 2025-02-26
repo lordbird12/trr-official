@@ -1,5 +1,5 @@
 <div class="md:max-w-lg mx-auto">
-  <h1 mat-dialog-title class="text-xl font-semibold">แก้ไขโรงงาน1</h1>
+  <h1 mat-dialog-title class="text-xl font-semibold">แก้ไขโรงงาน หมายเลขโรงงาน {{editForm.value.factory_id}}</h1>
   <div mat-dialog-content>
       <form [formGroup]="editForm">
         <div class=" md:flex ">
@@ -11,12 +11,19 @@
             </div>
         </div>
         <div class="md:flex ">
-            <div class="md:w-1/2 px-3">
+            <!-- <div class="md:w-1/2 px-3">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                    <mat-label>หมายเลขโรงงาน</mat-label>
-                    <input matInput [placeholder]="'กรอกหมายเลขโรงงาน'" readonly="" [formControlName]="'factory_id'" readonly>
+                  <mat-label>หมายเลขโรงงาน</mat-label>
+                  <input
+                    matInput
+                    [placeholder]="'กรอกหมายเลขโรงงาน'"
+                    [formControlName]="'factory_id'"
+                    readonly
+                    matTooltip="ไม่สามารถแก้ไขเลขโรงงานได้"
+                  />
                 </mat-form-field>
-            </div>
+              </div> -->
+
             <div class="md:w-1/2 px-3">
                 <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                     <mat-label>เบอร์โทร</mat-label>

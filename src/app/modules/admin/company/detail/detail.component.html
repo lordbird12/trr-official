@@ -51,15 +51,16 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    
+
                     <mat-label>เวลาทำการ</mat-label>
                     <div class="-mx-3 md:flex mb-6">
                         <div class="md:w-2/4 px-3">
-                            <!-- <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                                <mat-label>วันเริ่ม</mat-label>
-                                <input matInput [placeholder]="'กรอกวันเริ่ม'" [formControlName]="'date_start'">
-                            </mat-form-field> -->
+                            <mat-label>วันเริ่ม - วันสิ้นสุด</mat-label>
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
+                                <input matInput [placeholder]="''" [formControlName]="'date'" readonly>
+                            </mat-form-field>
+
+                            <!-- <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
                                 <mat-label>วันเริ่ม - วันสิ้นสุด</mat-label>
                                 <mat-date-range-input  [rangePicker]="picker">
                                     <input matStartDate formControlName="date_start" placeholder="วันที่เริ่ม">
@@ -67,7 +68,7 @@
                                 </mat-date-range-input>
                                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
                                 <mat-date-range-picker #picker></mat-date-range-picker>
-                            </mat-form-field>
+                            </mat-form-field> -->
                         </div>
                         <!-- <div class="md:w-1/4 px-3">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
@@ -189,7 +190,7 @@
                     <div class="-mx-3 md:flex mb-2">
                         <div class="md:w-1/2 px-3">
                             <mat-form-field [ngClass]="formFieldHelpers" class="w-full">
-                                <mat-label>Link 3</mat-label>
+                                <mat-label>Link 5</mat-label>
                                 <input matInput [placeholder]="'กรอก link Tiktok'" [formControlName]="'link5'">
                             </mat-form-field>
                         </div>
@@ -217,7 +218,7 @@
                         <div class="flex items-center justify-center w-full"></div>
 
                     </div>
-             
+
 
                     <div mat-dialog-actions class="flex justify-end md-4">
                         <!-- <button mat-button class="px-4 py-2 bg-gray-300 text-gray-600 rounded-md hover:bg-gray-400" (click)="backTo()">ยกเลิก</button> -->

@@ -104,6 +104,7 @@ export class DetailComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             factory_id: 1,
             // factory_affiliation: '',
+            date: 'วันจันทร์ ถึง วันศุกร์ เวลา 09.00 น.-16.30 น. ',
             head_office: '',
             phone: '',
             email: '',
@@ -224,7 +225,7 @@ export class DetailComponent implements OnInit {
                 //         formData.append(key, value);
                 //     }
                 // );
-               
+
                 this._service.create(formValue).subscribe({
                     next: (resp: any) => {
                         this._fuseConfirmationService.open({
