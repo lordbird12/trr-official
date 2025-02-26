@@ -104,7 +104,7 @@ export class DetailComponent implements OnInit {
         this.addForm = this.formBuilder.group({
             factory_id: 1,
             // factory_affiliation: '',
-            date: 'วันจันทร์ ถึง วันศุกร์ เวลา 09.00 น.-16.30 น. ',
+            date: '',
             head_office: '',
             phone: '',
             email: '',
@@ -194,8 +194,8 @@ export class DetailComponent implements OnInit {
 
     Submit(): void {
         let formValue = this.addForm.value
-        formValue.date_start =  moment(this.addForm.value.date_start).format('YYYY-MM-DD')
-        formValue.date_end =  moment(this.addForm.value.date_end).format('YYYY-MM-DD')
+        // formValue.date_start =  moment(this.addForm.value.date_start).format('YYYY-MM-DD')
+        // formValue.date_end =  moment(this.addForm.value.date_end).format('YYYY-MM-DD')
         const confirmation = this._fuseConfirmationService.open({
             title: 'บันทึกข้อมูล',
             message: 'คุณต้องการบันทึกข้อมูลใช่หรือไม่ ?',
