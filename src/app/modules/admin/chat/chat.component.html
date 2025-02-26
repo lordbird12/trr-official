@@ -28,7 +28,7 @@
                                         <div class="flex-0 w-10 h-10 rounded-full overflow-hidden">
                                             <img *ngIf="name.image == '{}' || name.image == null"
                                                 class="rounded-full w-12 h-12 border-2 border-yellow-900"
-                                                src="assets/images/no_image.png" alt="image description">
+                                                src="assets/images/nochat-image.png" alt="image description">
                                             <img *ngIf="name.image"
                                                 class="rounded-full w-12 h-12 border-2 border-yellow-900"
                                                 src="{{name.image}}" alt="image description">
@@ -59,10 +59,10 @@
                                         <div class="flex-0 w-10 h-10 rounded-full overflow-hidden">
                                             <!-- <img class="w-full h-full object-cover" src="{{name?.image}}"> -->
                                             <img *ngIf="name.image == '{}' || name.image == null"
-                                                class="rounded-full w-12 h-12 border-2 border-yellow-900"
-                                                src="assets/images/no_image.png" alt="image description">
+                                                class="rounded-full w-full h-full border-2 "
+                                                src="assets/images/nochat-image.png" alt="image description">
                                             <img *ngIf="name.image"
-                                                class="rounded-full w-12 h-12 border-2 border-yellow-900"
+                                                class="rounded-full w-12 h-12 border-2 "
                                                 src="{{name.image}}" alt="image description">
                                         </div>
                                         <span *ngIf="name?.name != null" class="pl-2">{{name?.name}}</span>
